@@ -75,7 +75,7 @@ class CategoryPrepareObserver implements ObserverInterface
 				$data['conditions'] = $data['rule']['conditions'];
 				unset($data['rule']);
 			}
-			$rule->loadPost(['conditions' => $data['conditions']]);	
+			$rule->loadPost(['conditions' => isset($data['conditions']) ? $data['conditions'] : []]);	
 			$category->setPostedProducts($rule->getMatchingProductIds());
 			$category->setSmartRule($rule);
 		}
