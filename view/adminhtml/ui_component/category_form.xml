@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Faonni
+ *  
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade module to newer
+ * versions in the future.
+ * 
+ * @package     Faonni_SmartCategory
+ * @copyright   Copyright (c) 2016 Karliuka Vitalii(karliuka.vitalii@gmail.com) 
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="general"/>
+    <fieldset name="assign_products">
+        <container name="smart_category" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">159</item>
+                </item>
+            </argument>
+			<field name="is_smart">
+				<argument name="data" xsi:type="array">
+					<item name="config" xsi:type="array">
+						<item name="sortOrder" xsi:type="number">10</item>
+						<item name="dataType" xsi:type="string">boolean</item>
+						<item name="formElement" xsi:type="string">checkbox</item>
+						<item name="source" xsi:type="string">category_form</item>
+						<item name="prefer" xsi:type="string">toggle</item>
+						<item name="label" xsi:type="string" translate="true">Smart Category</item>
+						<item name="valueMap" xsi:type="array">
+							<item name="true" xsi:type="string">1</item>
+							<item name="false" xsi:type="string">0</item>
+						</item>
+						<!--<item name="default" xsi:type="string">0</item>-->		
+						<item name="validation" xsi:type="array">
+							<item name="required-entry" xsi:type="boolean">false</item>
+						</item>		
+						<!--<item name="component" xsi:type="string">Faonni_SmartCategory/js/form/element/rule</item>-->
+					</item>
+				</argument>
+			</field>
+			<htmlContent name="rule_html_content">
+				<argument name="block" xsi:type="object">Faonni\SmartCategory\Block\Adminhtml\Catalog\Edit\Tab\Conditions</argument>
+			</htmlContent>
+        </container>
+    </fieldset>
+</form>

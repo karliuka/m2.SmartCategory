@@ -24,7 +24,6 @@ namespace Faonni\SmartCategory\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Faonni\SmartCategory\Model\Position\ProcessorFactory;
 
 /**
  * Category prepare observer
@@ -36,27 +35,17 @@ class CategoryPrepareObserver implements ObserverInterface
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
-    
-    /**
-     * Position Processor instance
-     * 
-     * @var \Faonni\SmartCategory\Model\Position\ProcessorFactory
-     */
-    protected $_processorFactory;      
+    protected $_objectManager;    
     
     /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Faonni\SmartCategory\Model\Position\ProcessorFactory $processorFactory
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        ProcessorFactory $processorFactory
+        ObjectManagerInterface $objectManager
     ) {
         $this->_objectManager = $objectManager;
-        $this->_processorFactory = $processorFactory;
     }
        	
     /**
@@ -67,9 +56,29 @@ class CategoryPrepareObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+		$request = $observer->getEvent()->getRequest();
 		$category = $observer->getEvent()->getCategory();
-		$request = $observer->getEvent()->getRequest();	
-
+		$data = $request->getPostValue();
+			
+		if ($data && $category->getIsSmart()) {
+			/** @var \Faonni\SmartCategory\Model\Rule $rule */
+			if ($category->getId()) {
+				$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule')
+					->load($category->getId());
+			} else {
+				$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');	
+			}						
+			$validateResult = $rule->validateData(new \Magento\Framework\DataObject($data));
+			// add validate control
+			
+			if (isset($data['rule'])) {
+				$data['conditions'] = $data['rule']['conditions'];
+				unset($data['rule']);
+			}
+			$rule->loadPost(['conditions' => $data['conditions']]);	
+			$category->setPostedProducts($rule->getMatchingProductIds());
+			$category->setSmartRule($rule);
+		}
         return $this;
     }
 }  

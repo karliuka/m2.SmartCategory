@@ -23,17 +23,41 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-	<!--
-	configuration example
-    <type name="Faonni\SmartCategory\Model\Position\ProcessorConfig">		
+    <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
-            <argument name="config" xsi:type="array">
-                <item name="sale" xsi:type="array">
-                    <item name="label" xsi:type="string">Sale Smart Category</item>
-                    <item name="class" xsi:type="string">Faonni\SmartCategorySale\Model\Position\Processor</item>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="faonni_smartcategory_rule" xsi:type="string">Faonni_SmartCategory</item>
+            </argument>
+        </arguments>
+    </type>    
+    <type name="Faonni\SmartCategory\Model\Rule\Condition\Combine">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="form_name" xsi:type="string">category_form</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Faonni\SmartCategory\Model\Rule\Condition\Product">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="form_name" xsi:type="string">category_form</item>
+            </argument>
+        </arguments>
+    </type> 
+    <virtualType name="Faonni\SmartCategory\Model\ResourceModel\Rule\AssociatedEntityMap" type="Magento\Framework\DataObject">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="website" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">catalogrule_website</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">website_id</item>
+                </item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">catalogrule_customer_group</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
                 </item>
             </argument>
         </arguments>
-    </type>	
-    -->
+    </virtualType>       
 </config>

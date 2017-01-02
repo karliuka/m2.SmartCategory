@@ -1,4 +1,5 @@
-<?php
+<?xml version="1.0"?>
+<!--
 /**
  * Faonni
  *  
@@ -19,22 +20,12 @@
  * @copyright   Copyright (c) 2016 Karliuka Vitalii(karliuka.vitalii@gmail.com) 
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-namespace Faonni\SmartCategory\Model\Position;
-
-use Magento\Framework\DataObject;
-
-/**
- * SmartCategory processor abstract model
- */
-abstract class ProcessorAbstract extends DataObject
-{
-    /**
-     * Retrieve array of product id's for category
-     *
-     * The array returned has the following format:
-     * array($productId => $position)
-     *
-     * @return array
-     */	
-    abstract public function getPosition($category=null);  	
-}
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="smartcategory" frontName="smartcategory">
+            <module name="Faonni_SmartCategory" before="Magento_Backend" />
+        </route>
+    </router>
+</config>

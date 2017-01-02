@@ -24,12 +24,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
 	<!--
-	event category_move
-	-->		
-    <event name="category_move">
-        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryMoveObserver" />
-    </event>
-	<!--
 	event catalog_category_save_before
 	-->	    
     <event name="catalog_category_save_before">

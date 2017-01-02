@@ -24,7 +24,6 @@ namespace Faonni\SmartCategory\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Faonni\SmartCategory\Model\Position\ProcessorFactory;
 
 /**
  * Category save observer
@@ -36,27 +35,17 @@ class CategorySaveObserver implements ObserverInterface
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
-       
-    /**
-     * Position Processor instance
-     * 
-     * @var \Faonni\SmartCategory\Model\Position\ProcessorFactory
-     */
-    protected $_processorFactory;      
+    protected $_objectManager;     
     
     /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Faonni\SmartCategory\Model\Position\ProcessorFactory $processorFactory
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        ProcessorFactory $processorFactory
+        ObjectManagerInterface $objectManager
     ) {
         $this->_objectManager = $objectManager;
-        $this->_processorFactory = $processorFactory;
     }
        	
     /**
@@ -68,7 +57,11 @@ class CategorySaveObserver implements ObserverInterface
     public function execute(Observer $observer)
     {
 		$category = $observer->getEvent()->getCategory();	
-
+		if ($category->getIsSmart()) {
+			$rule = $category->getSmartRule();
+			$rule->setId($category->getId());
+			$rule->save();					
+		}
         return $this;
     }
 }  
