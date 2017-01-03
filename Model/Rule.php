@@ -239,18 +239,6 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function validateData(\Magento\Framework\DataObject $dataObject)
-    {
-        $result = parent::validateData($dataObject);
-        if ($result === true) {
-            $result = [];
-        }
-        return !empty($result) ? $result : true;
-    }
-
-    /**
      * Filtering products that must be checked for matching with rule
      *
      * @param  int|array $productIds

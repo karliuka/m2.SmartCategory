@@ -24,6 +24,7 @@ namespace Faonni\SmartCategory\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Category prepare observer
@@ -61,14 +62,13 @@ class CategoryPrepareObserver implements ObserverInterface
 		$data = $request->getPostValue();
 			
 		if ($data && $category->getIsSmart()) {
-			/** @var \Faonni\SmartCategory\Model\Rule $rule */
+
+			$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');	
 			if ($category->getId()) {
-				$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule')
-					->load($category->getId());
-			} else {
-				$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');	
-			}						
-			$validateResult = $rule->validateData(new \Magento\Framework\DataObject($data));
+				$rule->load($category->getId());
+			}
+								
+			$validateResult = $rule->validateData(new DataObject($data));
 			// add validate control
 			
 			if (isset($data['rule'])) {
