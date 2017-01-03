@@ -34,5 +34,11 @@
 	-->	    
     <event name="catalog_category_prepare_save">
         <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryPrepareObserver" />
-    </event>         
+    </event> 
+	<!--
+	event catalog_controller_category_delete
+	-->	    
+    <event name="catalog_controller_category_delete">
+        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryDeleteObserver" />
+    </event>            
 </config>

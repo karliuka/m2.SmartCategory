@@ -214,7 +214,7 @@ class Rule extends AbstractModel implements IdentityInterface
             $product->setStoreId($defaultStoreId);
             $results[$websiteId] = $this->getConditions()->validate($product);
             if (true === $results[$websiteId]) {
-				$this->_productIds[$product->getId()] = 0;
+				$this->_productIds[$product->getId()] = 1;
 			}
         }
     }
