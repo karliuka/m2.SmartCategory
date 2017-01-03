@@ -187,7 +187,7 @@ class Conditions extends Generic implements TabInterface
             ['form_namespace' => $formName]
         );
 
-        $renderer = $this->_rendererFieldset->setTemplate('Magento_CatalogRule::promo/fieldset.phtml')
+        $renderer = $this->_rendererFieldset->setTemplate('Faonni_SmartCategory::fieldset.phtml')
             ->setNewChildUrl($newChildUrl)
             ->setFieldSetId($model->getConditionsFieldSetId($formName));
 
