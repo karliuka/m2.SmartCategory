@@ -31,6 +31,9 @@ use Magento\Rule\Block\Conditions as RuleConditions;
 use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
 use Magento\Rule\Model\Condition\AbstractCondition;
 
+/**
+ * Smart Category Conditions block
+ */
 class Conditions extends Generic implements TabInterface
 {
     /**
@@ -41,11 +44,15 @@ class Conditions extends Generic implements TabInterface
     protected $_coreRegistry;
     	
     /**
+	 * Renderer Fieldset instance
+	 *
      * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
      */
     protected $_rendererFieldset;
 
     /**
+	 * Conditions instance
+	 *
      * @var \Magento\Rule\Block\Conditions
      */
     protected $_conditions;
@@ -68,8 +75,7 @@ class Conditions extends Generic implements TabInterface
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
-        $this->_coreRegistry = $registry;   
-        
+        $this->_coreRegistry = $registry;           
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -151,7 +157,9 @@ class Conditions extends Generic implements TabInterface
     }
     
     /**
-     * @return Form
+     * Prepare form before rendering HTML
+     *
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -170,13 +178,15 @@ class Conditions extends Generic implements TabInterface
     }
     
     /**
-     * @param \Magento\CatalogRule\Api\Data\RuleInterface $model
+     * Handles addition of conditions tab to supplied form
+     *
+     * @param \Faonni\SmartCategory\Model\Rule $model
      * @param string $fieldsetId
      * @param string $formName
      * @return \Magento\Framework\Data\Form
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'category_form')
+    protected function addTabToForm($model, $fieldsetId='conditions_fieldset', $formName='category_form')
     {
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
@@ -193,20 +203,17 @@ class Conditions extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset(
             $fieldsetId,
-            ['legend' => __('Conditions (don\'t add conditions if category is not smart)')]
-        )->setRenderer($renderer);
+            ['legend' => __('Conditions (don\'t add conditions if category is not smart)')])
+			->setRenderer($renderer);
 
-        $fieldset->addField(
-            'conditions',
-            'text',
+        $fieldset->addField('conditions', 'text',
             [
                 'name' => 'conditions',
                 'label' => __('Conditions'),
                 'title' => __('Conditions'),
                 'required' => true,
                 'data-form-part' => $formName
-            ]
-        )
+            ])
             ->setRule($model)
             ->setRenderer($this->_conditions);
 
@@ -216,6 +223,8 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
+     * Handles addition of form name to condition and its conditions
+     *	
      * @param \Magento\Rule\Model\Condition\AbstractCondition $conditions
      * @param string $formName
      * @return void
