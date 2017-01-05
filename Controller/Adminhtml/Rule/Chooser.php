@@ -35,7 +35,7 @@ class Chooser extends \Faonni\SmartCategory\Controller\Adminhtml\Rule
         switch ($request->getParam('attribute')) {
             case 'sku':
                 $block = $this->_view->getLayout()->createBlock(
-                    'Faonni\SmartCategory\Block\Adminhtml\Chooser\Sku',
+                    'Faonni\SmartCategory\Block\Adminhtml\Rule\Chooser\Sku',
                     'smartcategory_chooser_sku',
                     ['data' => ['js_form_object' => $request->getParam('form')]]
                 );
