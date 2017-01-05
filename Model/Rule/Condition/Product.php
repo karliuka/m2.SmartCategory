@@ -23,6 +23,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $url = false;
         switch ($this->getAttribute()) {
+            case 'sku':
             case 'category_ids':
                 $url = 'smartcategory/rule/chooser/attribute/' . $this->getAttribute();
                 if ($this->getJsFormObject()) {

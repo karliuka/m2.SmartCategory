@@ -33,6 +33,13 @@ class Chooser extends \Faonni\SmartCategory\Controller\Adminhtml\Rule
         $request = $this->getRequest();
 
         switch ($request->getParam('attribute')) {
+            case 'sku':
+                $block = $this->_view->getLayout()->createBlock(
+                    'Faonni\SmartCategory\Block\Adminhtml\Chooser\Sku',
+                    'smartcategory_chooser_sku',
+                    ['data' => ['js_form_object' => $request->getParam('form')]]
+                );
+                break;            
             case 'category_ids':
                 $ids = $request->getParam('selected', []);
                 if (is_array($ids)) {
@@ -42,15 +49,13 @@ class Chooser extends \Faonni\SmartCategory\Controller\Adminhtml\Rule
                             unset($ids[$key]);
                         }
                     }
-
                     $ids = array_unique($ids);
                 } else {
                     $ids = [];
                 }
-
                 $block = $this->_view->getLayout()->createBlock(
                     'Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree',
-                    'promo_widget_chooser_category_ids',
+                    'smartcategory_chooser_category_ids',
                     ['data' => ['js_form_object' => $request->getParam('form')]]
                 )->setCategoryIds(
                     $ids
