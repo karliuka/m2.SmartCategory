@@ -29,17 +29,14 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Psr\Log\LoggerInterface;
 
+/**
+ * SmartCategory Rule collection
+ */
 class Collection extends AbstractCollection
 {
     /**
-     * Store associated with rule entities information map
-     *
-     * @var array
-     */
-    protected $_associatedEntitiesMap;
-
-    /**
-     * Collection constructor.
+     * Collection constructor
+     * 
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -63,8 +60,6 @@ class Collection extends AbstractCollection
 			$connection, 
 			$resource
 		);
-		
-        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
     /**
@@ -94,52 +89,5 @@ class Collection extends AbstractCollection
         $this->addFieldToFilter('conditions_serialized', ['like' => $match]);
 
         return $this;
-    }
-
-    /**
-     * @param string $entityType
-     * @param string $objectField
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
-     */
-    protected function mapAssociatedEntities($entityType, $objectField)
-    {
-        if (!$this->_items) {
-            return;
-        }
-
-        $entityInfo = $this->_getAssociatedEntityInfo($entityType);
-        $ruleIdField = $entityInfo['rule_id_field'];
-        $entityIds = $this->getColumnValues($ruleIdField);
-
-        $select = $this->getConnection()->select()->from(
-            $this->getTable($entityInfo['associations_table'])
-        )->where(
-            $ruleIdField . ' IN (?)',
-            $entityIds
-        );
-
-        $associatedEntities = $this->getConnection()->fetchAll($select);
-
-        array_map(function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
-            $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
-            $itemAssociatedValue = $item->getData($objectField) === null ? [] : $item->getData($objectField);
-            $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
-            $item->setData($objectField, $itemAssociatedValue);
-        }, $associatedEntities);
-    }
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    private function getAssociatedEntitiesMap()
-    {
-        if (!$this->_associatedEntitiesMap) {
-            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Faonni\SmartCategory\Model\ResourceModel\Rule\AssociatedEntityMap')
-                ->getData();
-        }
-        return $this->_associatedEntitiesMap;
     }
 }

@@ -43,21 +43,5 @@
                 <item name="form_name" xsi:type="string">category_form</item>
             </argument>
         </arguments>
-    </type> 
-    <virtualType name="Faonni\SmartCategory\Model\ResourceModel\Rule\AssociatedEntityMap" type="Magento\Framework\DataObject">
-        <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="website" xsi:type="array">
-                    <item name="associations_table" xsi:type="string">catalogrule_website</item>
-                    <item name="rule_id_field" xsi:type="string">rule_id</item>
-                    <item name="entity_id_field" xsi:type="string">website_id</item>
-                </item>
-                <item name="customer_group" xsi:type="array">
-                    <item name="associations_table" xsi:type="string">catalogrule_customer_group</item>
-                    <item name="rule_id_field" xsi:type="string">rule_id</item>
-                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>       
+    </type>     
 </config>

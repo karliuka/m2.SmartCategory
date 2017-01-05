@@ -26,7 +26,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * SmartCategory Rule resource
  */
 class Rule extends AbstractResource
 {
@@ -47,7 +47,10 @@ class Rule extends AbstractResource
         Context $context,
         $connectionName = null
     ) {            
-        parent::__construct($context, $connectionName);
+        parent::__construct(
+			$context, 
+			$connectionName
+		);
     }
 
     /**
