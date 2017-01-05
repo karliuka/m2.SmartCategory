@@ -21,7 +21,15 @@
  */
 namespace Faonni\SmartCategory\Model\ResourceModel\Rule;
 
-class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
+use Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Psr\Log\LoggerInterface;
+
+class Collection extends AbstractCollection
 {
     /**
      * Store associated with rule entities information map
@@ -40,14 +48,22 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        parent::__construct(
+			$entityFactory, 
+			$logger, 
+			$fetchStrategy, 
+			$eventManager, 
+			$connection, 
+			$resource
+		);
+		
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
@@ -59,7 +75,10 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      */
     protected function _construct()
     {
-        $this->_init('Faonni\SmartCategory\Model\Rule', 'Faonni\SmartCategory\Model\ResourceModel\Rule');
+        $this->_init(
+			'Faonni\SmartCategory\Model\Rule', 
+			'Faonni\SmartCategory\Model\ResourceModel\Rule'
+		);
     }
 
     /**

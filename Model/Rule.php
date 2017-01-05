@@ -23,13 +23,28 @@ namespace Faonni\SmartCategory\Model;
 
 use Magento\Rule\Model\AbstractModel;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Model\ResourceModel\Iterator;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Model\ProductFactory;
+use Faonni\SmartCategory\Model\Rule\Condition\CombineFactory;
 
 /**
- * SmartCategory Rule data model
+ * SmartCategory Rule model
  */
 class Rule extends AbstractModel implements IdentityInterface
 {
+    /**
+     * Constants rule id field name
+     */
+    const RULE_ID = 'rule_id';
+	
     /**
      * Prefix of model events names
      *
@@ -39,8 +54,6 @@ class Rule extends AbstractModel implements IdentityInterface
 
     /**
      * Parameter name in event
-     *
-     * In observe method you can use $observer->getEvent()->getRule() in this case
      *
      * @var string
      */
@@ -61,32 +74,43 @@ class Rule extends AbstractModel implements IdentityInterface
     protected $_productsFilter = null;
 
     /**
+	 * Iterator resource model
+	 *
      * @var \Magento\Framework\Model\ResourceModel\Iterator
      */
     protected $_resourceIterator;
 
     /**
+	 * Combine model factory
+	 *
      * @var \Faonni\SmartCategory\Model\Rule\Condition\CombineFactory
      */
     protected $_combineFactory;
 
     /**
+	 * Product model factory
+	 *	
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+	 * Store manager instance
+	 *	
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+	 * Product collection factory
+	 *	
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * Rule constructor.
+     * Rule constructor
+	 *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -98,24 +122,22 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $relatedCacheTypes
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,       
-        \Faonni\SmartCategory\Model\Rule\Condition\CombineFactory $combineFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $relatedCacheTypes = [],
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        TimezoneInterface $localeDate,
+        CollectionFactory $productCollectionFactory,
+        StoreManagerInterface $storeManager,       
+        CombineFactory $combineFactory,
+        ProductFactory $productFactory,
+        Iterator $resourceIterator,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -123,7 +145,6 @@ class Rule extends AbstractModel implements IdentityInterface
         $this->_combineFactory = $combineFactory;
         $this->_productFactory = $productFactory;
         $this->_resourceIterator = $resourceIterator;
-        $this->_relatedCacheTypes = $relatedCacheTypes;
 
         parent::__construct(
             $context,
@@ -144,6 +165,7 @@ class Rule extends AbstractModel implements IdentityInterface
     protected function _construct()
     {
         parent::_construct();
+		
         $this->_init('Faonni\SmartCategory\Model\ResourceModel\Rule');
         $this->setIdFieldName('rule_id');
     }
@@ -265,8 +287,6 @@ class Rule extends AbstractModel implements IdentityInterface
      * Prepare data before saving
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
     {
@@ -275,9 +295,7 @@ class Rule extends AbstractModel implements IdentityInterface
             $this->setConditionsSerialized(serialize($this->getConditions()->asArray()));
             $this->_conditions = null;
         }
-        parent::beforeSave();
-        
-        return $this;
+        return parent::beforeSave();
     }
     
     /**
@@ -294,62 +312,20 @@ class Rule extends AbstractModel implements IdentityInterface
         }
         return $this;
     }
- 
-    /**
-     * Check if rule behavior changed
-     *
-     * @return bool
-     */
-    public function isRuleBehaviorChanged()
-    {
-        if (!$this->isObjectNew()) {
-            $arrayDiff = $this->dataDiff($this->getOrigData(), $this->getStoredData());
-            if (empty($arrayDiff)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Get array with data differences
-     * @param array $array1
-     * @param array $array2
-     *
-     * @return array
-     */
-    protected function dataDiff($array1, $array2)
-    {
-        $result = [];
-        foreach ($array1 as $key => $value) {
-            if (array_key_exists($key, $array2)) {
-                if (is_array($value)) {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
-                } else {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
-                }
-            } else {
-                $result[$key] = true;
-            }
-        }
-        return $result;
-    }
 
     /**
      * @param string $formName
      * @return string
      */
-    public function getConditionsFieldSetId($formName = '')
+    public function getConditionsFieldSetId($formName='')
     {
         return $formName . 'rule_conditions_fieldset_' . $this->getId();
     }
 
     /**
-     * {@inheritdoc}
+     * Returns rule id field
+     *
+     * @return int|null
      */
     public function getRuleId()
     {
@@ -357,7 +333,10 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set rule id
+     *
+     * @param int $ruleId
+     * @return $this
      */
     public function setRuleId($ruleId)
     {
@@ -365,11 +344,13 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * @inheritDoc
+     * Return unique ID(s) for each object in system
+     *
+     * @return string[]
      */
     public function getIdentities()
     {
-        return [];
+		return [];
     }
     
     /**
@@ -378,7 +359,7 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param null|\Magento\Rule\Model\Action\Collection $actions
      * @return $this
      */
-    protected function _resetActions($actions = null)
+    protected function _resetActions($actions=null)
     {
         return $this;
     }    
