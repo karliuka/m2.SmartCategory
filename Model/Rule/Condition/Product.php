@@ -1,18 +1,33 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-/**
- * Catalog Rule Product Condition data model
+ * Faonni
+ *  
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade module to newer
+ * versions in the future.
+ * 
+ * @package     Faonni_SmartCategory
+ * @copyright   Copyright (c) 2016 Karliuka Vitalii(karliuka.vitalii@gmail.com) 
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition;
 
+use Magento\Rule\Model\Condition\Product\AbstractProduct;
+use Magento\Framework\Model\AbstractModel;
+
 /**
- * @method string getAttribute() Returns attribute code
+ * SmartCategory Rule Product model
  */
-class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
+class Product extends AbstractProduct
 {
     /**
      * Retrieve value element chooser URL
@@ -42,7 +57,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model)
     {
         $attrCode = $this->getAttribute();
         if ('category_ids' == $attrCode) {
@@ -69,7 +84,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param mixed $oldAttrValue
      * @return void
      */
-    protected function _restoreOldAttrValue(\Magento\Framework\Model\AbstractModel $model, $oldAttrValue)
+    protected function _restoreOldAttrValue(AbstractModel $model, $oldAttrValue)
     {
         $attrCode = $this->getAttribute();
         if ($oldAttrValue === null) {
@@ -85,7 +100,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return $this
      */
-    protected function _setAttributeValue(\Magento\Framework\Model\AbstractModel $model)
+    protected function _setAttributeValue(AbstractModel $model)
     {
         $storeId = $model->getStoreId();
         $defaultStoreId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
@@ -117,7 +132,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareDatetimeValue($value, \Magento\Framework\Model\AbstractModel $model)
+    protected function _prepareDatetimeValue($value, AbstractModel $model)
     {
         $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
@@ -134,7 +149,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareMultiselectValue($value, \Magento\Framework\Model\AbstractModel $model)
+    protected function _prepareMultiselectValue($value, AbstractModel $model)
     {
         $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getFrontendInput() == 'multiselect') {

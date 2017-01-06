@@ -22,8 +22,6 @@
 namespace Faonni\SmartCategory\Model\ResourceModel;
 
 use Magento\Rule\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * SmartCategory Rule resource
@@ -36,22 +34,6 @@ class Rule extends AbstractResource
      * @var bool
      */
     protected $_isPkAutoIncrement = false;    
-
-    /**
-     * Rule constructor
-     * 
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param null $connectionName
-     */
-    public function __construct(
-        Context $context,
-        $connectionName = null
-    ) {            
-        parent::__construct(
-			$context, 
-			$connectionName
-		);
-    }
 
     /**
      * Initialize main table and table id field

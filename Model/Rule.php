@@ -251,7 +251,6 @@ class Rule extends AbstractModel implements IdentityInterface
         $map = [];
         $websites = $this->_storeManager->getWebsites();
         foreach ($websites as $website) {
-            // Continue if website has no store to be able to create catalog rule for website without store
             if ($website->getDefaultStore() === null) {
                 continue;
             }

@@ -27,6 +27,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Catalog\Model\Category;
 
 /**
  * Faonni_SmartCategory InstallData
@@ -84,7 +85,7 @@ class InstallData implements InstallDataInterface
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);        
         $eavSetup->addAttribute(
-            \Magento\Catalog\Model\Category::ENTITY,
+            Category::ENTITY,
             'is_smart',
             [
 				'type' => 'int',

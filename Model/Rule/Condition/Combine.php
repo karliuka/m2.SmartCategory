@@ -21,34 +21,52 @@
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition;
 
-class Combine extends \Magento\Rule\Model\Condition\Combine
+use Magento\Rule\Model\Condition\Combine as RuleCombine;
+use Magento\Rule\Model\Condition\Context;
+use Faonni\SmartCategory\Model\Rule\Condition\ProductFactory;
+
+/**
+ * SmartCategory Rule Combine model
+ */
+class Combine extends RuleCombine
 {
     /**
-     * @var \Magento\CatalogRule\Model\Rule\Condition\ProductFactory
-     */
+	 * Product model factory
+	 *	
+     * @var \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory
+     */	 
     protected $_productFactory;
 
     /**
      * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory
+     * @param \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory $conditionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory $conditionFactory,
+        Context $context,
+        ProductFactory $conditionFactory,
         array $data = []
     ) {
-        $this->_productFactory = $conditionFactory;
-        parent::__construct($context, $data);
+        $this->_productFactory = $conditionFactory;	
+		
+        parent::__construct(
+			$context, 
+			$data
+		);
         $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Combine');
     }
 
     /**
+     * Get inherited conditions selectors
+     *
      * @return array
      */
     public function getNewChildSelectOptions()
     {
-        $productAttributes = $this->_productFactory->create()->loadAttributeOptions()->getAttributeOption();
+        $productAttributes = $this->_productFactory->create()
+			->loadAttributeOptions()
+			->getAttributeOption();
+			
         $attributes = [];
         foreach ($productAttributes as $code => $label) {
             $attributes[] = [
@@ -71,13 +89,14 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
-     * @param array $productCollection
+     * Collect validated attributes
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this
      */
     public function collectValidatedAttributes($productCollection)
     {
         foreach ($this->getConditions() as $condition) {
-            /** @var Product|Combine $condition */
             $condition->collectValidatedAttributes($productCollection);
         }
         return $this;
