@@ -21,7 +21,12 @@
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
-class Chooser extends \Faonni\SmartCategory\Controller\Adminhtml\Rule
+use Faonni\SmartCategory\Controller\Adminhtml\Rule;
+
+/**
+ * SmartCategory chooser controller
+ */
+class Chooser extends Rule
 {
     /**
      * Prepare block for chooser

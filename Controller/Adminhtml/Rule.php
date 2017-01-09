@@ -21,33 +21,17 @@
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml;
 
-class Rule extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+
+/**
+ * SmartCategory rule controller
+ */
+abstract class Rule extends Action
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_SmartCategory::rule';
-
-    /**
-     * @return void
-     */
-    public function execute()
-    {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_SmartCategory::rule');
-        $this->_addBreadcrumb(__('Smart Category'), __('Rule'));
-        $this->_view->renderLayout();
-    }
-    
-    /**
-     * Determine if authorized to perform group actions
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return true;//$this->_authorization->isAllowed('Faonni_Browser::info');
-    }    
+    const ADMIN_RESOURCE = 'Magento_Catalog::categories'; 
 }

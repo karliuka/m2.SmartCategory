@@ -22,10 +22,16 @@
 namespace Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
 use Magento\Rule\Model\Condition\AbstractCondition;
+use Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
-class NewConditionHtml extends \Faonni\SmartCategory\Controller\Adminhtml\Rule
+/**
+ * SmartCategory NewConditionHtml controller
+ */
+class NewConditionHtml extends Rule
 {
     /**
+     * New Condition Html
+     *
      * @return void
      */
     public function execute()
