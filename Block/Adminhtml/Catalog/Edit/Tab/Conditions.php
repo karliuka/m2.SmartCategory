@@ -23,12 +23,13 @@ namespace Faonni\SmartCategory\Block\Adminhtml\Catalog\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
 use Magento\Rule\Block\Conditions as RuleConditions;
-use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
 use Magento\Rule\Model\Condition\AbstractCondition;
 
 /**
@@ -56,13 +57,21 @@ class Conditions extends Generic implements TabInterface
      * @var \Magento\Rule\Block\Conditions
      */
     protected $_conditions;
-
+	
+    /**
+     * Object Manager instance
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager; 
+	
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Rule\Block\Conditions $conditions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
+	 * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $data
      */
     public function __construct(
@@ -71,11 +80,13 @@ class Conditions extends Generic implements TabInterface
         FormFactory $formFactory,
         RuleConditions $conditions,
         Fieldset $rendererFieldset,
+		ObjectManagerInterface $objectManager,
         array $data = []
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
-        $this->_coreRegistry = $registry;           
+        $this->_coreRegistry = $registry; 
+		$this->_objectManager = $objectManager;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -164,8 +175,7 @@ class Conditions extends Generic implements TabInterface
     protected function _prepareForm()
     {
 		$category = $this->getCurrentCategory();  
-		$rule = \Magento\Framework\App\ObjectManager::getInstance()
-			->get(\Faonni\SmartCategory\Model\Rule::class);	
+		$rule = $this->_objectManager->get('Faonni\SmartCategory\Model\Rule');	
 			          
 		if ($category->getId()) {
 			$rule = $rule->load($category->getId());
