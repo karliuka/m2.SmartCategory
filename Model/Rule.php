@@ -204,7 +204,7 @@ class Rule extends AbstractModel implements IdentityInterface
 			$productCollection = $this->_productCollectionFactory->create();
 			
 			$params = ['rule' => $this, 'collection' => $productCollection];
-			$this->_eventManager->dispatch('faonni_smart_category_match_before', $params);
+			$this->_eventManager->dispatch('faonni_smartcategory_product_collection_match_before', $params);
 			
 			if ($this->_productsFilter) {
 				$productCollection->addIdFilter($this->_productsFilter);
