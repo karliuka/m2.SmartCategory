@@ -202,6 +202,10 @@ class Rule extends AbstractModel implements IdentityInterface
             $this->setCollectedAttributes([]);
 			/** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
 			$productCollection = $this->_productCollectionFactory->create();
+			
+			$params = ['rule' => $this, 'collection' => $productCollection];
+			$this->_eventManager->dispatch('faonni_smart_category_match_before', $params);
+			
 			if ($this->_productsFilter) {
 				$productCollection->addIdFilter($this->_productsFilter);
 			}
