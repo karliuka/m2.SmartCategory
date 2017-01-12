@@ -33,6 +33,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\Product\Visibility;
 use Faonni\SmartCategory\Model\Rule\Condition\CombineFactory;
 
 /**
@@ -44,6 +45,19 @@ class Rule extends AbstractModel implements IdentityInterface
      * Constants rule id field name
      */
     const RULE_ID = 'rule_id';
+    
+    /**
+     * Constants cache tag
+     */    
+	const CACHE_TAG = 'FAONNI_SMARTCATEGORY_RULE'; 
+	
+    /**
+     * Model cache tag for clear cache in after save and after delete
+     * When you use true - all cache will be clean
+     *
+     * @var string|array|bool
+     */
+    protected $_cacheTag = self::CACHE_TAG;   
 	
     /**
      * Prefix of model events names
@@ -71,7 +85,14 @@ class Rule extends AbstractModel implements IdentityInterface
      *
      * @var int|array|null
      */
-    protected $_productsFilter = null;
+    protected $_productsFilter;
+    
+    /**
+     * Visibility filter flag
+     *
+     * @var bool
+     */
+    protected $_visibilityFilter = true;    
 
     /**
 	 * Iterator resource model
@@ -107,6 +128,13 @@ class Rule extends AbstractModel implements IdentityInterface
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
+    
+    /**
+     * Catalog product visibility
+     *
+     * @var \Magento\Catalog\Model\Product\Visibility
+     */
+    protected $_catalogProductVisibility;    
 
     /**
      * Rule constructor
@@ -119,6 +147,7 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Faonni\SmartCategory\Model\Rule\Condition\CombineFactory $combineFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility 
      * @param \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
@@ -135,6 +164,7 @@ class Rule extends AbstractModel implements IdentityInterface
         StoreManagerInterface $storeManager,       
         CombineFactory $combineFactory,
         ProductFactory $productFactory,
+        Visibility $catalogProductVisibility,
         Iterator $resourceIterator,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
@@ -144,6 +174,7 @@ class Rule extends AbstractModel implements IdentityInterface
         $this->_storeManager = $storeManager;
         $this->_combineFactory = $combineFactory;
         $this->_productFactory = $productFactory;
+        $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_resourceIterator = $resourceIterator;
 
         parent::__construct(
@@ -203,12 +234,22 @@ class Rule extends AbstractModel implements IdentityInterface
 			/** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
 			$productCollection = $this->_productCollectionFactory->create();
 			
-			$params = ['rule' => $this, 'collection' => $productCollection];
-			$this->_eventManager->dispatch('faonni_smartcategory_product_collection_match_before', $params);
+			$this->_eventManager->dispatch(
+				'faonni_smartcategory_product_collection_match_before', 
+				['rule' => $this, 'collection' => $productCollection]
+			);
 			
 			if ($this->_productsFilter) {
 				$productCollection->addIdFilter($this->_productsFilter);
 			}
+			
+			if ($this->_visibilityFilter) {
+				$productCollection->addAttributeToFilter(
+					'visibility', 
+					['in' => $this->_catalogProductVisibility->getVisibleInSiteIds()]
+				);
+			}
+						
 			$this->getConditions()->collectValidatedAttributes($productCollection);
 			$this->_resourceIterator->walk(
 				$productCollection->getSelect(),
@@ -287,6 +328,27 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
+     * Toggle visibility filter
+     *
+     * @param  bool $enabled
+     * @return void
+     */
+    public function setVisibilityFilter($enabled)
+    {
+        $this->_visibilityFilter = $enabled;
+    }
+
+    /**
+     * Check VisibilityFilter should be enabled
+     *
+     * @return bool
+     */
+    public function isVisibilityFilter()
+    {
+        return $this->_visibilityFilter;
+    }    
+
+    /**
      * Prepare data before saving
      *
      * @return $this
@@ -322,7 +384,7 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     public function getConditionsFieldSetId($formName='')
     {
-        return $formName . 'rule_conditions_fieldset_' . $this->getId();
+        return $formName . 'rule_conditions_fieldset_' . $this->getRuleId();
     }
 
     /**
@@ -353,7 +415,7 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     public function getIdentities()
     {
-		return [];
+		return [self::CACHE_TAG . '_' . $this->getRuleId()];
     }
     
     /**
