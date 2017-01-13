@@ -62,7 +62,6 @@ class CollectionFilter
     }
         	
     /**
-    /**
      * Filter product collection
      *
      * @param \Magento\Catalog\Model\Layer\Category\CollectionFilter" $collectionFilter
