@@ -79,7 +79,7 @@ class CollectionFilter
             ->addTaxPercents()
             ->addUrlRewrite($category->getId());
             	
-		if ($category->getIsSmart() && !$category->getReplaceOnConfigurable()) {
+		if ($category->getIsSmart()) {
 			$collection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
 		} else {
 			$collection->setVisibility($this->_productVisibility->getVisibleInCatalogIds());
