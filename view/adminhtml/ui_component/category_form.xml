@@ -40,11 +40,13 @@
 						<item name="source" xsi:type="string">category_form</item>
 						<item name="prefer" xsi:type="string">toggle</item>
 						<item name="label" xsi:type="string" translate="true">Smart Category</item>
+						<item name="notice" xsi:type="string" translate="true">The Smart Category Rule will select products with visibility in Catalog, Search or Catalog and Search</item>
+						<item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
 						<item name="valueMap" xsi:type="array">
 							<item name="true" xsi:type="string">1</item>
 							<item name="false" xsi:type="string">0</item>
 						</item>
-						<!--<item name="default" xsi:type="string">0</item>-->		
+						<item name="default" xsi:type="string">0</item>	
 						<item name="validation" xsi:type="array">
 							<item name="required-entry" xsi:type="boolean">false</item>
 						</item>		

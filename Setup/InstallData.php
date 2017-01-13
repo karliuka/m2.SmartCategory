@@ -27,6 +27,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Catalog\Model\Category;
 
 /**
@@ -92,11 +93,13 @@ class InstallData implements InstallDataInterface
 				'label' => 'Smart Category',
 				'input' => 'select',
 				'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+				'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
 				'required' => false,
 				'sort_order' => 10,
+				'default' => '0',
 				'group' => 'Products in Category',
             ]
-        );        
+        );       
         $setup->endSetup();  
     }
 }
