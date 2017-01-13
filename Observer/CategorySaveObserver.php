@@ -56,7 +56,7 @@ class CategorySaveObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$category = $observer->getEvent()->getCategory();	
+		$category = $observer->getEvent()->getCategory();		
 		if ($category->getIsSmart()) {
 			$rule = $category->getSmartRule();
 			$rule->setId($category->getId());

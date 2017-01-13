@@ -64,7 +64,7 @@ class Rule extends AbstractModel implements IdentityInterface
      *
      * @var string
      */
-    protected $_eventPrefix = 'smartcategory_rule';
+    protected $_eventPrefix = 'faonni_smartcategory_rule';
 
     /**
      * Parameter name in event

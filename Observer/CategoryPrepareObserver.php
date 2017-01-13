@@ -77,6 +77,7 @@ class CategoryPrepareObserver implements ObserverInterface
 			}
 			
 			$rule->loadPost(['conditions' => isset($data['conditions']) ? $data['conditions'] : []]);
+			$rule->setCategory($category);
 			// apply rule
 			$matchingProducts = $rule->getMatchingProductIds();
 			// update position
