@@ -76,8 +76,14 @@ class CategoryPrepareObserver implements ObserverInterface
 				unset($data['rule']);
 			}
 			
-			$rule->loadPost(['conditions' => isset($data['conditions']) ? $data['conditions'] : []]);	
-			$category->setPostedProducts($rule->getMatchingProductIds());
+			$rule->loadPost(['conditions' => isset($data['conditions']) ? $data['conditions'] : []]);
+			// apply rule
+			$matchingProducts = $rule->getMatchingProductIds();
+			// update position
+			$postedProducts = array_intersect_key($category->getPostedProducts(), $matchingProducts);
+			$postedProducts = array_replace($matchingProducts, $postedProducts);
+
+			$category->setPostedProducts($postedProducts);
 			$category->setSmartRule($rule);
 		}
         return $this;
