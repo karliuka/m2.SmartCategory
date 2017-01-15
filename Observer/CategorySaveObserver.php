@@ -24,6 +24,7 @@ namespace Faonni\SmartCategory\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Category save observer
@@ -58,9 +59,15 @@ class CategorySaveObserver implements ObserverInterface
     {
 		$category = $observer->getEvent()->getCategory();		
 		if ($category->getIsSmart()) {
-			$rule = $category->getSmartRule();
-			$rule->setId($category->getId());
-			$rule->save();					
+			if ($category->getSmartRuleError()) {
+				throw new LocalizedException(
+					$category->getSmartRuleError()
+				);
+			} else {
+				$rule = $category->getSmartRule();
+				$rule->setId($category->getId());
+				$rule->save();				
+			}				
 		}
         return $this;
     }

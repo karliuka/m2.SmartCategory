@@ -22,6 +22,7 @@
 namespace Faonni\SmartCategory\Model;
 
 use Magento\Rule\Model\AbstractModel;
+use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
@@ -427,5 +428,24 @@ class Rule extends AbstractModel implements IdentityInterface
     protected function _resetActions($actions=null)
     {
         return $this;
-    }    
+    } 
+    
+    /**
+     * Validate rule data. Return true if validation passed successfully. 
+     *
+     * @param \Magento\Framework\DataObject $dataObject
+     * @return bool|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function validateData(DataObject $dataObject)
+    {
+        if ($dataObject->getIsSmart()) {
+            $conditions = $dataObject->getConditions();
+            if (!is_array($conditions) || 1 >= count($conditions)) {
+                return __('Please specify a rule.');
+            }
+        }        
+        return true;
+    }      
 }

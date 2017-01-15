@@ -67,21 +67,24 @@ class CategoryPrepareObserver implements ObserverInterface
 			if ($category->getId()) {
 				$rule->load($category->getId());
 			}
-								
-			$validateResult = $rule->validateData(new DataObject($data));
-			// add validate control
 			
 			if (isset($data['rule'])) {
 				$data['conditions'] = $data['rule']['conditions'];
 				unset($data['rule']);
+			}			
+							
+			$validateResult = $rule->validateData(new DataObject($data));
+			if ($validateResult !== true) {
+				$category->setSmartRuleError($validateResult);
+				return $this;
 			}
 			
-			$rule->loadPost(['conditions' => isset($data['conditions']) ? $data['conditions'] : []]);
+			$rule->loadPost(['conditions' => $data['conditions']]);
 			$rule->setCategory($category);
 			// apply rule
 			$matchingProducts = $rule->getMatchingProductIds();
 			// update position
-			$postedProducts = array_intersect_key($category->getPostedProducts(), $matchingProducts);
+			$postedProducts = array_intersect_key($category->getPostedProducts() ?: [], $matchingProducts);
 			$postedProducts = array_replace($matchingProducts, $postedProducts);
 
 			$category->setPostedProducts($postedProducts);
