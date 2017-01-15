@@ -40,5 +40,11 @@
 	-->	    
     <event name="catalog_controller_category_delete">
         <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryDeleteObserver" />
-    </event>            
+    </event>
+	<!--
+	event adminhtml_catalog_product_attribute_edit_frontend_prepare_form
+	-->	    
+    <event name="adminhtml_catalog_product_attribute_edit_frontend_prepare_form">
+        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\AttributePrepareObserver" />
+    </event>                
 </config>

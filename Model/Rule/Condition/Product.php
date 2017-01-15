@@ -30,6 +30,13 @@ use Magento\Framework\Model\AbstractModel;
 class Product extends AbstractProduct
 {
     /**
+     * Attribute data key that indicates whether it should be used for rules
+     *
+     * @var string
+     */
+    protected $_isUsedForRuleProperty = 'is_used_for_smart_rules';
+    	
+    /**
      * Retrieve value element chooser URL
      *
      * @return string
