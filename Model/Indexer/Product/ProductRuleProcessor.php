@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Faonni
  *  
@@ -20,11 +19,17 @@
  * @copyright   Copyright (c) 2017 Karliuka Vitalii(karliuka.vitalii@gmail.com) 
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
-    <indexer id="smartcategory_product" view_id="smartcategory_product" class="Faonni\SmartCategory\Model\Indexer\Product\ProductRuleIndexer" shared_index="smartcategory">
-        <title translate="true">Smart Category Product Rule</title>
-        <description translate="true">Indexed smart category product/rule association</description>
-    </indexer>
-</config>
+namespace Faonni\SmartCategory\Model\Indexer\Product;
+
+use Magento\Framework\Indexer\AbstractProcessor;
+
+/**
+ * SmartCategory ProductRuleProcessor model
+ */
+class ProductRuleProcessor extends AbstractProcessor
+{
+    /**
+     * Indexer id
+     */
+    const INDEXER_ID = 'smartcategory_product';
+}

@@ -24,19 +24,24 @@ namespace Faonni\SmartCategory\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Faonni\SmartCategory\Model\Indexer\Product\ProductRuleProcessor;
 
 /**
- * Category save observer
+ * Product save observer
  */
-class CategorySaveObserver implements ObserverInterface
+class ProductSaveObserver implements ObserverInterface
 {
     /**
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;     
+    protected $_objectManager;
+	
+    /**
+     * @var ProductRuleProcessor
+     */
+    protected $_productRuleProcessor;	
     
     /**
      * Factory constructor
@@ -44,33 +49,26 @@ class CategorySaveObserver implements ObserverInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+		ProductRuleProcessor $productRuleProcessor
     ) {
         $this->_objectManager = $objectManager;
+		$this->_productRuleProcessor = $productRuleProcessor;
     }
        	
     /**
-     * Handler for category save event
+     * Apply smart category rules after product model save
      *
      * @param Observer $observer
      * @return void
      */
     public function execute(Observer $observer)
     {
-		$category = $observer->getEvent()->getCategory();		
-		if ($category->getIsSmart()) {
-			if ($category->getSmartRuleError()) {
-				throw new LocalizedException(
-					$category->getSmartRuleError()
-				);
-			} else {
-				$rule = $category->getSmartRule();
-				if ($rule) {
-					$rule->setId($category->getId());
-					$rule->save();					
-				}				
-			}				
-		}
+		$product = $observer->getEvent()->getProduct();		
+        if (!$product->getIsMassupdate()) {           
+			$this->_productRuleProcessor->reindexRow($product->getId());
+			$product->setOrigData('category_ids');
+        }
         return $this;
     }
 }  

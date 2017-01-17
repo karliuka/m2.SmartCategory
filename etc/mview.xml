@@ -23,11 +23,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
-    <view id="smartcategory_rule" class="Faonni\SmartCategory\Model\Indexer\Rule\RuleProductIndexer" group="indexer">
+    <!--<view id="smartcategory_rule" class="Faonni\SmartCategory\Model\Indexer\Rule\RuleProductIndexer" group="indexer">
         <subscriptions>
             <table name="smartcategory" entity_column="rule_id" />
         </subscriptions>
-    </view>
+    </view>-->
     <view id="smartcategory_product" class="Faonni\SmartCategory\Model\Indexer\Product\ProductRuleIndexer" group="indexer">
         <subscriptions>
             <table name="catalog_product_entity" entity_column="entity_id" />
