@@ -214,6 +214,7 @@ class IndexBuilder
 		if ($rule->validate($product)) {
 			if (!$this->checkPostedProduct($ruleId, $productId)) {
 				$this->insertMultiple($ruleId, [$productId => '1']);
+				// unknown later kills this insert
 			}
             return $this;
         }
