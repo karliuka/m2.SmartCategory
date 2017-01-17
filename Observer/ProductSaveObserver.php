@@ -66,9 +66,7 @@ class ProductSaveObserver implements ObserverInterface
     {
 		$product = $observer->getEvent()->getProduct();		
         if (!$product->getIsMassupdate()) {           
-			file_put_contents('/var/www/html/m2.loc/var/log/index.php', '---------------', FILE_APPEND);
 			$this->_productRuleProcessor->reindexRow($product->getId());
-			//$product->setOrigData('category_ids', []);
         }
         return $this;
     }
