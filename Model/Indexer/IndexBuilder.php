@@ -239,14 +239,10 @@ class IndexBuilder
     {
         $postedProducts = $this->getPostedProductData($rule->getId()) ?: [];
         $matchingProducts = $rule->getMatchingProductIds();
-        print_r('matchingProducts');
-        print_r($matchingProducts);
+
         $deleteIds = array_diff($postedProducts, $matchingProducts);
-        print_r('deleteIds');
-        print_r($deleteIds);
         $insertIds = array_diff($matchingProducts, $postedProducts);
-        print_r('insertIds');
-        print_r($insertIds);
+
         if (0 < count($deleteIds)) {
 			$this->cleanByIds($rule->getId(), $deleteIds);
 		}
