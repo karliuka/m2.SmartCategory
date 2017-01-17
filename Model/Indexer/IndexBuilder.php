@@ -277,9 +277,9 @@ class IndexBuilder
 
         $deleteIds = array_diff($postedProducts, $matchingProducts);
         $insertIds = array_diff($matchingProducts, $postedProducts);
-
+		
         if (0 < count($deleteIds)) {
-			$this->cleanByIds($rule->getId(), $deleteIds);
+			$this->cleanByIds($rule->getId(), array_keys($deleteIds));
 		}
 		
         if (0 < count($insertIds)) {

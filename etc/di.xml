@@ -23,13 +23,21 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\File"/>
+	<type name="Magento\Framework\DB\Logger\File">
+		<arguments>
+			<argument name="logAllQueries" xsi:type="boolean">true</argument>
+			<argument name="debugFile" xsi:type="string">log/sql.log</argument>
+		</arguments>
+	</type>		
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">
                 <item name="faonni_smartcategory_rule" xsi:type="string">Faonni_SmartCategory</item>
             </argument>
         </arguments>
-    </type>    
+    </type>
+    <type name="Magento\SmartCategory\Model\ResourceModel\Rule\Collection" shared="false" />
     <type name="Faonni\SmartCategory\Model\Rule\Condition\Combine">
         <arguments>
             <argument name="data" xsi:type="array">
