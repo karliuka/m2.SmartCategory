@@ -25,13 +25,22 @@ use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\App\Cache\Type\Block;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
 
+/**
+ * SmartCategory AbstractIndexer model
+ */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**
      * @var IndexBuilder
      */
-    protected $indexBuilder;
+    protected $_indexBuilder;
 
     /**
      * Application Event Dispatcher
@@ -43,12 +52,12 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * @var \Magento\Framework\App\CacheInterface
      */
-    private $cacheManager;
+    private $_cacheManager;
 
     /**
      * @var \Magento\Framework\Indexer\CacheContext
      */
-    protected $cacheContext;
+    protected $_cacheContext;
 
     /**
      * @param IndexBuilder $indexBuilder
@@ -56,9 +65,9 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     public function __construct(
         IndexBuilder $indexBuilder,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        ManagerInterface $eventManager
     ) {
-        $this->indexBuilder = $indexBuilder;
+        $this->_indexBuilder = $indexBuilder;
         $this->_eventManager = $eventManager;
     }
 
@@ -80,7 +89,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     public function executeFull()
     {
-        $this->indexBuilder->reindexFull();
+        $this->_indexBuilder->reindexFull();
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         //TODO: remove after fix fpc. MAGETWO-50668
         $this->getCacheManager()->clean($this->getIdentities());
@@ -95,9 +104,9 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     public function getIdentities()
     {
         return [
-            \Magento\Catalog\Model\Category::CACHE_TAG,
-            \Magento\Catalog\Model\Product::CACHE_TAG,
-            \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
+            Category::CACHE_TAG,
+            Product::CACHE_TAG,
+            Block::CACHE_TAG
         ];
     }
 
@@ -111,7 +120,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     public function executeList(array $ids)
     {
         if (!$ids) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Could not rebuild index for empty products array')
             );
         }
@@ -136,7 +145,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     public function executeRow($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('We can\'t rebuild the index for an undefined product.')
             );
         }
@@ -159,12 +168,12 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     private function getCacheManager()
     {
-        if ($this->cacheManager === null) {
-            $this->cacheManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+        if ($this->_cacheManager === null) {
+            $this->_cacheManager = ObjectManager::getInstance()->get(
                 'Magento\Framework\App\CacheInterface'
             );
         }
-        return $this->cacheManager;
+        return $this->_cacheManager;
     }
 
     /**
@@ -175,10 +184,10 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     protected function getCacheContext()
     {
-        if (!($this->cacheContext instanceof CacheContext)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        if (!($this->_cacheContext instanceof CacheContext)) {
+            return ObjectManager::getInstance()->get(CacheContext::class);
         } else {
-            return $this->cacheContext;
+            return $this->_cacheContext;
         }
     }
 }

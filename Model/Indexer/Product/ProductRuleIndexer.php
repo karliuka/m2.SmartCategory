@@ -21,22 +21,35 @@
  */
 namespace Faonni\SmartCategory\Model\Indexer\Product;
 
-class ProductRuleIndexer extends \Faonni\SmartCategory\Model\Indexer\AbstractIndexer
+use Magento\Catalog\Model\Product;
+use Faonni\SmartCategory\Model\Indexer\AbstractIndexer;
+
+/**
+ * SmartCategory ProductRuleIndexer model
+ */
+class ProductRuleIndexer extends AbstractIndexer
 {
     /**
-     * {@inheritdoc}
+     * Execute partial indexation by ID list
+     *
+     * @param int[] $ids
+     * @return void
      */
     protected function doExecuteList($ids)
     {
-        $this->indexBuilder->reindexByIds(array_unique($ids));
-        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
+        $this->_indexBuilder->reindexByIds(array_unique($ids));
+        $this->getCacheContext()->registerEntities(Product::CACHE_TAG, $ids);
     }
 
     /**
-     * {@inheritdoc}
+     * Execute partial indexation by ID
+     *
+     * @param int $id
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      */
     protected function doExecuteRow($id)
     {
-        $this->indexBuilder->reindexById($id);
+        $this->_indexBuilder->reindexById($id);
     }
 }

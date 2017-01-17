@@ -21,56 +21,47 @@
  */
 namespace Faonni\SmartCategory\Model\Indexer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Product;
+use Psr\Log\LoggerInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Faonni\SmartCategory\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Faonni\SmartCategory\Model\Rule;
-use Magento\Framework\App\ResourceConnection;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * SmartCategory IndexBuilder model
  */
 class IndexBuilder
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
      */
-    protected $resource;
+    protected $_resource;
 
     /**
      * @var RuleCollectionFactory
      */
-    protected $ruleCollectionFactory;
+    protected $_ruleCollectionFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    protected $_logger;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected $productFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\CategoryFactory
-     */
-    protected $categoryFactory;
+    protected $_productFactory;
     
     /**
      * @var Product[]
      */
-    protected $loadedProducts;
-
-    /**
-     * @var Category[]
-     */
-    protected $loadedCategories;
+    protected $_loadedProducts;
     
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $connection;
+    protected $_connection;
 
     /**
      * @param RuleCollectionFactory $ruleCollectionFactory
@@ -81,17 +72,15 @@ class IndexBuilder
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory
+        ResourceConnection $resource,
+        LoggerInterface $logger,
+        ProductFactory $productFactory
     ) {
-        $this->resource = $resource;
-        $this->connection = $resource->getConnection();
-        $this->ruleCollectionFactory = $ruleCollectionFactory;
-        $this->logger = $logger;
-        $this->productFactory = $productFactory;
-        $this->categoryFactory = $categoryFactory;
+        $this->_resource = $resource;
+        $this->_connection = $resource->getConnection();
+        $this->_ruleCollectionFactory = $ruleCollectionFactory;
+        $this->_logger = $logger;
+        $this->_productFactory = $productFactory;
     }
 
     /**
@@ -120,14 +109,14 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __("Smart category rule indexing failed. See details in exception log.")
             );
         }
     }
 
     /**
-     * Reindex by ids. Template method
+     * Reindex by ids
      *
      * @param array $ids
      * @return void
@@ -155,7 +144,7 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
+            throw new LocalizedException(__($e->getMessage()), $e);
         }
     }
 
@@ -181,12 +170,35 @@ class IndexBuilder
      */
     protected function cleanByIds($categoryId, $productIds)
     {
-		$this->connection->delete(
+		$this->_connection->delete(
 			$this->getTable('catalog_category_product'),
 			['category_id = ?' => $categoryId, 'product_id IN (?)' => $productIds]
 		); 	       
     }
-
+	
+    /**
+     * Insert products
+     *
+     * @param integer $categoryId
+     * @param array $productIds
+     * @return void
+     */
+    protected function insertMultiple($categoryId, $productIds)
+    {
+		$data = [];
+		foreach ($productIds as $productId => $position) {
+			$data[] = [
+				'category_id' => $categoryId, 
+				'product_id' => $productId, 
+				'position' => $position
+			];
+		}
+		$this->_connection->insertMultiple(
+			$this->getTable('catalog_category_product'), 
+			$data
+		);	       
+    }
+	
     /**
      * @param Rule $rule
      * @param Product $product
@@ -196,11 +208,16 @@ class IndexBuilder
      */
     protected function applyRule(Rule $rule, $product)
     {
-        if ($rule->validate($product)) {
-            // nide add product to catalog_category_product table
+        $ruleId = $rule->getId();
+		$productId = $product->getId();
+		
+		if ($rule->validate($product)) {
+			if (!$this->checkPostedProduct($ruleId, $productId)) {
+				$this->insertMultiple($ruleId, [$productId => '1']);
+			}
             return $this;
         }
-        $this->cleanByIds($rule->getId(), [$product->getId()]);
+        $this->cleanByIds($ruleId, [$productId]);
         return $this;
     }
 
@@ -210,8 +227,26 @@ class IndexBuilder
      */
     protected function getTable($tableName)
     {
-        return $this->resource->getTableName($tableName);
+        return $this->_resource->getTableName($tableName);
     }
+	
+    /**
+     * @param integer $categoryId
+     * @param integer $productId
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+	protected function checkPostedProduct($categoryId, $productId)
+	{         
+		$select = $this->_connection
+			->select()
+			->from($this->getTable('catalog_category_product'), [new \Zend_Db_Expr('COUNT(*)')])
+			->where('category_id = ?', $categoryId)
+			->where('product_id = ?', $productId); 
+				
+		return (0 < $this->_connection->fetchOne($select)) ? true : false;		
+	}
     
     /**
      * @param integer $categoryId
@@ -221,12 +256,12 @@ class IndexBuilder
      */
 	protected function getPostedProductData($categoryId)
 	{         
-		$select = $this->connection
+		$select = $this->_connection
 			->select()
 			->from($this->getTable('catalog_category_product'), ['product_id', 'position'])
 			->where('category_id = ?', $categoryId); 
 				
-		return $this->connection->fetchPairs($select);		
+		return $this->_connection->fetchPairs($select);		
 	}
 
     /**
@@ -248,11 +283,7 @@ class IndexBuilder
 		}
 		
         if (0 < count($insertIds)) {
-            $data = [];
-            foreach ($insertIds as $productId => $position) {
-                $data[$productId] = ['category_id' => (int)$rule->getId(), 'product_id' => $productId, 'position' => $position];
-            }
-            $this->connection->insertMultiple($this->getTable('catalog_category_product'), $data);			
+			$this->insertMultiple($rule->getId(), $insertIds);
 		}		        
         return $this;
     }
@@ -264,11 +295,7 @@ class IndexBuilder
      */
     protected function getAllRules()
     {
-        $collection = $this->ruleCollectionFactory->create();
-        foreach ($collection as $rule) {
-			$rule->setCategory($this->getCategory($rule->getId()));
-		}
-		return $collection;
+        return $this->_ruleCollectionFactory->create();
     }
 
     /**
@@ -277,24 +304,12 @@ class IndexBuilder
      */
     protected function getProduct($productId)
     {
-        if (!isset($this->loadedProducts[$productId])) {
-            $this->loadedProducts[$productId] = $this->productFactory->create()->load($productId);
+        if (!isset($this->_loadedProducts[$productId])) {
+            $this->_loadedProducts[$productId] = $this->_productFactory->create()
+				->load($productId);
         }
-        return $this->loadedProducts[$productId];
-    }
-    
-
-    /**
-     * @param int $categoryId
-     * @return Product
-     */
-    protected function getCategory($categoryId)
-    {
-        if (!isset($this->loadedCategories[$categoryId])) {
-            $this->loadedCategories[$categoryId] = $this->categoryFactory->create()->load($categoryId);
-        }
-        return $this->loadedCategories[$categoryId];
-    }        
+        return $this->_loadedProducts[$productId];
+    }      
 
     /**
      * @param \Exception $e
@@ -302,6 +317,6 @@ class IndexBuilder
      */
     protected function critical($e)
     {
-        $this->logger->critical($e);
+        $this->_logger->critical($e);
     }
 }
