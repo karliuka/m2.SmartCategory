@@ -23,8 +23,11 @@ namespace Faonni\SmartCategory\Model\Indexer;
 
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Faonni\SmartCategory\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Faonni\SmartCategory\Model\Rule;
 
@@ -62,25 +65,33 @@ class IndexBuilder
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
+	
+
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    protected $_indexerRegistry;	
 
     /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
         ResourceConnection $resource,
         LoggerInterface $logger,
-        ProductFactory $productFactory
+        ProductFactory $productFactory,
+		IndexerRegistry $indexerRegistry
+		
     ) {
         $this->_resource = $resource;
         $this->_connection = $resource->getConnection();
         $this->_ruleCollectionFactory = $ruleCollectionFactory;
         $this->_logger = $logger;
         $this->_productFactory = $productFactory;
+		$this->_indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -123,14 +134,38 @@ class IndexBuilder
      */
     protected function doReindexByIds($ids)
     {
-        foreach ($this->getAllRules() as $rule) {
+		foreach ($this->getAllRules() as $rule) {
             foreach ($ids as $productId) {
                 $this->applyRule($rule, $this->getProduct($productId));
+				$this->productCategoryReindexRow($productId);
             }
         }
-        // run reindex category product
     }
-
+	
+    /**
+     * Reindex product categories by productId
+     *
+     * @param array $productId
+     * @return void
+     */
+    protected function productCategoryReindexRow($productId)
+    {
+        $productCategoryIndexer = $this->_indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
+		$productCategoryIndexer->reindexRow($productId);
+    }
+	
+    /**
+     * Reindex category products by productId
+     *
+     * @param array $categoryId
+     * @return void
+     */
+    protected function categoryProductReindexRow($categoryId)
+    {
+        $categoryProductIndexer = $this->_indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
+		$categoryProductIndexer->reindexRow($categoryId);
+    }	
+	
     /**
      * Full reindex
      *
@@ -157,8 +192,8 @@ class IndexBuilder
     {
         foreach ($this->getAllRules() as $rule) {
             $this->updateRuleProductData($rule);
+			$this->categoryProductReindexRow($rule->getId());
         }
-        // run reindex category product
     }
 
     /**
@@ -214,10 +249,10 @@ class IndexBuilder
 		if ($rule->validate($product)) {
 			if (!$this->checkPostedProduct($ruleId, $productId)) {
 				$this->insertMultiple($ruleId, [$productId => '1']);
-				// unknown later kills this insert
 			}
             return $this;
         }
+		
         $this->cleanByIds($ruleId, [$productId]);
         return $this;
     }
