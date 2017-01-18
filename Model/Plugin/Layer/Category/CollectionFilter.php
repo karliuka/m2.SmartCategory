@@ -39,7 +39,6 @@ class CollectionFilter
      */
     protected $_productVisibility;
     
-
     /**
      * Catalog config
      *

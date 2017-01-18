@@ -60,14 +60,13 @@ class CategoryPrepareObserver implements ObserverInterface
 		$request = $observer->getEvent()->getRequest();
 		$category = $observer->getEvent()->getCategory();
 		$data = $request->getPostValue();
-			
+		
+		$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');
+		if ($category->getId()) {
+			$rule->load($category->getId());
+		}
+						
 		if ($data && $category->getIsSmart()) {
-
-			$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');	
-			if ($category->getId()) {
-				$rule->load($category->getId());
-			}
-			
 			if (isset($data['rule'])) {
 				$data['conditions'] = $data['rule']['conditions'];
 				unset($data['rule']);
@@ -89,7 +88,10 @@ class CategoryPrepareObserver implements ObserverInterface
 
 			$category->setPostedProducts($postedProducts);
 			$category->setSmartRule($rule);
+		} else {
+			$rule->delete();
 		}
+	
         return $this;
     }
 }  
