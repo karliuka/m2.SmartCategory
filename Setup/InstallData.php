@@ -73,14 +73,6 @@ class InstallData implements InstallDataInterface
             ['rule_id']
         );
         
-        $installer->appendClassAliasReplace(
-            'faonni_smartcategory_rule',
-            'actions_serialized',
-            Migration::ENTITY_TYPE_MODEL,
-            Migration::FIELD_CONTENT_TYPE_SERIALIZED,
-            ['rule_id']
-        );
-        
         $installer->doUpdateClassAliases();
         
         /** @var EavSetup $eavSetup */
