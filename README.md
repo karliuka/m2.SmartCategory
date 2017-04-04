@@ -20,3 +20,4 @@ Extension is a base of Smart Categories functionality.
 	php bin/magento setup:upgrade
 	php bin/magento setup:static-content:deploy
 
+Additionally: [Smart Category Configurable](https://github.com/karliuka/m2.SmartCategoryConfigurable)
