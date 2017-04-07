@@ -358,7 +358,9 @@ class Rule extends AbstractModel implements IdentityInterface
     {
         // Serialize conditions
         if ($this->getConditions()) {
-            $this->setConditionsSerialized(serialize($this->getConditions()->asArray()));
+            $this->setConditionsSerialized(
+				serialize($this->getConditions()->asArray())
+			);
             $this->_conditions = null;
         }
         return parent::beforeSave();
@@ -441,10 +443,22 @@ class Rule extends AbstractModel implements IdentityInterface
     public function validateData(DataObject $dataObject)
     {
         if ($dataObject->getIsSmart()) {
-            $conditions = $dataObject->getConditions();
-            if (!is_array($conditions) || 1 >= count($conditions)) {
-                return __('Please specify a rule.');
+			$validator = new DataObject(['error' => null, 'continue' => true]); 			
+			$this->_eventManager->dispatch(
+				'faonni_smartcategory_validate_data', 
+				['object' => $dataObject, 'validator' => $validator]
+			);
+			
+            if ($validator->getError()) {
+                return $validator->getError();
             }
+			
+			if ($validator->getContinue()) {
+				$conditions = $dataObject->getConditions();
+				if (!is_array($conditions) || 1 >= count($conditions)) {
+					return __('Please specify a rule.');
+				}
+			} 
         }        
         return true;
     }      
