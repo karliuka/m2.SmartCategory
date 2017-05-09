@@ -10,7 +10,7 @@ Extension is a base of Smart Categories functionality.
 2. Enter following commands to install module:
 
     ```bash
-    composer require faonni/module-smart-category
+    composer require faonni/module-smart-category-kit
     ```
    Wait while dependencies are updated.
 
