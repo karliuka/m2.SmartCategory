@@ -23,7 +23,6 @@ namespace Faonni\SmartCategory\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Faonni\SmartCategory\Model\Indexer\Product\ProductRuleProcessor;
 
 /**
@@ -32,13 +31,8 @@ use Faonni\SmartCategory\Model\Indexer\Product\ProductRuleProcessor;
 class ProductSaveObserver implements ObserverInterface
 {
     /**
-     * Object Manager instance
+     * Product Rule Processor instance
      *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $_objectManager;
-	
-    /**
      * @var ProductRuleProcessor
      */
     protected $_productRuleProcessor;	
@@ -46,13 +40,11 @@ class ProductSaveObserver implements ObserverInterface
     /**
      * Factory constructor
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ProductRuleProcessor $objectManager
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
 		ProductRuleProcessor $productRuleProcessor
     ) {
-        $this->_objectManager = $objectManager;
 		$this->_productRuleProcessor = $productRuleProcessor;
     }
        	
