@@ -67,13 +67,26 @@ class Combine extends RuleCombine
 			->loadAttributeOptions()
 			->getAttributeOption();
 			
-        $attributes = [];
+        $attributes = [
+            [
+                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\Sale', 
+                'label' => __('Special Price')
+            ],
+            [
+                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\News', 
+                'label' => __('New')
+            ]   
+        ];
+        
         foreach ($productAttributes as $code => $label) {
-            $attributes[] = [
-                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product|' . $code,
-                'label' => $label,
-            ];
+            if ('special_price' != $code) {
+                $attributes[] = [
+                    'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product|' . $code,
+                    'label' => $label,
+                ];
+            }         
         }
+        
         $conditions = parent::getNewChildSelectOptions();
         $conditions = array_merge_recursive(
             $conditions,
