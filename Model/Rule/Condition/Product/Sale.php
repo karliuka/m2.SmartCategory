@@ -22,7 +22,6 @@
 namespace Faonni\SmartCategory\Model\Rule\Condition\Product;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Context;
 
@@ -31,13 +30,6 @@ use Magento\Rule\Model\Condition\Context;
  */
 class Sale extends AbstractCondition
 {
-    /**
-     * Locale Date instance
-     *
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $_localeDate;
-    
     /**
      * Defines which operators will be available for this condition
      *
@@ -49,12 +41,10 @@ class Sale extends AbstractCondition
      * Initialize Condition Model
      *
      * @param Context $context 
-     * @param TimezoneInterface $localeDate
      * @param array $data
      */
     public function __construct(
         Context $context,
-        TimezoneInterface $localeDate,
         array $data = []
     ) {
         parent::__construct(
@@ -62,8 +52,6 @@ class Sale extends AbstractCondition
 			$data
 		);
 		
-        $this->_localeDate = $localeDate;
-        
         $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Product\Sale');
         $this->setValue(0);
     }
