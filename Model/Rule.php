@@ -208,7 +208,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
     
     /**
-     * Get array of product ids which are matched by rule
+     * Get Array of Product ids Which are Matched by Rule
      *
      * @return array
      */
