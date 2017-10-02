@@ -4,7 +4,7 @@
  * 
  * See COPYING.txt for license details.
  */
-namespace Faonni\SmartCategory\Model\Plugin\Layer\Category;
+namespace Faonni\SmartCategory\Plugin\Catalog\Model\Layer\Category;
 
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Category;
 
 /**
- * Collection filter
+ * CollectionFilter Plugin
  */
 class CollectionFilter
 {	
@@ -32,10 +32,10 @@ class CollectionFilter
     protected $_catalogConfig;    
 
     /**
-     * CollectionFilter constructor
+     * Initialize Plugin
      *
-     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Catalog\Model\Config $catalogConfig
+     * @param Visibility $productVisibility
+     * @param Config $catalogConfig
      */
     public function __construct(
         Visibility $productVisibility,
@@ -48,13 +48,13 @@ class CollectionFilter
     /**
      * Filter product collection
      *
-     * @param \Magento\Catalog\Model\Layer\Category\CollectionFilter" $collectionFilter
-     * @param callable proceed
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-     * @param \Magento\Catalog\Model\Category $category
+     * @param LayerCollectionFilter $collectionFilter
+     * @param Callable proceed
+     * @param Collection $collection
+     * @param Category $category
      * @return void
      */
-    public function aroundFilter(LayerCollectionFilter $collectionFilter, callable $proceed, Collection $collection, Category $category)
+    public function aroundFilter(LayerCollectionFilter $collectionFilter, Callable $proceed, Collection $collection, Category $category)
     {
         $collection
             ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
@@ -64,9 +64,13 @@ class CollectionFilter
             ->addUrlRewrite($category->getId());
             	
 		if ($category->getIsSmart()) {
-			$collection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
+			$collection->setVisibility(
+				$this->_productVisibility->getVisibleInSiteIds()
+			);
 		} else {
-			$collection->setVisibility($this->_productVisibility->getVisibleInCatalogIds());
+			$collection->setVisibility(
+				$this->_productVisibility->getVisibleInCatalogIds()
+			);
 		}
     }
 } 
