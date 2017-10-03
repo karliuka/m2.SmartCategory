@@ -17,7 +17,7 @@ use Magento\Framework\DB\Ddl\Table;
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
-     * Upgrades DB schema for a module Faonni_SmartCategory
+     * Upgrades DB Schema for a Module Faonni_SmartCategory
      *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context

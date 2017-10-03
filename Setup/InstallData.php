@@ -16,7 +16,7 @@ use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Catalog\Model\Category;
 
 /**
- * Faonni_SmartCategory InstallData
+ * SmartCategory Install Data
  */
 class InstallData implements InstallDataInterface
 {
@@ -28,7 +28,7 @@ class InstallData implements InstallDataInterface
     private $_eavSetupFactory;
 
     /**
-     * Init
+     * Initialize Setup
      *
      * @param EavSetupFactory $eavSetupFactory
      */
@@ -39,7 +39,7 @@ class InstallData implements InstallDataInterface
     }
     	
     /**
-     * Installs DB schema for a module Faonni_SmartCategory
+     * Installs DB Data for a Module Faonni_SmartCategory
      *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
