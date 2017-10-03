@@ -3,6 +3,7 @@ Extension is a base of Smart Categories functionality.
 
 ### Category edit page
 <img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/category.png" style="width:100%"/>
+
 ## Install with Composer as you go
 
 1. Go to Magento2 root folder
@@ -18,6 +19,7 @@ Extension is a base of Smart Categories functionality.
 
     ```bash
 	php bin/magento setup:upgrade
-	php bin/magento setup:static-content:deploy
+	php bin/magento setup:di:compile
+	php bin/magento setup:static-content:deploy  (optional)
 
 Additionally: [Smart Category Configurable](https://github.com/karliuka/m2.SmartCategoryConfigurable)
