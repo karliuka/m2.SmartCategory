@@ -1,7 +1,9 @@
 # Magento2 Smart Category
-Extension is a base of Smart Categories functionality.
+
+Extension Smart Category rules dynamically change the product selection according to a set of conditions (Similar Smart Playlists on iTunes). 
 
 ### Category edit page
+
 <img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/category.png" style="width:100%"/>
 
 ## Install with Composer as you go
