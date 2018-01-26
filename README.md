@@ -15,7 +15,7 @@ Magento CE 2.1.x, 2.2.x
 
 ## Install
 
-### Install with Composer as you go
+#### Install with Composer as you go
 
 1. Go to Magento2 root folder
 
