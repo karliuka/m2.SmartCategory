@@ -39,6 +39,8 @@ The corresponding version of the Smart Category Kit will be installed automatica
 
 3. Copy the unzip content to the folder ({Magento root}/app/code/Faonni/SmartCategory)
 
+4. Install [Smart Category Configurable](https://github.com/karliuka/m2.SmartCategoryConfigurable)
+
 ### Completion of installation
 
 1. Go to Magento2 root folder
@@ -54,5 +56,3 @@ The corresponding version of the Smart Category Kit will be installed automatica
 ### Category edit page
 
 <img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/category.png" style="width:100%"/>
-
-Additionally: [latest version](https://github.com/karliuka/m2.SmartCategory/releases)
