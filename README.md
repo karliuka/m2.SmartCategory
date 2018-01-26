@@ -15,7 +15,8 @@ Magento CE 2.1.x, 2.2.x
 
 ## Install
 
-#### Install with Composer as you go
+#### Install with Composer as you go (recommend)
+The corresponding version of the extension will be installed automatically.
 
 1. Go to Magento2 root folder
 
