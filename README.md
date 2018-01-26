@@ -9,12 +9,13 @@ You can create categories based on rules you specify, and then update these cate
 
 For example, you could create a category  includes only new products. Or you could create a categories of products by a particular brand, color, size, etc. You can add as many conditions to the expression as needed to describe the products to include.
 
+## Compatibility
 
-### Category edit page
+Magento CE 2.1.x, 2.2.x
 
-<img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/category.png" style="width:100%"/>
+## Install
 
-## Install with Composer as you go
+### Install with Composer as you go
 
 1. Go to Magento2 root folder
 
@@ -31,5 +32,9 @@ For example, you could create a category  includes only new products. Or you cou
 	php bin/magento setup:upgrade
 	php bin/magento setup:di:compile
 	php bin/magento setup:static-content:deploy  (optional)
+
+### Category edit page
+
+<img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/category.png" style="width:100%"/>
 
 Additionally: [Smart Category Configurable](https://github.com/karliuka/m2.SmartCategoryConfigurable)
