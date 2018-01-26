@@ -3,7 +3,12 @@
 [![Total Downloads](https://poser.pugx.org/faonni/module-smart-category/downloads)](https://packagist.org/packages/faonni/module-smart-category)
 [![Latest Stable Version](https://poser.pugx.org/faonni/module-smart-category/v/stable)](https://packagist.org/packages/faonni/module-smart-category)	
 
-Extension Smart Category rules dynamically change the product selection according to a set of conditions (Similar Smart Playlists on iTunes). 
+Extension Smart Category rules dynamically change the product selection according to a set of conditions (Similar Smart Playlists on iTunes).
+
+You can create categories based on rules you specify, and then update these categories automatically as your products changes.
+
+For example, you could create a category  includes only new products. Or you could create a categories of products by a particular brand, color, size, etc. You can add as many conditions to the expression as needed to describe the products to include.
+
 
 ### Category edit page
 
