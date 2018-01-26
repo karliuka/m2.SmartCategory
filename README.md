@@ -15,8 +15,12 @@ Magento CE 2.1.x, 2.2.x
 
 ## Install
 
-#### Install with Composer as you go (recommend)
-The corresponding version of the extension will be installed automatically.
+To install the Smart Category, You must install kit of extensions:
+- Smart Category - base of Smart Categories functionality.
+- [Smart Category Configurable](https://github.com/karliuka/m2.SmartCategoryConfigurable) - changes simple products to their parents for configurable products.
+
+#### Install via Composer (recommend)
+The corresponding version of the Smart Category Kit will be installed automatically.
 
 1. Go to Magento2 root folder
 
@@ -26,16 +30,29 @@ The corresponding version of the extension will be installed automatically.
     composer require faonni/module-smart-category-kit
     ```
    Wait while dependencies are updated.
+   
+#### Manual Installation
+   
+1. Create a folder {Magento root}/app/code/Faonni/SmartCategory
 
-3. Enter following commands to enable module:
+2. Download the corresponding [latest version](https://github.com/karliuka/m2.SmartCategory/releases)
+
+3. Copy the unzip content to the folder ({Magento root}/app/code/Faonni/SmartCategory)
+
+### Completion of installation
+
+1. Go to Magento2 root folder
+
+2. Enter following commands:
 
     ```bash
 	php bin/magento setup:upgrade
 	php bin/magento setup:di:compile
 	php bin/magento setup:static-content:deploy  (optional)
+    ```
 
 ### Category edit page
 
 <img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/category.png" style="width:100%"/>
 
-Additionally: [Smart Category Configurable](https://github.com/karliuka/m2.SmartCategoryConfigurable)
+Additionally: [latest version](https://github.com/karliuka/m2.SmartCategory/releases)
