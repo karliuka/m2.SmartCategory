@@ -1,5 +1,8 @@
 # Magento2 Smart Category
 
+[![Total Downloads](https://poser.pugx.org/faonni/module-smart-category/downloads)](https://packagist.org/packages/faonni/module-smart-category)
+[![Latest Stable Version](https://poser.pugx.org/faonni/module-smart-category/v/stable)](https://packagist.org/packages/faonni/module-smart-category)	
+
 Extension Smart Category rules dynamically change the product selection according to a set of conditions (Similar Smart Playlists on iTunes). 
 
 ### Category edit page
