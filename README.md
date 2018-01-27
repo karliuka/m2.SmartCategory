@@ -80,7 +80,7 @@ This works only with modules defined as Composer packages.
     composer remove faonni/module-smart-category-kit
     ```
 
-### Completion of uninstall
+#### Completion of uninstall
 
 1. Go to Magento2 root folder
 
