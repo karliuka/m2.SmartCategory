@@ -11,7 +11,7 @@ For example, you could create a category  includes only new products. Or you cou
 
 ### Category edit page
 
-<img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/category.png" style="width:100%"/>
+<img alt="Magento2 Smart Category" src="https://karliuka.github.io/m2/smart-category/edit.png" style="width:100%"/>
 
 ## Compatibility
 
