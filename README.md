@@ -57,3 +57,36 @@ The corresponding version of the Smart Category Kit will be installed automatica
 	php bin/magento setup:static-content:deploy  (optional)
     ```
 
+## Uninstall
+This works only with modules defined as Composer packages.
+
+#### Remove database data and schema
+
+1. Go to Magento2 root folder
+
+2. Enter following commands to remove database data and schema:
+
+    ```bash
+    php bin/magento module:uninstall -r Faonni_SmartCategoryKit Faonni_SmartCategoryConfigurable Faonni_SmartCategory
+    ```
+    
+#### Remove Smart Category Kit
+    
+1. Go to Magento2 root folder
+
+2. Enter following commands to remove:
+
+    ```bash
+    composer remove faonni/module-smart-category-kit
+    ```
+
+### Completion of uninstall
+
+1. Go to Magento2 root folder
+
+2. Enter following commands:
+
+    ```bash
+	php bin/magento setup:upgrade
+	php bin/magento setup:di:compile
+	php bin/magento setup:static-content:deploy  (optional)
