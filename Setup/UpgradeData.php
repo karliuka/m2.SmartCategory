@@ -21,7 +21,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Field Data Converter
      *
-     * @var AggregatedFieldDataConverter
+     * @var \Magento\Framework\DB\AggregatedFieldDataConverter
      */
     protected $_aggregatedFieldConverter;
 

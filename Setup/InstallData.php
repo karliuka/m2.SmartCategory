@@ -10,7 +10,6 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Module\Setup\Migration;
-use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Catalog\Model\Category;
@@ -21,9 +20,9 @@ use Magento\Catalog\Model\Category;
 class InstallData implements InstallDataInterface
 {
     /**
-     * EAV setup factory
+     * EAV Setup Factory
      *
-     * @var EavSetupFactory
+     * @var \Magento\Eav\Setup\EavSetupFactory
      */
     private $_eavSetupFactory;
 
@@ -60,7 +59,7 @@ class InstallData implements InstallDataInterface
         
         $installer->doUpdateClassAliases();
         
-        /** @var EavSetup $eavSetup */
+        /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);        
         $eavSetup->addAttribute(
             Category::ENTITY,
