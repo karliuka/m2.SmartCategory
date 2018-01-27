@@ -57,9 +57,9 @@ The corresponding version of the Smart Category Kit will be installed automatica
 	php bin/magento setup:static-content:deploy  (optional)
     ```
 ## Configuration
-In the Magento Admin Panel go to Stores > Product Attributes.
+In the Magento Admin Panel go to *Stores > Product Attributes*.
 Select any attribute that you’d like to be able to use by in the smart category conditions.
-On the edit attribute page, under 'Storefront Properties' set 'Use for Smart Category Rule' to 'Yes'.
+On the edit attribute page, under **Storefront Properties** set **Use for Smart Category Rule** to **Yes**.
 <img alt="Magento2 Use for Smart Category Rule" src="https://karliuka.github.io/m2/smart-category/attribute.png" style="width:100%"/>
 Save the attribute.
 
