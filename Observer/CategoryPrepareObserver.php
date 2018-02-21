@@ -55,12 +55,15 @@ class CategoryPrepareObserver implements ObserverInterface
 			if (isset($data['rule'])) {
 				$data['conditions'] = $data['rule']['conditions'];
 				unset($data['rule']);
-			}			
+			} else {
+				// closed tab
+				return;			
+			}	
 							
 			$validateResult = $rule->validateData(new DataObject($data));
 			if ($validateResult !== true) {
 				$category->setSmartRuleError($validateResult);
-				return $this;
+				return;
 			}
 			
 			$rule->loadPost(['conditions' => $data['conditions']]);
@@ -76,7 +79,6 @@ class CategoryPrepareObserver implements ObserverInterface
 		} else {
 			$rule->delete();
 		}
-	
-        return $this;
+        return;
     }
 }  
