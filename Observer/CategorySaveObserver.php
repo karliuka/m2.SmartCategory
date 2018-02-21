@@ -8,32 +8,13 @@ namespace Faonni\SmartCategory\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Category save observer
+ * Category Save Observer
  */
 class CategorySaveObserver implements ObserverInterface
-{
-    /**
-     * Object Manager instance
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $_objectManager;     
-    
-    /**
-     * Factory constructor
-     *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     */
-    public function __construct(
-        ObjectManagerInterface $objectManager
-    ) {
-        $this->_objectManager = $objectManager;
-    }
-       	
+{ 	
     /**
      * Handler for category save event
      *
@@ -56,6 +37,5 @@ class CategorySaveObserver implements ObserverInterface
 				}				
 			}				
 		}
-        return $this;
     }
 }  

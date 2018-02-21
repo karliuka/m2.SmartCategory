@@ -12,16 +12,20 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Config\Model\Config\Source\Yesno;
 
 /**
- * Attribute prepare observer
+ * Attribute Prepare Observer
  */
 class AttributePrepareObserver implements ObserverInterface
 {
     /**
-     * @var Yesno
+     * Source Yesno
+     * 
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_yesNo;
 
     /**
+     * Initialize Observer
+     * 
      * @param Yesno $yesNo
      */
     public function __construct(
@@ -55,6 +59,5 @@ class AttributePrepareObserver implements ObserverInterface
 				'is_used_for_promo_rules'
 			);
         }
-        return $this;
     }
 }  

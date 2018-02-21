@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Category prepare observer
+ * Category Prepare Observer
  */
 class CategoryPrepareObserver implements ObserverInterface
 {
