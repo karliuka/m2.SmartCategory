@@ -62,7 +62,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $connection = $setup->getConnection();
         $connection->addColumn(
-            'catalog_eav_attribute',
+            $setup->getTable('catalog_eav_attribute'),
             'is_used_for_smart_rules',
             [
                 'type' => Table::TYPE_SMALLINT,
