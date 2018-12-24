@@ -14,30 +14,30 @@ use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Catalog\Model\Category;
 
 /**
- * SmartCategory Install Data
+ * Install data
  */
 class InstallData implements InstallDataInterface
 {
     /**
-     * EAV Setup Factory
+     * EAV setup factory
      *
      * @var \Magento\Eav\Setup\EavSetupFactory
      */
     private $_eavSetupFactory;
 
     /**
-     * Initialize Setup
+     * Initialize setup
      *
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-		EavSetupFactory $eavSetupFactory
-	) {
+        EavSetupFactory $eavSetupFactory
+    ) {
         $this->_eavSetupFactory = $eavSetupFactory;
     }
-    	
+
     /**
-     * Installs DB Data for a Module Faonni_SmartCategory
+     * Installs DB Data
      *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -47,7 +47,7 @@ class InstallData implements InstallDataInterface
     {
         $installer = $setup->createMigrationSetup();
         $setup->startSetup();
-        
+
         $installer->appendClassAliasReplace(
             'faonni_smartcategory_rule',
             'conditions_serialized',
@@ -55,26 +55,26 @@ class InstallData implements InstallDataInterface
             Migration::FIELD_CONTENT_TYPE_SERIALIZED,
             ['rule_id']
         );
-        
+
         $installer->doUpdateClassAliases();
-        
+
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);        
+        $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);
         $eavSetup->addAttribute(
             Category::ENTITY,
             'is_smart',
             [
-				'type' => 'int',
-				'label' => 'Smart Category',
-				'input' => 'select',
-				'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
-				'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
-				'required' => false,
-				'sort_order' => 10,
-				'default' => '0',
-				'group' => 'Products in Category',
+                'type' => 'int',
+                'label' => 'Smart Category',
+                'input' => 'select',
+                'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+                'required' => false,
+                'sort_order' => 10,
+                'default' => '0',
+                'group' => 'Products in Category',
             ]
-        );       
-        $setup->endSetup();  
+        );
+        $setup->endSetup();
     }
 }
