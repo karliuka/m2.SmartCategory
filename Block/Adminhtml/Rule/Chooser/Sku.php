@@ -5,54 +5,80 @@
  */
 namespace Faonni\SmartCategory\Block\Adminhtml\Rule\Chooser;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Extended as AbstractGrid;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as SetCollectionFactory;
 
-class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
+/**
+ * Sku grid
+ */
+class Sku extends AbstractGrid
 {
     /**
+     * Product type
+     *
      * @var \Magento\Catalog\Model\Product\Type
      */
-    protected $_catalogType;
+    protected $_productType;
 
     /**
+     * Product collection factory
+     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
-    protected $_cpCollection;
+    protected $_productCollectionFactory;
 
     /**
+     * Product collection
+     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    protected $_cpCollectionInstance;
+    protected $productCollection;
 
     /**
+     * Attribute set collection factory
+     *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
-    protected $_eavAttSetCollection;
+    protected $_setCollectionFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $cpCollection
-     * @param \Magento\Catalog\Model\Product\Type $catalogType
+     * Intialize grid
+     *
+     * @param Context $context
+     * @param BackendHelper $backendHelper
+     * @param SetCollectionFactory $setCollectionFactory
+     * @param ProductCollectionFactory $productCollectionFactory
+     * @param ProductType $productType
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $cpCollection,
-        \Magento\Catalog\Model\Product\Type $catalogType,
+        Context $context,
+        BackendHelper $backendHelper,
+        SetCollectionFactory $setCollectionFactory,
+        ProductCollectionFactory $productCollectionFactory,
+        ProductType $productType,
         array $data = []
     ) {
-        $this->_catalogType = $catalogType;
-        $this->_cpCollection = $cpCollection;
-        $this->_eavAttSetCollection = $eavAttSetCollection;
-        parent::__construct($context, $backendHelper, $data);
+        $this->_productType = $productType;
+        $this->_productCollectionFactory = $productCollectionFactory;
+        $this->_setCollectionFactory = $setCollectionFactory;
+
+        parent::__construct(
+            $context,
+            $backendHelper,
+            $data
+        );
     }
 
     /**
+     * Intialize data
+     *
      * @return void
      */
     protected function _construct()
@@ -66,17 +92,21 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         $form = $this->getJsFormObject();
+
         $this->setRowClickCallback("{$form}.chooserGridRowClick.bind({$form})");
         $this->setCheckboxCheckCallback("{$form}.chooserGridCheckboxCheck.bind({$form})");
         $this->setRowInitCallback("{$form}.chooserGridRowInit.bind({$form})");
         $this->setDefaultSort('sku');
         $this->setUseAjax(true);
+
         if ($this->getRequest()->getParam('collapse')) {
             $this->setIsCollapsed(true);
         }
     }
 
     /**
+     * Add column filtering conditions to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -106,30 +136,25 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_getCpCollectionInstance()->setStoreId(
-            0
-        )->addAttributeToSelect(
-            'name',
-            'type_id',
-            'attribute_set_id'
-        );
+        $collection = $this->_getProductCollection()
+            ->setStoreId(0)
+            ->addAttributeToSelect('name', 'type_id', 'attribute_set_id');
 
         $this->setCollection($collection);
-
         return parent::_prepareCollection();
     }
 
     /**
-     * Get catalog product resource collection instance
+     * Retrieve catalog product resource collection instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    protected function _getCpCollectionInstance()
+    protected function _getProductCollection()
     {
-        if (!$this->_cpCollectionInstance) {
-            $this->_cpCollectionInstance = $this->_cpCollection->create();
+        if (!$this->productCollection) {
+            $this->productCollection = $this->_productCollectionFactory->create();
         }
-        return $this->_cpCollectionInstance;
+        return $this->productCollection;
     }
 
     /**
@@ -154,7 +179,12 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'entity_id',
-            ['header' => __('ID'), 'sortable' => true, 'width' => '60px', 'index' => 'entity_id']
+            [
+                'header' => __('ID'),
+                'sortable' => true,
+                'width' => '60px',
+                'index' => 'entity_id'
+            ]
         );
 
         $this->addColumn(
@@ -164,12 +194,12 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
                 'width' => '60px',
                 'index' => 'type_id',
                 'type' => 'options',
-                'options' => $this->_catalogType->getOptionArray()
+                'options' => $this->_productType->getOptionArray()
             ]
         );
 
-        $sets = $this->_eavAttSetCollection->create()->setEntityTypeFilter(
-            $this->_getCpCollectionInstance()->getEntity()->getTypeId()
+        $sets = $this->_setCollectionFactory->create()->setEntityTypeFilter(
+            $this->_getProductCollection()->getEntity()->getTypeId()
         )->load()->toOptionHash();
 
         $this->addColumn(
@@ -185,17 +215,28 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'chooser_sku',
-            ['header' => __('SKU'), 'name' => 'chooser_sku', 'width' => '80px', 'index' => 'sku']
-        );
-        $this->addColumn(
-            'chooser_name',
-            ['header' => __('Product'), 'name' => 'chooser_name', 'index' => 'name']
+            [
+                'header' => __('SKU'),
+                'name' => 'chooser_sku',
+                'width' => '80px', 
+                'index' => 'sku'
+            ]
         );
 
+        $this->addColumn(
+            'chooser_name',
+            [
+                'header' => __('Product'),
+                'name' => 'chooser_name', 
+                'index' => 'name'
+            ]
+        );
         return parent::_prepareColumns();
     }
 
     /**
+     * Retrieve grid reload url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -207,12 +248,12 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve selected products
+     *
      * @return mixed
      */
     protected function _getSelectedProducts()
     {
-        $products = $this->getRequest()->getPost('selected', []);
-
-        return $products;
+        return $this->getRequest()->getPost('selected', []);
     }
 }
