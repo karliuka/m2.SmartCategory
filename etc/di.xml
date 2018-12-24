@@ -14,7 +14,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SmartCategory\Model\ResourceModel\Rule\Collection" shared="false" />
+    <type name="Faonni\SmartCategory\Model\ResourceModel\Rule\Collection" shared="false" />
     <type name="Faonni\SmartCategory\Model\Rule\Condition\Combine">
         <arguments>
             <argument name="data" xsi:type="array">

@@ -15,23 +15,23 @@ use Magento\Catalog\Model\Category;
  * CollectionFilter Plugin
  */
 class CollectionFilter
-{	
+{
     /**
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_productVisibility;
-    
+
     /**
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
      */
-    protected $_catalogConfig;    
+    protected $_catalogConfig;
 
     /**
-     * Initialize Plugin
+     * Initialize plugin
      *
      * @param Visibility $productVisibility
      * @param Config $catalogConfig
@@ -43,7 +43,7 @@ class CollectionFilter
         $this->_productVisibility = $productVisibility;
         $this->_catalogConfig = $catalogConfig;
     }
-        	
+
     /**
      * Filter product collection
      *
@@ -53,24 +53,28 @@ class CollectionFilter
      * @param Category $category
      * @return void
      */
-    public function aroundFilter(LayerCollectionFilter $collectionFilter, Callable $proceed, Collection $collection, Category $category)
-    {
+    public function aroundFilter(
+        LayerCollectionFilter $collectionFilter, 
+        Callable $proceed, 
+        Collection $collection, 
+        Category $category
+    ) {
         $collection
             ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
             ->addUrlRewrite($category->getId());
-            	
-		if ($category->getIsSmart()) {
-			$collection->setVisibility(
-				$this->_productVisibility->getVisibleInSiteIds()
-			);
-		} else {
-			$collection->setVisibility(
-				$this->_productVisibility->getVisibleInCatalogIds()
-			);
-		}
+
+        if ($category->getIsSmart()) {
+            $collection->setVisibility(
+                $this->_productVisibility->getVisibleInSiteIds()
+            );
+        } else {
+            $collection->setVisibility(
+                $this->_productVisibility->getVisibleInCatalogIds()
+            );
+        }
     }
 } 
  
