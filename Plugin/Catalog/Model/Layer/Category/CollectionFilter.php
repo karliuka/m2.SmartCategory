@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Plugin\Catalog\Model\Layer\Category;
@@ -16,20 +16,20 @@ use Magento\Catalog\Model\Category;
  * CollectionFilter Plugin
  */
 class CollectionFilter
-{	
+{
     /**
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_productVisibility;
-    
+
     /**
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
      */
-    protected $_catalogConfig;    
+    protected $_catalogConfig;
 
     /**
      * Initialize Plugin
@@ -44,17 +44,17 @@ class CollectionFilter
         $this->_productVisibility = $productVisibility;
         $this->_catalogConfig = $catalogConfig;
     }
-        	
+
     /**
      * Filter product collection
      *
      * @param LayerCollectionFilter $collectionFilter
-     * @param Callable proceed
+     * @param callable proceed
      * @param Collection $collection
      * @param Category $category
      * @return void
      */
-    public function aroundFilter(LayerCollectionFilter $collectionFilter, Callable $proceed, Collection $collection, Category $category)
+    public function aroundFilter(LayerCollectionFilter $collectionFilter, callable $proceed, Collection $collection, Category $category)
     {
         $collection
             ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
@@ -62,16 +62,15 @@ class CollectionFilter
             ->addFinalPrice()
             ->addTaxPercents()
             ->addUrlRewrite($category->getId());
-            	
-		if ($category->getIsSmart()) {
-			$collection->setVisibility(
-				$this->_productVisibility->getVisibleInSiteIds()
-			);
-		} else {
-			$collection->setVisibility(
-				$this->_productVisibility->getVisibleInCatalogIds()
-			);
-		}
+
+        if ($category->getIsSmart()) {
+            $collection->setVisibility(
+                $this->_productVisibility->getVisibleInSiteIds()
+            );
+        } else {
+            $collection->setVisibility(
+                $this->_productVisibility->getVisibleInCatalogIds()
+            );
+        }
     }
-} 
- 
+}

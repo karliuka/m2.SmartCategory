@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition;
@@ -16,10 +16,10 @@ use Faonni\SmartCategory\Model\Rule\Condition\ProductFactory;
 class Combine extends RuleCombine
 {
     /**
-	 * Product model factory
-	 *	
+     * Product model factory
+     *
      * @var \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory
-     */	 
+     */
     protected $_productFactory;
 
     /**
@@ -32,12 +32,12 @@ class Combine extends RuleCombine
         ProductFactory $conditionFactory,
         array $data = []
     ) {
-        $this->_productFactory = $conditionFactory;	
-		
+        $this->_productFactory = $conditionFactory;
+
         parent::__construct(
-			$context, 
-			$data
-		);
+            $context,
+            $data
+        );
         $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Combine');
     }
 
@@ -49,29 +49,29 @@ class Combine extends RuleCombine
     public function getNewChildSelectOptions()
     {
         $productAttributes = $this->_productFactory->create()
-			->loadAttributeOptions()
-			->getAttributeOption();
-			
+            ->loadAttributeOptions()
+            ->getAttributeOption();
+
         $attributes = [
             [
-                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\Sale', 
+                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\Sale',
                 'label' => __('Special Price')
             ],
             [
-                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\News', 
+                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\News',
                 'label' => __('New')
-            ]   
+            ]
         ];
-        
+
         foreach ($productAttributes as $code => $label) {
             if ('special_price' != $code) {
                 $attributes[] = [
                     'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product|' . $code,
                     'label' => $label,
                 ];
-            }         
+            }
         }
-        
+
         $conditions = parent::getNewChildSelectOptions();
         $conditions = array_merge_recursive(
             $conditions,

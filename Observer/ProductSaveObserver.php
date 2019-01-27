@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Observer;
@@ -20,19 +20,19 @@ class ProductSaveObserver implements ObserverInterface
      *
      * @var ProductRuleProcessor
      */
-    protected $_productRuleProcessor;	
-    
+    protected $_productRuleProcessor;
+
     /**
      * Factory constructor
      *
      * @param ProductRuleProcessor $objectManager
      */
     public function __construct(
-		ProductRuleProcessor $productRuleProcessor
+        ProductRuleProcessor $productRuleProcessor
     ) {
-		$this->_productRuleProcessor = $productRuleProcessor;
+        $this->_productRuleProcessor = $productRuleProcessor;
     }
-       	
+
     /**
      * Apply smart category rules after product model save
      *
@@ -41,10 +41,10 @@ class ProductSaveObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$product = $observer->getEvent()->getProduct();		
-        if (!$product->getIsMassupdate()) {           
-			$this->_productRuleProcessor->reindexRow($product->getId());
+        $product = $observer->getEvent()->getProduct();
+        if (!$product->getIsMassupdate()) {
+            $this->_productRuleProcessor->reindexRow($product->getId());
         }
         return $this;
     }
-}  
+}

@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Observer;
@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Category Save Observer
  */
 class CategorySaveObserver implements ObserverInterface
-{ 	
+{
     /**
      * Handler for category save event
      *
@@ -23,19 +23,19 @@ class CategorySaveObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$category = $observer->getEvent()->getCategory();		
-		if ($category->getIsSmart()) {
-			if ($category->getSmartRuleError()) {
-				throw new LocalizedException(
-					$category->getSmartRuleError()
-				);
-			} else {
-				$rule = $category->getSmartRule();
-				if ($rule) {
-					$rule->setId($category->getId());
-					$rule->save();					
-				}				
-			}				
-		}
+        $category = $observer->getEvent()->getCategory();
+        if ($category->getIsSmart()) {
+            if ($category->getSmartRuleError()) {
+                throw new LocalizedException(
+                    $category->getSmartRuleError()
+                );
+            } else {
+                $rule = $category->getSmartRule();
+                if ($rule) {
+                    $rule->setId($category->getId());
+                    $rule->save();
+                }
+            }
+        }
     }
-}  
+}

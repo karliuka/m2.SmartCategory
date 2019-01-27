@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Block\Adminhtml\Catalog\Edit\Tab;
@@ -28,35 +28,35 @@ class Conditions extends Generic implements TabInterface
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
-    	
+
     /**
-	 * Renderer Fieldset instance
-	 *
+     * Renderer Fieldset instance
+     *
      * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
      */
     protected $_rendererFieldset;
 
     /**
-	 * Conditions instance
-	 *
+     * Conditions instance
+     *
      * @var \Magento\Rule\Block\Conditions
      */
     protected $_conditions;
-	
+
     /**
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager; 
-	
+    protected $_objectManager;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Rule\Block\Conditions $conditions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
-	 * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $data
      */
     public function __construct(
@@ -65,14 +65,20 @@ class Conditions extends Generic implements TabInterface
         FormFactory $formFactory,
         RuleConditions $conditions,
         Fieldset $rendererFieldset,
-		ObjectManagerInterface $objectManager,
+        ObjectManagerInterface $objectManager,
         array $data = []
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
-        $this->_coreRegistry = $registry; 
-		$this->_objectManager = $objectManager;
-        parent::__construct($context, $registry, $formFactory, $data);
+        $this->_coreRegistry = $registry;
+        $this->_objectManager = $objectManager;
+
+        parent::__construct(
+            $context,
+            $registry,
+            $formFactory,
+            $data
+        );
     }
 
     /**
@@ -151,7 +157,7 @@ class Conditions extends Generic implements TabInterface
     {
         return false;
     }
-    
+
     /**
      * Prepare form before rendering HTML
      *
@@ -159,19 +165,19 @@ class Conditions extends Generic implements TabInterface
      */
     protected function _prepareForm()
     {
-		$category = $this->getCurrentCategory();  
-		$rule = $this->_objectManager->get('Faonni\SmartCategory\Model\Rule');	
-			          
-		if ($category->getId()) {
-			$rule = $rule->load($category->getId());
-		}    
+        $category = $this->getCurrentCategory();
+        $rule = $this->_objectManager->get('Faonni\SmartCategory\Model\Rule');
+
+        if ($category->getId()) {
+            $rule = $rule->load($category->getId());
+        }
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->addTabToForm($rule);
         $this->setForm($form);
 
         return parent::_prepareForm();
     }
-    
+
     /**
      * Handles addition of conditions tab to supplied form
      *
@@ -181,7 +187,7 @@ class Conditions extends Generic implements TabInterface
      * @return \Magento\Framework\Data\Form
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function addTabToForm($model, $fieldsetId='conditions_fieldset', $formName='category_form')
+    protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'category_form')
     {
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
@@ -198,19 +204,22 @@ class Conditions extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset(
             $fieldsetId,
-            ['legend' => __('Conditions (don\'t add conditions if category is not smart)')])
-			->setRenderer($renderer);
+            ['legend' => __('Conditions (don\'t add conditions if category is not smart)')]
+        )->setRenderer($renderer);
 
-        $fieldset->addField('conditions', 'text',
+        $fieldset->addField(
+            'conditions',
+            'text',
             [
                 'name' => 'conditions',
                 'label' => __('Conditions'),
                 'title' => __('Conditions'),
                 'required' => true,
                 'data-form-part' => $formName
-            ])
-            ->setRule($model)
-            ->setRenderer($this->_conditions);
+            ]
+        )
+        ->setRule($model)
+        ->setRenderer($this->_conditions);
 
         $form->setValues($model->getData());
         $this->setConditionFormName($model->getConditions(), $formName);
@@ -219,7 +228,7 @@ class Conditions extends Generic implements TabInterface
 
     /**
      * Handles addition of form name to condition and its conditions
-     *	
+     *
      * @param \Magento\Rule\Model\Condition\AbstractCondition $conditions
      * @param string $formName
      * @return void
@@ -234,7 +243,7 @@ class Conditions extends Generic implements TabInterface
             }
         }
     }
-    
+
     /**
      * Retrieve current category model object
      *
@@ -243,5 +252,5 @@ class Conditions extends Generic implements TabInterface
     public function getCurrentCategory()
     {
         return $this->_coreRegistry->registry('current_category');
-    }    
+    }
 }

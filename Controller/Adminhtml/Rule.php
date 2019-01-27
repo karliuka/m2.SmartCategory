@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml;
@@ -18,5 +18,5 @@ abstract class Rule extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::categories'; 
+    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Observer;
@@ -21,8 +21,8 @@ class CategoryPrepareObserver implements ObserverInterface
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;    
-    
+    protected $_objectManager;
+
     /**
      * Factory constructor
      *
@@ -33,7 +33,7 @@ class CategoryPrepareObserver implements ObserverInterface
     ) {
         $this->_objectManager = $objectManager;
     }
-       	
+
     /**
      * Handler for category prepare event
      *
@@ -42,41 +42,41 @@ class CategoryPrepareObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$request = $observer->getEvent()->getRequest();
-		$category = $observer->getEvent()->getCategory();
-		$data = $request->getPostValue();
+        $request = $observer->getEvent()->getRequest();
+        $category = $observer->getEvent()->getCategory();
+        $data = $request->getPostValue();
 
-		$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');
-		if ($category->getId()) {
-			$rule->load($category->getId());
-		}
-						
-		if ($data && $category->getIsSmart()) {
-			if (isset($data['rule'])) {
-				$data['conditions'] = $data['rule']['conditions'];
-				unset($data['rule']);
-			} else {
-				// closed tab
-				return;			
-			}				
-			$validateResult = $rule->validateData(new DataObject($data));
-			if ($validateResult !== true) {
-				$category->setSmartRuleError($validateResult);
-				return;
-			}
-			
-			$rule->loadPost(['conditions' => $data['conditions']]);
-			$rule->setCategory($category);
-			// apply rule
-			$matchingProducts = $rule->getMatchingProductIds();
-			// update position
-			$postedProducts = array_intersect_key($category->getPostedProducts() ?: [], $matchingProducts);
-			$postedProducts = array_replace($matchingProducts, $postedProducts);
+        $rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');
+        if ($category->getId()) {
+            $rule->load($category->getId());
+        }
 
-			$category->setPostedProducts($postedProducts);
-			$category->setSmartRule($rule);
-		} else {
-			$rule->delete();
-		}
+        if ($data && $category->getIsSmart()) {
+            if (isset($data['rule'])) {
+                $data['conditions'] = $data['rule']['conditions'];
+                unset($data['rule']);
+            } else {
+                // closed tab
+                return;
+            }
+            $validateResult = $rule->validateData(new DataObject($data));
+            if ($validateResult !== true) {
+                $category->setSmartRuleError($validateResult);
+                return;
+            }
+
+            $rule->loadPost(['conditions' => $data['conditions']]);
+            $rule->setCategory($category);
+            // apply rule
+            $matchingProducts = $rule->getMatchingProductIds();
+            // update position
+            $postedProducts = array_intersect_key($category->getPostedProducts() ?: [], $matchingProducts);
+            $postedProducts = array_replace($matchingProducts, $postedProducts);
+
+            $category->setPostedProducts($postedProducts);
+            $category->setSmartRule($rule);
+        } else {
+            $rule->delete();
+        }
     }
-}  
+}

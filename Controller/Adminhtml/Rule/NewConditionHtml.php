@@ -1,21 +1,22 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
 use Magento\Rule\Model\Condition\AbstractCondition;
-use Faonni\SmartCategory\Controller\Adminhtml\Rule;
+use Faonni\SmartCategory\Controller\Adminhtml\Rule as Action;
+use Faonni\SmartCategory\Model\Rule;
 
 /**
- * SmartCategory NewConditionHtml controller
+ * NewConditionHtml controller
  */
-class NewConditionHtml extends Rule
+class NewConditionHtml extends Action
 {
     /**
-     * New Condition Html
+     * New condition html
      *
      * @return void
      */
@@ -29,7 +30,7 @@ class NewConditionHtml extends Rule
         $model = $this->_objectManager->create($type)
             ->setId($id)
             ->setType($type)
-            ->setRule($this->_objectManager->create('Faonni\SmartCategory\Model\Rule'))
+            ->setRule($this->_objectManager->create(Rule::class))
             ->setPrefix('conditions');
 
         if (!empty($typeArr[1])) {

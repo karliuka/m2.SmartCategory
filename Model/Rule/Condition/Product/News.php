@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition\Product;
@@ -21,11 +21,11 @@ class News extends AbstractCondition
      * @var string
      */
     protected $_inputType = 'select';
-    
+
     /**
      * Initialize Condition Model
      *
-     * @param Context $context 
+     * @param Context $context
      * @param array $data
      */
     public function __construct(
@@ -33,14 +33,14 @@ class News extends AbstractCondition
         array $data = []
     ) {
         parent::__construct(
-			$context, 
-			$data
-		);
-		
+            $context,
+            $data
+        );
+
         $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Product\News');
         $this->setValue(0);
     }
-    
+
     /**
      * Get input type for attribute value
      *
@@ -50,7 +50,7 @@ class News extends AbstractCondition
     {
         return 'select';
     }
-    
+
     /**
      * Prepare value select options
      *
@@ -61,7 +61,7 @@ class News extends AbstractCondition
         $this->setValueOption([]);
         return $this;
     }
-    
+
     /**
      * Prepare operator select options
      *
@@ -70,12 +70,12 @@ class News extends AbstractCondition
     public function loadOperatorOptions()
     {
         $this->setOperatorOption([
-            '==' => __('set'),  
+            '==' => __('set'),
             '!=' => __('not set')
         ]);
         return $this;
     }
-    
+
     /**
      * Get HTML of condition string
      *
@@ -88,7 +88,7 @@ class News extends AbstractCondition
             $this->getOperatorElementHtml()
         ) . $this->getRemoveLinkHtml();
     }
-    
+
     /**
      * Validate product attribute value for condition
      *
@@ -103,21 +103,20 @@ class News extends AbstractCondition
             $model->getNewsFromDate(),
             $model->getNewsToDate()
         );
-        
-        if ($this->getOperator() == '==' && 
-            ($model->getNewsFromDate() || $model->getNewsToDate()) && 
+
+        if ($this->getOperator() == '==' &&
+            ($model->getNewsFromDate() || $model->getNewsToDate()) &&
             $isDateInterval
-        ) {       
+        ) {
             return true;
-        } 
-        elseif ($this->getOperator() == '!=' && 
+        } elseif ($this->getOperator() == '!=' &&
             ((!$model->getNewsFromDate() && !$model->getNewsToDate()) || !$isDateInterval)
-        ) {           
+        ) {
             return true;
         }
-        return false;        
+        return false;
     }
-    
+
     /**
      * Collect validated attributes
      *
@@ -129,7 +128,7 @@ class News extends AbstractCondition
         $productCollection
             ->addAttributeToSelect('news_from_date', 'left')
             ->addAttributeToSelect('news_to_date', 'left');
-            
+
         return $this;
     }
 }

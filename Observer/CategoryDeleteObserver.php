@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Observer;
@@ -20,8 +20,8 @@ class CategoryDeleteObserver implements ObserverInterface
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;    
-    
+    protected $_objectManager;
+
     /**
      * Factory constructor
      *
@@ -32,7 +32,7 @@ class CategoryDeleteObserver implements ObserverInterface
     ) {
         $this->_objectManager = $objectManager;
     }
-       	
+
     /**
      * Handler for category delete event
      *
@@ -41,14 +41,14 @@ class CategoryDeleteObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$category = $observer->getEvent()->getCategory();
-		/** @var \Faonni\SmartCategory\Model\Rule $rule */
-		$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule')
-			->load($category->getId());		
-		
-		if ($rule->getId()) {
-			$rule->delete();
-		} 		
+        $category = $observer->getEvent()->getCategory();
+        /** @var \Faonni\SmartCategory\Model\Rule $rule */
+        $rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule')
+            ->load($category->getId());
+
+        if ($rule->getId()) {
+            $rule->delete();
+        }
         return $this;
     }
-}  
+}

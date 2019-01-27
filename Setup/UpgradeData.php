@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Setup;
@@ -14,19 +14,19 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
- * SmartCategory Upgrade Data
+ * Upgrade data
  */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * Field Data Converter
+     * Field data converter
      *
      * @var \Magento\Framework\DB\AggregatedFieldDataConverter
      */
     protected $_aggregatedFieldConverter;
 
     /**
-     * Initialize Setup
+     * Initialize setup
      *
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      */
@@ -37,7 +37,7 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Upgrades DB Data for a Module Faonni_SmartCategory
+     * Upgrades DB data
      *
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -55,14 +55,15 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Convert Metadata from Serialized to JSON Format
+     * Convert metadata from serialized to JSON format
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
     private function convertSerializedDataToJson($setup)
     {
-        $this->_aggregatedFieldConverter->convert([
+        $this->_aggregatedFieldConverter->convert(
+            [
                 new FieldToConvert(
                     SerializedToJson::class,
                     $setup->getTable('faonni_smartcategory_rule'),
