@@ -10,6 +10,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DataObject;
+use Faonni\SmartCategory\Model\Rule;
 
 /**
  * Category Prepare Observer
@@ -46,7 +47,7 @@ class CategoryPrepareObserver implements ObserverInterface
         $category = $observer->getEvent()->getCategory();
         $data = $request->getPostValue();
 
-        $rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule');
+        $rule = $this->_objectManager->create(Rule::class);
         if ($category->getId()) {
             $rule->load($category->getId());
         }

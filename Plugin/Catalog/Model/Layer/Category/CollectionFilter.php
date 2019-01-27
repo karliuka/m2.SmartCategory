@@ -54,8 +54,12 @@ class CollectionFilter
      * @param Category $category
      * @return void
      */
-    public function aroundFilter(LayerCollectionFilter $collectionFilter, callable $proceed, Collection $collection, Category $category)
-    {
+    public function aroundFilter(
+        LayerCollectionFilter $collectionFilter,
+        callable $proceed,
+        Collection $collection,
+        Category $category
+    ) {
         $collection
             ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
             ->addMinimalPrice()

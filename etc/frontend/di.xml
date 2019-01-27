@@ -8,9 +8,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-	<!--
-	plugin
-	-->			
+    <!--
+    plugin
+    -->
     <type name="Magento\Catalog\Model\Layer\Category\CollectionFilter">
         <plugin name="faonni_smartcategory" type="Faonni\SmartCategory\Plugin\Catalog\Model\Layer\Category\CollectionFilter"/>
     </type>

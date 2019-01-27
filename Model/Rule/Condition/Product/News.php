@@ -37,7 +37,7 @@ class News extends AbstractCondition
             $data
         );
 
-        $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Product\News');
+        $this->setType(self::class);
         $this->setValue(0);
     }
 

@@ -16,9 +16,10 @@ use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
 use Magento\Rule\Block\Conditions as RuleConditions;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use Faonni\SmartCategory\Model\Rule;
 
 /**
- * Smart Category Conditions block
+ * Conditions tab
  */
 class Conditions extends Generic implements TabInterface
 {
@@ -30,27 +31,29 @@ class Conditions extends Generic implements TabInterface
     protected $_coreRegistry;
 
     /**
-     * Renderer Fieldset instance
+     * Fieldset renderer
      *
      * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
      */
     protected $_rendererFieldset;
 
     /**
-     * Conditions instance
+     * Conditions
      *
      * @var \Magento\Rule\Block\Conditions
      */
     protected $_conditions;
 
     /**
-     * Object Manager instance
+     * Object manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
+     * Initialize tab
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -104,7 +107,7 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Retrieve status flag about this tab can be showen or not
      *
      * @return bool
      * @codeCoverageIgnore
@@ -115,7 +118,7 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
-     * Returns status flag about this tab hidden or not
+     * Retrieve status flag about this tab hidden or not
      *
      * @return bool
      * @codeCoverageIgnore
@@ -126,7 +129,7 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
-     * Tab class getter
+     * Retrieve tab class
      *
      * @return string
      * @codeCoverageIgnore
@@ -137,7 +140,7 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
-     * Return URL link to Tab content
+     * Retrieve URL link to tab content
      *
      * @return string
      * @codeCoverageIgnore
@@ -166,7 +169,7 @@ class Conditions extends Generic implements TabInterface
     protected function _prepareForm()
     {
         $category = $this->getCurrentCategory();
-        $rule = $this->_objectManager->get('Faonni\SmartCategory\Model\Rule');
+        $rule = $this->_objectManager->get(Rule::class);
 
         if ($category->getId()) {
             $rule = $rule->load($category->getId());
@@ -181,7 +184,7 @@ class Conditions extends Generic implements TabInterface
     /**
      * Handles addition of conditions tab to supplied form
      *
-     * @param \Faonni\SmartCategory\Model\Rule $model
+     * @param Rule $model
      * @param string $fieldsetId
      * @param string $formName
      * @return \Magento\Framework\Data\Form

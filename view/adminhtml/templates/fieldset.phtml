@@ -8,8 +8,10 @@
 <?php $_element = $block->getElement() ?>
 <?php $_jsObjectName = $block->getFieldSetId() != null ? $block->getFieldSetId() : $_element->getHtmlId() ?>
 <div class="rule-tree">
-    <fieldset id="<?= /* @escapeNotVerified */ $_jsObjectName ?>" <?= /* @escapeNotVerified */ $_element->serialize(['class']) ?> class="fieldset">
-        <legend class="legend"><span><?= /* @escapeNotVerified */ $_element->getLegend() ?></span></legend>
+    <fieldset
+        id="<?= $_jsObjectName ?>" <?= $_element->serialize(['class']) ?>
+        class="fieldset">
+        <legend class="legend"><span><?= $_element->getLegend() ?></span></legend>
         <br>
     <?php if ($_element->getComment()) : ?>
         <div class="messages">
@@ -27,10 +29,13 @@ require([
     "prototype"
 ], function(VarienRulesForm){
 
-window.<?= /* @escapeNotVerified */ $_jsObjectName ?> = new VarienRulesForm('<?= /* @escapeNotVerified */ $_jsObjectName ?>', '<?= /* @escapeNotVerified */ $block->getNewChildUrl() ?>');
+window.<?= $_jsObjectName ?> = new VarienRulesForm(
+    '<?= $_jsObjectName ?>',
+    '<?= $block->getNewChildUrl() ?>'
+);
 <?php if ($_element->getReadonly()) : ?>
     <?= $_element->getHtmlId() ?>.setReadonly(true);
-<?php endif; ?>
+<?php endif ?>
 
 });
 </script>

@@ -9,9 +9,12 @@ namespace Faonni\SmartCategory\Model\Rule\Condition;
 use Magento\Rule\Model\Condition\Combine as RuleCombine;
 use Magento\Rule\Model\Condition\Context;
 use Faonni\SmartCategory\Model\Rule\Condition\ProductFactory;
+use Faonni\SmartCategory\Model\Rule\Condition\Product\Sale;
+use Faonni\SmartCategory\Model\Rule\Condition\Product\News;
+use Faonni\SmartCategory\Model\Rule\Condition\Product;
 
 /**
- * SmartCategory Rule Combine model
+ * Combine model
  */
 class Combine extends RuleCombine
 {
@@ -23,8 +26,10 @@ class Combine extends RuleCombine
     protected $_productFactory;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory $conditionFactory
+     * Initialize combine
+     *
+     * @param Context $context
+     * @param ProductFactory $conditionFactory
      * @param array $data
      */
     public function __construct(
@@ -38,7 +43,7 @@ class Combine extends RuleCombine
             $context,
             $data
         );
-        $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Combine');
+        $this->setType(self::class);
     }
 
     /**
@@ -54,11 +59,11 @@ class Combine extends RuleCombine
 
         $attributes = [
             [
-                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\Sale',
+                'value' => Sale::class,
                 'label' => __('Special Price')
             ],
             [
-                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\News',
+                'value' => News::class,
                 'label' => __('New')
             ]
         ];
@@ -66,7 +71,7 @@ class Combine extends RuleCombine
         foreach ($productAttributes as $code => $label) {
             if ('special_price' != $code) {
                 $attributes[] = [
-                    'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product|' . $code,
+                    'value' => Product::class . '|' . $code,
                     'label' => $label,
                 ];
             }
@@ -77,7 +82,7 @@ class Combine extends RuleCombine
             $conditions,
             [
                 [
-                    'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Combine',
+                    'value' => self::class,
                     'label' => __('Conditions Combination'),
                 ],
                 ['label' => __('Product Attribute'), 'value' => $attributes]

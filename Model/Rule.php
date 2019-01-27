@@ -24,6 +24,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Visibility;
 use Faonni\SmartCategory\Model\Rule\Condition\CombineFactory;
+use Faonni\SmartCategory\Model\ResourceModel\Rule as RuleResource;
 
 /**
  * Rule model
@@ -105,7 +106,7 @@ class Rule extends AbstractModel implements IdentityInterface
     protected $_productFactory;
 
     /**
-     * Store manager instance
+     * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
@@ -126,7 +127,7 @@ class Rule extends AbstractModel implements IdentityInterface
     protected $_catalogProductVisibility;
 
     /**
-     * Rule constructor
+     * Initialize model
      *
      * @param Context $context
      * @param Registry $registry
@@ -193,12 +194,12 @@ class Rule extends AbstractModel implements IdentityInterface
     {
         parent::_construct();
 
-        $this->_init('Faonni\SmartCategory\Model\ResourceModel\Rule');
+        $this->_init(RuleResource::class);
         $this->setIdFieldName('rule_id');
     }
 
     /**
-     * Getter for rule conditions collection
+     * Retrieve rule conditions collection
      *
      * @return \Magento\Rule\Model\Condition\Combine
      */
@@ -208,7 +209,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Getter for rule actions instance
+     * Retrieve rule actions instance
      *
      * @return null
      */
@@ -218,7 +219,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Get Array of Product ids Which are Matched by Rule
+     * Retrieve array of product ids which are matched by rule
      *
      * @return array
      */
@@ -313,7 +314,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Returns products filter
+     * Retrieve products filter
      *
      * @return array|int|null
      * @codeCoverageIgnore
@@ -360,6 +361,8 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
+     * Retrieve condition field set id
+     *
      * @param string $formName
      * @return string
      */
@@ -369,7 +372,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Returns rule id field
+     * Retrieve rule id field
      *
      * @return int|null
      */
@@ -390,7 +393,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Return unique ID(s) for each object in system
+     * Retrieve unique ID(s) for each object in system
      *
      * @return string[]
      */
@@ -411,7 +414,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Validate rule data. Return true if validation passed successfully.
+     * Validate rule data
      *
      * @param \Magento\Framework\DataObject $dataObject
      * @return bool|string

@@ -37,7 +37,7 @@ class Sale extends AbstractCondition
             $data
         );
 
-        $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Product\Sale');
+        $this->setType(self::class);
         $this->setValue(0);
     }
 
