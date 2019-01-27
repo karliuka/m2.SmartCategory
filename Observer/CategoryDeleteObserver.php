@@ -29,7 +29,7 @@ class CategoryDeleteObserver implements ObserverInterface
     public function __construct(
         RuleFactory $ruleFactory
     ) {
-        $this->_ruleFactory = $ruleFactory
+        $this->_ruleFactory = $ruleFactory;
     }
 
     /**
