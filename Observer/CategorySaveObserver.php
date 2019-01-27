@@ -10,7 +10,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Category Save Observer
+ * Category save observer
  */
 class CategorySaveObserver implements ObserverInterface
 {

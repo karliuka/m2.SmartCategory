@@ -7,31 +7,30 @@ namespace Faonni\SmartCategory\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DataObject;
-use Faonni\SmartCategory\Model\Rule;
+use Faonni\SmartCategory\Model\RuleFactory;
 
 /**
- * Category Prepare Observer
+ * Category prepare observer
  */
 class CategoryPrepareObserver implements ObserverInterface
 {
     /**
-     * Object Manager instance
+     * Rule factory
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Faonni\SmartCategory\Model\RuleFactory
      */
-    protected $_objectManager;
+    protected $_ruleFactory;
 
     /**
-     * Factory constructor
+     * Intialize observer
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param RuleFactory $ruleFactory
      */
     public function __construct(
-        ObjectManagerInterface $objectManager
+        RuleFactory $ruleFactory
     ) {
-        $this->_objectManager = $objectManager;
+        $this->_ruleFactory = $ruleFactory
     }
 
     /**
@@ -46,7 +45,7 @@ class CategoryPrepareObserver implements ObserverInterface
         $category = $observer->getEvent()->getCategory();
         $data = $request->getPostValue();
 
-        $rule = $this->_objectManager->create(Rule::class);
+        $rule = $this->_ruleFactory->create();
         if ($category->getId()) {
             $rule->load($category->getId());
         }

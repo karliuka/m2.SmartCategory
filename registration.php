@@ -5,6 +5,9 @@
  */
  use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * Register module
+ */
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
     'Faonni_SmartCategory',

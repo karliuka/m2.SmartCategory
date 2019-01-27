@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Config\Model\Config\Source\Yesno;
 
 /**
- * Attribute Prepare Observer
+ * Attribute prepare observer
  */
 class AttributePrepareObserver implements ObserverInterface
 {

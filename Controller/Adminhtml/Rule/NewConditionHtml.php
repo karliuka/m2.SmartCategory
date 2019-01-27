@@ -21,9 +21,10 @@ class NewConditionHtml extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
-        $formName = $this->getRequest()->getParam('form_namespace');
-        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $request = $this->getRequest();
+        $id = $request->getParam('id');
+        $formName = $request->getParam('form_namespace');
+        $typeArr = explode('|', str_replace('-', '/', $request->getParam('type')));
         $type = $typeArr[0];
 
         $model = $this->_objectManager->create($type)
@@ -37,7 +38,7 @@ class NewConditionHtml extends Action
         }
 
         if ($model instanceof AbstractCondition) {
-            $model->setJsFormObject($this->getRequest()->getParam('form'));
+            $model->setJsFormObject($request->getParam('form'));
             $model->setFormName($formName);
             $html = $model->asHtmlRecursive();
         } else {

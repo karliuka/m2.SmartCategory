@@ -7,8 +7,7 @@ namespace Faonni\SmartCategory\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Faonni\SmartCategory\Model\Rule;
+use Faonni\SmartCategory\Model\RuleFactory;
 
 /**
  * Category delete observer
@@ -16,21 +15,21 @@ use Faonni\SmartCategory\Model\Rule;
 class CategoryDeleteObserver implements ObserverInterface
 {
     /**
-     * Object Manager instance
+     * Rule factory
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Faonni\SmartCategory\Model\RuleFactory
      */
-    protected $_objectManager;
+    protected $_ruleFactory;
 
     /**
-     * Factory constructor
+     * Intialize observer
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param RuleFactory $ruleFactory
      */
     public function __construct(
-        ObjectManagerInterface $objectManager
+        RuleFactory $ruleFactory
     ) {
-        $this->_objectManager = $objectManager;
+        $this->_ruleFactory = $ruleFactory
     }
 
     /**
@@ -43,7 +42,7 @@ class CategoryDeleteObserver implements ObserverInterface
     {
         $category = $observer->getEvent()->getCategory();
         /** @var \Faonni\SmartCategory\Model\Rule $rule */
-        $rule = $this->_objectManager->create(Rule::class)
+        $rule = $this->_ruleFactory->create()
             ->load($category->getId());
 
         if ($rule->getId()) {

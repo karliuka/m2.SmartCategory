@@ -15,14 +15,14 @@ use Faonni\SmartCategory\Model\Indexer\Product\ProductRuleProcessor;
 class ProductSaveObserver implements ObserverInterface
 {
     /**
-     * Product Rule Processor instance
+     * Product rule processor
      *
      * @var ProductRuleProcessor
      */
     protected $_productRuleProcessor;
 
     /**
-     * Factory constructor
+     * Intialize observer
      *
      * @param ProductRuleProcessor $objectManager
      */

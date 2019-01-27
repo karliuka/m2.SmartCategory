@@ -31,7 +31,7 @@ class CollectionFilter
     protected $_catalogConfig;
 
     /**
-     * Initialize Plugin
+     * Initialize plugin
      *
      * @param Visibility $productVisibility
      * @param Config $catalogConfig
