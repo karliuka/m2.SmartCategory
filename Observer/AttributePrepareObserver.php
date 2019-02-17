@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Observer;
@@ -12,20 +11,20 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Config\Model\Config\Source\Yesno;
 
 /**
- * Attribute Prepare Observer
+ * Attribute prepare observer
  */
 class AttributePrepareObserver implements ObserverInterface
 {
     /**
      * Source Yesno
-     * 
+     *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_yesNo;
 
     /**
      * Initialize Observer
-     * 
+     *
      * @param Yesno $yesNo
      */
     public function __construct(
@@ -33,7 +32,7 @@ class AttributePrepareObserver implements ObserverInterface
     ) {
         $this->_yesNo = $yesNo;
     }
-    	 	
+
     /**
      * Handler for attribute prepare event
      *
@@ -42,22 +41,22 @@ class AttributePrepareObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$form = $observer->getEvent()->getForm();
-		$yesnoSource = $this->_yesNo->toOptionArray();
-		$fieldset = $form->getElement('front_fieldset'); 
-		
+        $form = $observer->getEvent()->getForm();
+        $yesnoSource = $this->_yesNo->toOptionArray();
+        $fieldset = $form->getElement('front_fieldset');
+
         if ($fieldset) {
-			$fieldset->addField(
-				'is_used_for_smart_rules',
-				'select',
-				[
-					'name' => 'is_used_for_smart_rules',
-					'label' => __('Use for Smart Category Rule'),
-					'title' => __('Use for Smart Category Rule'),
-					'values' => $yesnoSource,
-				],
-				'is_used_for_promo_rules'
-			);
+            $fieldset->addField(
+                'is_used_for_smart_rules',
+                'select',
+                [
+                    'name' => 'is_used_for_smart_rules',
+                    'label' => __('Use for Smart Category Rule'),
+                    'title' => __('Use for Smart Category Rule'),
+                    'values' => $yesnoSource,
+                ],
+                'is_used_for_promo_rules'
+            );
         }
     }
-}  
+}

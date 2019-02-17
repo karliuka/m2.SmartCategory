@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
-use Faonni\SmartCategory\Controller\Adminhtml\Rule;
+use Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree;
+use Faonni\SmartCategory\Controller\Adminhtml\Rule as Action;
+use Faonni\SmartCategory\Block\Adminhtml\Rule\Chooser\Sku;
 
 /**
- * SmartCategory chooser controller
+ * Chooser controller
  */
-class Chooser extends Rule
+class Chooser extends Action
 {
     /**
      * Prepare block for chooser
@@ -25,11 +26,11 @@ class Chooser extends Rule
         switch ($request->getParam('attribute')) {
             case 'sku':
                 $block = $this->_view->getLayout()->createBlock(
-                    'Faonni\SmartCategory\Block\Adminhtml\Rule\Chooser\Sku',
+                    Sku::class,
                     'smartcategory_chooser_sku',
                     ['data' => ['js_form_object' => $request->getParam('form')]]
                 );
-                break;            
+                break;
             case 'category_ids':
                 $ids = $request->getParam('selected', []);
                 if (is_array($ids)) {
@@ -44,7 +45,7 @@ class Chooser extends Rule
                     $ids = [];
                 }
                 $block = $this->_view->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree',
+                    Tree::class,
                     'smartcategory_chooser_category_ids',
                     ['data' => ['js_form_object' => $request->getParam('form')]]
                 )->setCategoryIds(

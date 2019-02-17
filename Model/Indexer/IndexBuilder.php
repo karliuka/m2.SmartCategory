@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\Indexer;
@@ -17,7 +16,7 @@ use Faonni\SmartCategory\Model\ResourceModel\Rule\CollectionFactory as RuleColle
 use Faonni\SmartCategory\Model\Rule;
 
 /**
- * SmartCategory IndexBuilder model
+ * Index builder
  */
 class IndexBuilder
 {
@@ -40,20 +39,19 @@ class IndexBuilder
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
-    
+
     /**
      * @var Product[]
      */
     protected $_loadedProducts;
-    
+
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
-	
 
     /** @var \Magento\Framework\Indexer\IndexerRegistry */
-    protected $_indexerRegistry;	
+    protected $_indexerRegistry;
 
     /**
      * @param RuleCollectionFactory $ruleCollectionFactory
@@ -68,15 +66,14 @@ class IndexBuilder
         ResourceConnection $resource,
         LoggerInterface $logger,
         ProductFactory $productFactory,
-		IndexerRegistry $indexerRegistry
-		
+        IndexerRegistry $indexerRegistry
     ) {
         $this->_resource = $resource;
         $this->_connection = $resource->getConnection();
         $this->_ruleCollectionFactory = $ruleCollectionFactory;
         $this->_logger = $logger;
         $this->_productFactory = $productFactory;
-		$this->_indexerRegistry = $indexerRegistry;
+        $this->_indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -119,14 +116,14 @@ class IndexBuilder
      */
     protected function doReindexByIds($ids)
     {
-		foreach ($this->getAllRules() as $rule) {
+        foreach ($this->getAllRules() as $rule) {
             foreach ($ids as $productId) {
                 $this->applyRule($rule, $this->getProduct($productId));
-				$this->productCategoryReindexRow($productId);
+                $this->productCategoryReindexRow($productId);
             }
         }
     }
-	
+
     /**
      * Reindex product categories by productId
      *
@@ -136,9 +133,9 @@ class IndexBuilder
     protected function productCategoryReindexRow($productId)
     {
         $productCategoryIndexer = $this->_indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
-		$productCategoryIndexer->reindexRow($productId);
+        $productCategoryIndexer->reindexRow($productId);
     }
-	
+
     /**
      * Reindex category products by productId
      *
@@ -148,9 +145,9 @@ class IndexBuilder
     protected function categoryProductReindexRow($categoryId)
     {
         $categoryProductIndexer = $this->_indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
-		$categoryProductIndexer->reindexRow($categoryId);
-    }	
-	
+        $categoryProductIndexer->reindexRow($categoryId);
+    }
+
     /**
      * Full reindex
      *
@@ -177,7 +174,7 @@ class IndexBuilder
     {
         foreach ($this->getAllRules() as $rule) {
             $this->updateRuleProductData($rule);
-			$this->categoryProductReindexRow($rule->getId());
+            $this->categoryProductReindexRow($rule->getId());
         }
     }
 
@@ -190,12 +187,12 @@ class IndexBuilder
      */
     protected function cleanByIds($categoryId, $productIds)
     {
-		$this->_connection->delete(
-			$this->getTable('catalog_category_product'),
-			['category_id = ?' => $categoryId, 'product_id IN (?)' => $productIds]
-		); 	       
+        $this->_connection->delete(
+            $this->getTable('catalog_category_product'),
+            ['category_id = ?' => $categoryId, 'product_id IN (?)' => $productIds]
+        );
     }
-	
+
     /**
      * Insert products
      *
@@ -205,20 +202,20 @@ class IndexBuilder
      */
     protected function insertMultiple($categoryId, $productIds)
     {
-		$data = [];
-		foreach ($productIds as $productId => $position) {
-			$data[] = [
-				'category_id' => $categoryId, 
-				'product_id' => $productId, 
-				'position' => $position
-			];
-		}
-		$this->_connection->insertMultiple(
-			$this->getTable('catalog_category_product'), 
-			$data
-		);	       
+        $data = [];
+        foreach ($productIds as $productId => $position) {
+            $data[] = [
+                'category_id' => $categoryId,
+                'product_id' => $productId,
+                'position' => $position
+            ];
+        }
+        $this->_connection->insertMultiple(
+            $this->getTable('catalog_category_product'),
+            $data
+        );
     }
-	
+
     /**
      * @param Rule $rule
      * @param Product $product
@@ -229,15 +226,15 @@ class IndexBuilder
     protected function applyRule(Rule $rule, $product)
     {
         $ruleId = $rule->getId();
-		$productId = $product->getId();
-		
-		if ($rule->validate($product)) {
-			if (!$this->checkPostedProduct($ruleId, $productId)) {
-				$this->insertMultiple($ruleId, [$productId => '1']);
-			}
+        $productId = $product->getId();
+
+        if ($rule->validate($product)) {
+            if (!$this->checkPostedProduct($ruleId, $productId)) {
+                $this->insertMultiple($ruleId, [$productId => '1']);
+            }
             return $this;
         }
-		
+
         $this->cleanByIds($ruleId, [$productId]);
         return $this;
     }
@@ -250,7 +247,7 @@ class IndexBuilder
     {
         return $this->_resource->getTableName($tableName);
     }
-	
+
     /**
      * @param integer $categoryId
      * @param integer $productId
@@ -258,32 +255,32 @@ class IndexBuilder
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-	protected function checkPostedProduct($categoryId, $productId)
-	{         
-		$select = $this->_connection
-			->select()
-			->from($this->getTable('catalog_category_product'), [new \Zend_Db_Expr('COUNT(*)')])
-			->where('category_id = ?', $categoryId)
-			->where('product_id = ?', $productId); 
-				
-		return (0 < $this->_connection->fetchOne($select)) ? true : false;		
-	}
-    
+    protected function checkPostedProduct($categoryId, $productId)
+    {
+        $select = $this->_connection
+            ->select()
+            ->from($this->getTable('catalog_category_product'), [new \Zend_Db_Expr('COUNT(*)')])
+            ->where('category_id = ?', $categoryId)
+            ->where('product_id = ?', $productId);
+
+        return (0 < $this->_connection->fetchOne($select)) ? true : false;
+    }
+
     /**
      * @param integer $categoryId
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-	protected function getPostedProductData($categoryId)
-	{         
-		$select = $this->_connection
-			->select()
-			->from($this->getTable('catalog_category_product'), ['product_id', 'position'])
-			->where('category_id = ?', $categoryId); 
-				
-		return $this->_connection->fetchPairs($select);		
-	}
+    protected function getPostedProductData($categoryId)
+    {
+        $select = $this->_connection
+            ->select()
+            ->from($this->getTable('catalog_category_product'), ['product_id', 'position'])
+            ->where('category_id = ?', $categoryId);
+
+        return $this->_connection->fetchPairs($select);
+    }
 
     /**
      * @param Rule $rule
@@ -298,14 +295,14 @@ class IndexBuilder
 
         $deleteIds = array_diff_key($postedProducts, $matchingProducts);
         $insertIds = array_diff_key($matchingProducts, $postedProducts);
-		
+
         if (0 < count($deleteIds)) {
-			$this->cleanByIds($rule->getId(), array_keys($deleteIds));
-		}
-		
+            $this->cleanByIds($rule->getId(), array_keys($deleteIds));
+        }
+
         if (0 < count($insertIds)) {
-			$this->insertMultiple($rule->getId(), $insertIds);
-		}		        
+            $this->insertMultiple($rule->getId(), $insertIds);
+        }
         return $this;
     }
 
@@ -327,10 +324,10 @@ class IndexBuilder
     {
         if (!isset($this->_loadedProducts[$productId])) {
             $this->_loadedProducts[$productId] = $this->_productFactory->create()
-				->load($productId);
+                ->load($productId);
         }
         return $this->_loadedProducts[$productId];
-    }      
+    }
 
     /**
      * @param \Exception $e

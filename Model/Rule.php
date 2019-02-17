@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model;
@@ -24,9 +23,10 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Visibility;
 use Faonni\SmartCategory\Model\Rule\Condition\CombineFactory;
+use Faonni\SmartCategory\Model\ResourceModel\Rule as RuleResource;
 
 /**
- * SmartCategory Rule model
+ * Rule model
  */
 class Rule extends AbstractModel implements IdentityInterface
 {
@@ -34,20 +34,20 @@ class Rule extends AbstractModel implements IdentityInterface
      * Constants rule id field name
      */
     const RULE_ID = 'rule_id';
-    
+
     /**
      * Constants cache tag
-     */    
-	const CACHE_TAG = 'FAONNI_SMARTCATEGORY_RULE'; 
-	
+     */
+    const CACHE_TAG = 'FAONNI_SMARTCATEGORY_RULE';
+
     /**
      * Model cache tag for clear cache in after save and after delete
      * When you use true - all cache will be clean
      *
      * @var string|array|bool
      */
-    protected $_cacheTag = self::CACHE_TAG;   
-	
+    protected $_cacheTag = self::CACHE_TAG;
+
     /**
      * Prefix of model events names
      *
@@ -75,59 +75,59 @@ class Rule extends AbstractModel implements IdentityInterface
      * @var int|array|null
      */
     protected $_productsFilter;
-    
+
     /**
      * Visibility filter flag
      *
      * @var bool
      */
-    protected $_visibilityFilter = true;    
+    protected $_visibilityFilter = true;
 
     /**
-	 * Iterator resource model
-	 *
+     * Iterator resource model
+     *
      * @var \Magento\Framework\Model\ResourceModel\Iterator
      */
     protected $_resourceIterator;
 
     /**
-	 * Combine model factory
-	 *
+     * Combine model factory
+     *
      * @var \Faonni\SmartCategory\Model\Rule\Condition\CombineFactory
      */
     protected $_combineFactory;
 
     /**
-	 * Product model factory
-	 *	
+     * Product model factory
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
-	 * Store manager instance
-	 *	
+     * Store manager
+     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-	 * Product collection factory
-	 *	
+     * Product collection factory
+     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
-    
+
     /**
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
-    protected $_catalogProductVisibility;    
+    protected $_catalogProductVisibility;
 
     /**
-     * Rule constructor
-	 *
+     * Initialize model
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -136,16 +136,14 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param StoreManagerInterface $storeManager
      * @param CombineFactory $combineFactory
      * @param ProductFactory $productFactory
-     * @param Visibility $catalogProductVisibility 
+     * @param Visibility $catalogProductVisibility
      * @param Iterator $resourceIterator
      * @param ExtensionAttributesFactory|null $extensionFactory
-     * @param AttributeValueFactory|null $customAttributeFactory     
-     * @param Serializer $serializer    
+     * @param AttributeValueFactory|null $customAttributeFactory
+     * @param Serializer $serializer
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -153,13 +151,13 @@ class Rule extends AbstractModel implements IdentityInterface
         FormFactory $formFactory,
         TimezoneInterface $localeDate,
         CollectionFactory $productCollectionFactory,
-        StoreManagerInterface $storeManager,       
+        StoreManagerInterface $storeManager,
         CombineFactory $combineFactory,
         ProductFactory $productFactory,
         Visibility $catalogProductVisibility,
         Iterator $resourceIterator,
         ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null,        
+        AttributeValueFactory $customAttributeFactory = null,
         Serializer $serializer = null,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
@@ -182,7 +180,7 @@ class Rule extends AbstractModel implements IdentityInterface
             $data,
             $extensionFactory,
             $customAttributeFactory,
-            $serializer            
+            $serializer
         );
     }
 
@@ -194,13 +192,13 @@ class Rule extends AbstractModel implements IdentityInterface
     protected function _construct()
     {
         parent::_construct();
-		
-        $this->_init('Faonni\SmartCategory\Model\ResourceModel\Rule');
+
+        $this->_init(RuleResource::class);
         $this->setIdFieldName('rule_id');
     }
 
     /**
-     * Getter for rule conditions collection
+     * Retrieve rule conditions collection
      *
      * @return \Magento\Rule\Model\Condition\Combine
      */
@@ -208,9 +206,9 @@ class Rule extends AbstractModel implements IdentityInterface
     {
         return $this->_combineFactory->create();
     }
-    
+
     /**
-     * Getter for rule actions instance
+     * Retrieve rule actions instance
      *
      * @return null
      */
@@ -218,9 +216,9 @@ class Rule extends AbstractModel implements IdentityInterface
     {
         return null;
     }
-    
+
     /**
-     * Get Array of Product ids Which are Matched by Rule
+     * Retrieve array of product ids which are matched by rule
      *
      * @return array
      */
@@ -229,34 +227,34 @@ class Rule extends AbstractModel implements IdentityInterface
         if ($this->_productIds === null) {
             $this->_productIds = [];
             $this->setCollectedAttributes([]);
-			/** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
-			$productCollection = $this->_productCollectionFactory->create();
-			
-			$this->_eventManager->dispatch(
-				'faonni_smartcategory_product_collection_match_before', 
-				['rule' => $this, 'collection' => $productCollection]
-			);
-			
-			if ($this->_productsFilter) {
-				$productCollection->addIdFilter($this->_productsFilter);
-			}
-			
-			if ($this->_visibilityFilter) {
-				$productCollection->addAttributeToFilter(
-					'visibility', 
-					['in' => $this->_catalogProductVisibility->getVisibleInSiteIds()]
-				);
-			}
-						
-			$this->getConditions()->collectValidatedAttributes($productCollection);
-			$this->_resourceIterator->walk(
-				$productCollection->getSelect(),
-				[[$this, 'callbackValidateProduct']],
-				[
-					'attributes' => $this->getCollectedAttributes(),
-					'product' => $this->_productFactory->create()
-				]
-			);
+            /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+            $productCollection = $this->_productCollectionFactory->create();
+
+            $this->_eventManager->dispatch(
+                'faonni_smartcategory_product_collection_match_before',
+                ['rule' => $this, 'collection' => $productCollection]
+            );
+
+            if ($this->_productsFilter) {
+                $productCollection->addIdFilter($this->_productsFilter);
+            }
+
+            if ($this->_visibilityFilter) {
+                $productCollection->addAttributeToFilter(
+                    'visibility',
+                    ['in' => $this->_catalogProductVisibility->getVisibleInSiteIds()]
+                );
+            }
+
+            $this->getConditions()->collectValidatedAttributes($productCollection);
+            $this->_resourceIterator->walk(
+                $productCollection->getSelect(),
+                [[$this, 'callbackValidateProduct']],
+                [
+                    'attributes' => $this->getCollectedAttributes(),
+                    'product' => $this->_productFactory->create()
+                ]
+            );
         }
         return $this->_productIds;
     }
@@ -279,8 +277,8 @@ class Rule extends AbstractModel implements IdentityInterface
             $product->setStoreId($defaultStoreId);
             $results[$websiteId] = $this->getConditions()->validate($product);
             if (true === $results[$websiteId]) {
-				$this->_productIds[$product->getId()] = 1;
-			}
+                $this->_productIds[$product->getId()] = 1;
+            }
         }
     }
 
@@ -315,7 +313,7 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Returns products filter
+     * Retrieve products filter
      *
      * @return array|int|null
      * @codeCoverageIgnore
@@ -344,8 +342,8 @@ class Rule extends AbstractModel implements IdentityInterface
     public function isVisibilityFilter()
     {
         return $this->_visibilityFilter;
-    }    
-    
+    }
+
     /**
      * Initialize rule model data from array
      *
@@ -354,7 +352,7 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     public function loadPost(array $data)
     {
-        $arr = $this->_convertFlatToRecursive($data);      
+        $arr = $this->_convertFlatToRecursive($data);
         if (isset($arr['conditions'])) {
             $this->getConditions()->setConditions([])->loadArray($arr['conditions'][1]);
         }
@@ -362,16 +360,18 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
+     * Retrieve condition field set id
+     *
      * @param string $formName
      * @return string
      */
-    public function getConditionsFieldSetId($formName='')
+    public function getConditionsFieldSetId($formName = '')
     {
         return $formName . 'rule_conditions_fieldset_' . $this->getRuleId();
     }
 
     /**
-     * Returns rule id field
+     * Retrieve rule id field
      *
      * @return int|null
      */
@@ -392,28 +392,28 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Return unique ID(s) for each object in system
+     * Retrieve unique ID(s) for each object in system
      *
      * @return string[]
      */
     public function getIdentities()
     {
-		return [self::CACHE_TAG . '_' . $this->getRuleId()];
+        return [self::CACHE_TAG . '_' . $this->getRuleId()];
     }
-    
+
     /**
      * Reset rule actions
      *
      * @param null|\Magento\Rule\Model\Action\Collection $actions
      * @return $this
      */
-    protected function _resetActions($actions=null)
+    protected function _resetActions($actions = null)
     {
         return $this;
-    } 
-    
+    }
+
     /**
-     * Validate rule data. Return true if validation passed successfully. 
+     * Validate rule data
      *
      * @param \Magento\Framework\DataObject $dataObject
      * @return bool|string
@@ -423,23 +423,23 @@ class Rule extends AbstractModel implements IdentityInterface
     public function validateData(DataObject $dataObject)
     {
         if ($dataObject->getIsSmart()) {
-			$validator = new DataObject(['error' => null, 'continue' => true]); 			
-			$this->_eventManager->dispatch(
-				'faonni_smartcategory_validate_data', 
-				['object' => $dataObject, 'validator' => $validator]
-			);
-			
+            $validator = new DataObject(['error' => null, 'continue' => true]);
+            $this->_eventManager->dispatch(
+                'faonni_smartcategory_validate_data',
+                ['object' => $dataObject, 'validator' => $validator]
+            );
+
             if ($validator->getError()) {
                 return $validator->getError();
             }
-			
-			if ($validator->getContinue()) {
-				$conditions = $dataObject->getConditions();
-				if (!is_array($conditions) || 1 >= count($conditions)) {
-					return __('Please specify a rule.');
-				}
-			} 
-        }        
+
+            if ($validator->getContinue()) {
+                $conditions = $dataObject->getConditions();
+                if (!is_array($conditions) || 1 >= count($conditions)) {
+                    return __('Please specify a rule.');
+                }
+            }
+        }
         return true;
-    }      
+    }
 }

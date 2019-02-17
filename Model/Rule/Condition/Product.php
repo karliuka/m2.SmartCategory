@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition;
@@ -20,7 +19,7 @@ class Product extends AbstractProduct
      * @var string
      */
     protected $_isUsedForRuleProperty = 'is_used_for_smart_rules';
-    	
+
     /**
      * Retrieve value element chooser URL
      *
@@ -42,7 +41,7 @@ class Product extends AbstractProduct
         }
         return $url !== false ? $this->_backendData->getUrl($url) : '';
     }
-    	
+
     /**
      * Validate product attribute value for condition
      *

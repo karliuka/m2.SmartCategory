@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\ResourceModel;
@@ -9,7 +8,7 @@ namespace Faonni\SmartCategory\Model\ResourceModel;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
 
 /**
- * SmartCategory Rule resource
+ * Rule resource
  */
 class Rule extends AbstractResource
 {
@@ -18,7 +17,7 @@ class Rule extends AbstractResource
      *
      * @var bool
      */
-    protected $_isPkAutoIncrement = false;    
+    protected $_isPkAutoIncrement = false;
 
     /**
      * Initialize main table and table id field

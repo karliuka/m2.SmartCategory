@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\Indexer;
@@ -14,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\App\Cache\Type\Block;
+use Magento\Framework\App\CacheInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 
@@ -155,7 +155,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         if ($this->_cacheManager === null) {
             $this->_cacheManager = ObjectManager::getInstance()->get(
-                'Magento\Framework\App\CacheInterface'
+                CacheInterface::class
             );
         }
         return $this->_cacheManager;

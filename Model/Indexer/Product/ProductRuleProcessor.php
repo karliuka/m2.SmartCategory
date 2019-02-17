@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\Indexer\Product;
@@ -34,6 +33,4 @@ class ProductRuleProcessor extends AbstractProcessor
         }
         parent::reindexList($ids, $forceReindex);
     }
-
-
 }

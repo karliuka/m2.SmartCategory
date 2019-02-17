@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Setup;
@@ -13,30 +12,30 @@ use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Catalog\Model\Category;
 
 /**
- * SmartCategory Uninstall
+ * Uninstall
  */
 class Uninstall implements UninstallInterface
 {
     /**
-     * EAV Setup Factory
+     * EAV setup factory
      *
      * @var \Magento\Eav\Setup\EavSetupFactory
      */
     private $_eavSetupFactory;
 
     /**
-     * Initialize Setup
+     * Initialize setup
      *
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-		EavSetupFactory $eavSetupFactory
-	) {
+        EavSetupFactory $eavSetupFactory
+    ) {
         $this->_eavSetupFactory = $eavSetupFactory;
     }
-    
+
     /**
-     * Uninstall DB Schema for a Module SmartCategory
+     * Uninstall DB schema
      *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -46,43 +45,43 @@ class Uninstall implements UninstallInterface
     {
         $setup->startSetup();
 
-		$this->removeTables($setup);
-		$this->removeColumns($setup);
-        $this->removeAttributes();	
-		
+        $this->removeTables($setup);
+        $this->removeColumns($setup);
+        $this->removeAttributes();
+
         $setup->endSetup();
     }
-    
+
     /**
-     * Remove Tables
-	 *
+     * Remove tables
+     *
      * @param SchemaSetupInterface $setup
      * @return void
      */
     private function removeTables(SchemaSetupInterface $setup)
-    {	
+    {
         $tableName = 'faonni_smartcategory_rule';
-        if ($setup->tableExists($tableName)) {			
+        if ($setup->tableExists($tableName)) {
             $setup->getConnection()->dropTable($setup->getTable($tableName));
-		}
+        }
     }
-    
+
     /**
-     * Remove Columns
-	 *
+     * Remove columns
+     *
      * @param SchemaSetupInterface $setup
      * @return void
      */
     private function removeColumns(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->dropColumn(
-			$setup->getTable('catalog_eav_attribute'), 
-			'is_used_for_smart_rules'
-		);
+            $setup->getTable('catalog_eav_attribute'),
+            'is_used_for_smart_rules'
+        );
     }
-    
+
     /**
-     * Remove Attributes
+     * Remove attributes
      *
      * @return void
      */
@@ -90,9 +89,9 @@ class Uninstall implements UninstallInterface
     {
         $attributes = ['is_smart'];
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->_eavSetupFactory->create();         
+        $eavSetup = $this->_eavSetupFactory->create();
         foreach ($attributes as $attribute) {
-			$eavSetup->removeAttribute(Category::ENTITY, $attribute); 	
+            $eavSetup->removeAttribute(Category::ENTITY, $attribute);
         }
-    }    
+    }
 }

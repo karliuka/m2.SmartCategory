@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model\ResourceModel\Rule;
 
 use Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection;
+use Faonni\SmartCategory\Model\ResourceModel\Rule as RuleResource;
+use Faonni\SmartCategory\Model\Rule;
 
 /**
- * SmartCategory Rule collection
+ * Rule collection
  */
 class Collection extends AbstractCollection
 {
@@ -20,9 +21,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(
-			'Faonni\SmartCategory\Model\Rule', 
-			'Faonni\SmartCategory\Model\ResourceModel\Rule'
-		);
+        $this->_init(Rule::class, RuleResource::class);
     }
 }
