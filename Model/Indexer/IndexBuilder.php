@@ -231,7 +231,7 @@ class IndexBuilder
         $ruleId = $rule->getId();
 		$productId = $product->getId();
 		
-		if ($rule->validate($product)) {
+		if ($this->validateProduct($rule, $product)) {
 			if (!$this->checkPostedProduct($ruleId, $productId)) {
 				$this->insertMultiple($ruleId, [$productId => '1']);
 			}
