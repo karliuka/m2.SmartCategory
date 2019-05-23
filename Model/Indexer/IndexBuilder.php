@@ -243,6 +243,10 @@ class IndexBuilder
         return $this;
     }
 
+    protected function validateProduct($rule, $product) {
+        return $rule->validate($product);
+    }
+
     /**
      * @param string $tableName
      * @return string
