@@ -9,6 +9,7 @@ use Magento\Rule\Model\Condition\Combine as RuleCombine;
 use Magento\Rule\Model\Condition\Context;
 use Faonni\SmartCategory\Model\Rule\Condition\ProductFactory;
 use Faonni\SmartCategory\Model\Rule\Condition\Product;
+use Faonni\SmartCategory\Model\Rule\Condition\Product\News;
 
 /**
  * Combine model
@@ -48,11 +49,23 @@ class Combine extends RuleCombine
      *
      * @return array
      */
+    /**
+     * Get inherited conditions selectors
+     *
+     * @return array
+     */
     public function getNewChildSelectOptions()
     {
         $productAttributes = $this->_productFactory->create()
             ->loadAttributeOptions()
             ->getAttributeOption();
+
+        $attributes = [
+            [
+                'value' => News::class,
+                'label' => __('New')
+            ]
+        ];
 
         foreach ($productAttributes as $code => $label) {
 			$attributes[] = [
@@ -74,6 +87,7 @@ class Combine extends RuleCombine
         );
         return $conditions;
     }
+	
 
     /**
      * Collect validated attributes
