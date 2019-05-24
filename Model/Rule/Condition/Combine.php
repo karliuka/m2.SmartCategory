@@ -8,9 +8,8 @@ namespace Faonni\SmartCategory\Model\Rule\Condition;
 use Magento\Rule\Model\Condition\Combine as RuleCombine;
 use Magento\Rule\Model\Condition\Context;
 use Faonni\SmartCategory\Model\Rule\Condition\ProductFactory;
-use Faonni\SmartCategory\Model\Rule\Condition\Product\Sale;
-use Faonni\SmartCategory\Model\Rule\Condition\Product\News;
 use Faonni\SmartCategory\Model\Rule\Condition\Product;
+use Faonni\SmartCategory\Model\Rule\Condition\Product\News;
 
 /**
  * Combine model
@@ -50,6 +49,11 @@ class Combine extends RuleCombine
      *
      * @return array
      */
+    /**
+     * Get inherited conditions selectors
+     *
+     * @return array
+     */
     public function getNewChildSelectOptions()
     {
         $productAttributes = $this->_productFactory->create()
@@ -58,22 +62,16 @@ class Combine extends RuleCombine
 
         $attributes = [
             [
-                'value' => Sale::class,
-                'label' => __('Special Price')
-            ],
-            [
                 'value' => News::class,
                 'label' => __('New')
             ]
         ];
 
         foreach ($productAttributes as $code => $label) {
-            if ('special_price' != $code) {
-                $attributes[] = [
-                    'value' => Product::class . '|' . $code,
-                    'label' => $label,
-                ];
-            }
+			$attributes[] = [
+				'value' => Product::class . '|' . $code,
+				'label' => $label,
+			];
         }
 
         $conditions = parent::getNewChildSelectOptions();
@@ -89,6 +87,7 @@ class Combine extends RuleCombine
         );
         return $conditions;
     }
+	
 
     /**
      * Collect validated attributes

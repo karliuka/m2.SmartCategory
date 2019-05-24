@@ -1,28 +1,28 @@
 <?php
 /**
- * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * See COPYING.txt for license details.
+ * @author      Benjamin Rosenberger <rosenberger@e-conomix.at>
+ * @package
+ * @copyright   Copyright (c) 2017 E-CONOMIX GmbH (http://www.e-conomix.at)
  */
+
 namespace Faonni\SmartCategory\Observer;
 
+
+use Faonni\SmartCategory\Model\Indexer\Product\ProductRuleProcessor;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Faonni\SmartCategory\Model\Indexer\Product\ProductRuleProcessor;
 
-/**
- * Product save observer
- */
-class ProductSaveObserver implements ObserverInterface
+class RuleChangeObserver implements ObserverInterface
 {
     /**
-     * Product rule processor
+     * Product Rule Processor instance
      *
      * @var ProductRuleProcessor
      */
     protected $_productRuleProcessor;
 
     /**
-     * Intialize observer
+     * Factory constructor
      *
      * @param ProductRuleProcessor $objectManager
      */
@@ -33,17 +33,13 @@ class ProductSaveObserver implements ObserverInterface
     }
 
     /**
-     * Apply smart category rules after product model save
+     * Apply Reindex after saving the category rule model
      *
      * @param Observer $observer
      * @return void
      */
     public function execute(Observer $observer)
     {
-        $product = $observer->getEvent()->getProduct();
-        if (!$product->getIsMassupdate()) {
-            $this->_productRuleProcessor->reindexRow($product->getId(),true);
-        }
-        return $this;
+        $this->_productRuleProcessor->reindexAll();
     }
 }
