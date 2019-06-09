@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
  use Magento\Framework\Component\ComponentRegistrar;
- 
+
 /**
  * Register module
  */

@@ -15,7 +15,7 @@ use Faonni\SmartCategory\Model\Rule;
 class NewConditionHtml extends Action
 {
     /**
-     * New Condition Html
+     * New condition html
      *
      * @return void
      */

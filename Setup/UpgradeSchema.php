@@ -77,5 +77,5 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getIdxName('catalog_eav_attribute', ['is_used_for_smart_rules']),
             ['is_used_for_smart_rules']
         );
-    } 
+    }
 }

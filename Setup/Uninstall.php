@@ -21,17 +21,17 @@ class Uninstall implements UninstallInterface
      *
      * @var \Magento\Eav\Setup\EavSetupFactory
      */
-    private $_eavSetupFactory;
+    private $eavSetupFactory;
 
     /**
-     * Initialize uninstall
+     * Initialize setup
      *
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->_eavSetupFactory = $eavSetupFactory;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
@@ -89,7 +89,7 @@ class Uninstall implements UninstallInterface
     {
         $attributes = ['is_smart'];
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->_eavSetupFactory->create();
+        $eavSetup = $this->eavSetupFactory->create();
         foreach ($attributes as $attribute) {
             $eavSetup->removeAttribute(Category::ENTITY, $attribute);
         }

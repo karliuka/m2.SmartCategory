@@ -8,22 +8,27 @@ namespace Faonni\SmartCategory\Model\Rule\Condition;
 use Magento\Rule\Model\Condition\Combine as RuleCombine;
 use Magento\Rule\Model\Condition\Context;
 use Faonni\SmartCategory\Model\Rule\Condition\ProductFactory;
+use Faonni\SmartCategory\Model\Rule\Condition\Product\Sale;
+use Faonni\SmartCategory\Model\Rule\Condition\Product\News;
+use Faonni\SmartCategory\Model\Rule\Condition\Product;
 
 /**
- * SmartCategory Rule Combine model
+ * Combine model
  */
 class Combine extends RuleCombine
 {
     /**
-	 * Product model factory
-	 *	
+     * Product model factory
+     *
      * @var \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory
-     */	 
-    protected $_productFactory;
+     */
+    protected $productFactory;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory $conditionFactory
+     * Initialize combine
+     *
+     * @param Context $context
+     * @param ProductFactory $conditionFactory
      * @param array $data
      */
     public function __construct(
@@ -31,13 +36,13 @@ class Combine extends RuleCombine
         ProductFactory $conditionFactory,
         array $data = []
     ) {
-        $this->_productFactory = $conditionFactory;	
-		
+        $this->productFactory = $conditionFactory;
+
         parent::__construct(
-			$context, 
-			$data
-		);
-        $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Combine');
+            $context,
+            $data
+        );
+        $this->setType(self::class);
     }
 
     /**
@@ -47,36 +52,36 @@ class Combine extends RuleCombine
      */
     public function getNewChildSelectOptions()
     {
-        $productAttributes = $this->_productFactory->create()
-			->loadAttributeOptions()
-			->getAttributeOption();
-			
+        $productAttributes = $this->productFactory->create()
+            ->loadAttributeOptions()
+            ->getAttributeOption();
+
         $attributes = [
             [
-                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\Sale', 
+                'value' => Sale::class,
                 'label' => __('Special Price')
             ],
             [
-                'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product\News', 
+                'value' => News::class,
                 'label' => __('New')
-            ]   
+            ]
         ];
-        
+
         foreach ($productAttributes as $code => $label) {
             if ('special_price' != $code) {
                 $attributes[] = [
-                    'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Product|' . $code,
+                    'value' => Product::class . '|' . $code,
                     'label' => $label,
                 ];
-            }         
+            }
         }
-        
+
         $conditions = parent::getNewChildSelectOptions();
         $conditions = array_merge_recursive(
             $conditions,
             [
                 [
-                    'value' => 'Faonni\SmartCategory\Model\Rule\Condition\Combine',
+                    'value' => self::class,
                     'label' => __('Conditions Combination'),
                 ],
                 ['label' => __('Product Attribute'), 'value' => $attributes]

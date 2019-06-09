@@ -11,6 +11,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Catalog\Model\Category;
 
 /**
@@ -23,7 +24,7 @@ class InstallData implements InstallDataInterface
      *
      * @var \Magento\Eav\Setup\EavSetupFactory
      */
-    private $_eavSetupFactory;
+    private $eavSetupFactory;
 
     /**
      * Initialize setup
@@ -33,11 +34,11 @@ class InstallData implements InstallDataInterface
     public function __construct(
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->_eavSetupFactory = $eavSetupFactory;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
-     * Installs DB Data
+     * Installs DB data
      *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -59,7 +60,7 @@ class InstallData implements InstallDataInterface
         $installer->doUpdateClassAliases();
 
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
         $eavSetup->addAttribute(
             Category::ENTITY,
             'is_smart',
@@ -67,7 +68,7 @@ class InstallData implements InstallDataInterface
                 'type' => 'int',
                 'label' => 'Smart Category',
                 'input' => 'select',
-                'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                'source' => Boolean::class,
                 'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
                 'required' => false,
                 'sort_order' => 10,

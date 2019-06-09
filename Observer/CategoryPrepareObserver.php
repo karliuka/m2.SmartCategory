@@ -20,7 +20,7 @@ class CategoryPrepareObserver implements ObserverInterface
      *
      * @var \Faonni\SmartCategory\Model\RuleFactory
      */
-    protected $_ruleFactory;
+    protected $ruleFactory;
 
     /**
      * Intialize observer
@@ -30,7 +30,7 @@ class CategoryPrepareObserver implements ObserverInterface
     public function __construct(
         RuleFactory $ruleFactory
     ) {
-        $this->_ruleFactory = $ruleFactory
+        $this->ruleFactory = $ruleFactory;
     }
 
     /**
@@ -45,7 +45,7 @@ class CategoryPrepareObserver implements ObserverInterface
         $category = $observer->getEvent()->getCategory();
         $data = $request->getPostValue();
 
-        $rule = $this->_ruleFactory->create();
+        $rule = $this->ruleFactory->create();
         if ($category->getId()) {
             $rule->load($category->getId());
         }
@@ -78,4 +78,4 @@ class CategoryPrepareObserver implements ObserverInterface
             $rule->delete();
         }
     }
-}  
+}

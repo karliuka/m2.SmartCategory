@@ -17,5 +17,5 @@ abstract class Rule extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::categories'; 
+    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 }

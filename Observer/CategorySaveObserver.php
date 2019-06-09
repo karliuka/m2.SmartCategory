@@ -26,8 +26,8 @@ class CategorySaveObserver implements ObserverInterface
         if ($category->getIsSmart()) {
             if ($category->getSmartRuleError()) {
                 throw new LocalizedException(
-                $category->getSmartRuleError()
-            );
+                    $category->getSmartRuleError()
+                );
             } else {
                 $rule = $category->getSmartRule();
                 if ($rule) {

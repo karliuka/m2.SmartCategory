@@ -19,7 +19,7 @@ class CategoryDeleteObserver implements ObserverInterface
      *
      * @var \Faonni\SmartCategory\Model\RuleFactory
      */
-    protected $_ruleFactory;
+    protected $ruleFactory;
 
     /**
      * Intialize observer
@@ -29,7 +29,7 @@ class CategoryDeleteObserver implements ObserverInterface
     public function __construct(
         RuleFactory $ruleFactory
     ) {
-        $this->_ruleFactory = $ruleFactory
+        $this->ruleFactory = $ruleFactory;
     }
 
     /**
@@ -42,7 +42,7 @@ class CategoryDeleteObserver implements ObserverInterface
     {
         $category = $observer->getEvent()->getCategory();
         /** @var \Faonni\SmartCategory\Model\Rule $rule */
-        $rule = $this->_ruleFactory->create()
+        $rule = $this->ruleFactory->create()
             ->load($category->getId());
 
         if ($rule->getId()) {
@@ -50,4 +50,4 @@ class CategoryDeleteObserver implements ObserverInterface
         }
         return $this;
     }
-}  
+}

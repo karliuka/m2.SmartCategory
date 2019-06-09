@@ -22,7 +22,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @var \Magento\Framework\DB\AggregatedFieldDataConverter
      */
-    protected $_aggregatedFieldConverter;
+    protected $aggregatedFieldConverter;
 
     /**
      * Initialize setup
@@ -32,7 +32,7 @@ class UpgradeData implements UpgradeDataInterface
     public function __construct(
         AggregatedFieldDataConverter $aggregatedFieldConverter
     ) {
-        $this->_aggregatedFieldConverter = $aggregatedFieldConverter;
+        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
     }
 
     /**
@@ -61,7 +61,8 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function convertSerializedDataToJson($setup)
     {
-        $this->_aggregatedFieldConverter->convert([
+        $this->aggregatedFieldConverter->convert(
+            [
                 new FieldToConvert(
                     SerializedToJson::class,
                     $setup->getTable('faonni_smartcategory_rule'),

@@ -6,7 +6,7 @@
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="general"/>
     <fieldset name="assign_products">
         <container name="smart_category" >
@@ -30,11 +30,10 @@
                             <item name="true" xsi:type="string">1</item>
                             <item name="false" xsi:type="string">0</item>
                         </item>
-                        <item name="default" xsi:type="string">0</item>	
+                        <item name="default" xsi:type="string">0</item>
                         <item name="validation" xsi:type="array">
                             <item name="required-entry" xsi:type="boolean">false</item>
-                        </item>		
-                        <!--<item name="component" xsi:type="string">Faonni_SmartCategory/js/form/element/rule</item>-->
+                        </item>
                     </item>
                 </argument>
             </field>

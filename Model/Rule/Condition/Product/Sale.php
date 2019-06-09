@@ -20,11 +20,11 @@ class Sale extends AbstractCondition
      * @var string
      */
     protected $_inputType = 'select';
-    
+
     /**
      * Initialize Condition Model
      *
-     * @param Context $context 
+     * @param Context $context
      * @param array $data
      */
     public function __construct(
@@ -32,14 +32,14 @@ class Sale extends AbstractCondition
         array $data = []
     ) {
         parent::__construct(
-			$context, 
-			$data
-		);
-		
-        $this->setType('Faonni\SmartCategory\Model\Rule\Condition\Product\Sale');
+            $context,
+            $data
+        );
+
+        $this->setType(self::class);
         $this->setValue(0);
     }
-    
+
     /**
      * Get input type for attribute value
      *
@@ -49,7 +49,7 @@ class Sale extends AbstractCondition
     {
         return 'select';
     }
-    
+
     /**
      * Prepare value select options
      *
@@ -60,7 +60,7 @@ class Sale extends AbstractCondition
         $this->setValueOption([]);
         return $this;
     }
-    
+
     /**
      * Prepare operator select options
      *
@@ -69,12 +69,12 @@ class Sale extends AbstractCondition
     public function loadOperatorOptions()
     {
         $this->setOperatorOption([
-            '==' => __('has'),  
+            '==' => __('has'),
             '!=' => __('does not have')
         ]);
         return $this;
     }
-    
+
     /**
      * Get HTML of condition string
      *
@@ -87,7 +87,7 @@ class Sale extends AbstractCondition
             $this->getOperatorElementHtml()
         ) . $this->getRemoveLinkHtml();
     }
-    
+
     /**
      * Validate product attribute value for condition
      *
@@ -102,16 +102,15 @@ class Sale extends AbstractCondition
             $model->getSpecialFromDate(),
             $model->getSpecialToDate()
         );
-        
+
         if ($this->getOperator() == '==' && $specialPrice && $isDateInterval) {
             return true;
-        } 
-        elseif ($this->getOperator() == '!=' && (!$specialPrice || !$isDateInterval)) {
+        } elseif ($this->getOperator() == '!=' && (!$specialPrice || !$isDateInterval)) {
             return true;
-        }     
+        }
         return false;
     }
-    
+
     /**
      * Collect validated attributes
      *
@@ -124,7 +123,7 @@ class Sale extends AbstractCondition
             ->addAttributeToSelect('special_price', 'left')
             ->addAttributeToSelect('special_from_date', 'left')
             ->addAttributeToSelect('special_to_date', 'left');
-            
+
         return $this;
     }
 }

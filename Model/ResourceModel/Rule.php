@@ -8,7 +8,7 @@ namespace Faonni\SmartCategory\Model\ResourceModel;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
 
 /**
- * SmartCategory Rule resource
+ * Rule resource
  */
 class Rule extends AbstractResource
 {
@@ -17,13 +17,12 @@ class Rule extends AbstractResource
      *
      * @var bool
      */
-    protected $_isPkAutoIncrement = false;    
+    protected $_isPkAutoIncrement = false;
 
     /**
      * Initialize main table and table id field
      *
      * @return void
-     * @codeCoverageIgnore
      */
     protected function _construct()
     {
