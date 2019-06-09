@@ -218,7 +218,7 @@ class Conditions extends Generic implements TabInterface
 
         $form->setValues($model->getData());
         $this->setConditionFormName(
-            $model->getConditions(), 
+            $model->getConditions(),
             $formName
         );
         return $form;

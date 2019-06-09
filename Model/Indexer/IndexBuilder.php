@@ -59,7 +59,6 @@ class IndexBuilder
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
@@ -221,7 +220,6 @@ class IndexBuilder
      * @param Product $product
      * @return $this
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function applyRule(Rule $rule, $product)
     {
@@ -252,8 +250,6 @@ class IndexBuilder
      * @param integer $categoryId
      * @param integer $productId
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function checkPostedProduct($categoryId, $productId)
     {
@@ -269,8 +265,6 @@ class IndexBuilder
     /**
      * @param integer $categoryId
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getPostedProductData($categoryId)
     {
@@ -285,8 +279,6 @@ class IndexBuilder
     /**
      * @param Rule $rule
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function updateRuleProductData(Rule $rule)
     {

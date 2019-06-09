@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
@@ -14,7 +14,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Faonni\SmartCategory\Model\ResourceModel\Rule\Collection" shared="false" />
+    <type name="Faonni\SmartCategory\Model\ResourceModel\Rule\Collection" shared="false"/>
     <type name="Faonni\SmartCategory\Model\Rule\Condition\Combine">
         <arguments>
             <argument name="data" xsi:type="array">

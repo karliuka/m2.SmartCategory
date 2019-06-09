@@ -218,7 +218,7 @@ class Sku extends AbstractGrid
             [
                 'header' => __('SKU'),
                 'name' => 'chooser_sku',
-                'width' => '80px', 
+                'width' => '80px',
                 'index' => 'sku'
             ]
         );
@@ -227,7 +227,7 @@ class Sku extends AbstractGrid
             'chooser_name',
             [
                 'header' => __('Product'),
-                'name' => 'chooser_name', 
+                'name' => 'chooser_name',
                 'index' => 'name'
             ]
         );

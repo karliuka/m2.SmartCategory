@@ -5,36 +5,26 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <!--
-    event controller_action_catalog_product_save_entity_after
-    -->
+    <!-- event controller_action_catalog_product_save_entity_after -->
     <event name="controller_action_catalog_product_save_entity_after">
-        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\ProductSaveObserver" />
-    </event> 	
-    <!--
-    event catalog_category_save_after
-    -->
-    <event name="catalog_category_save_after">
-        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategorySaveObserver" />
-    </event> 
-    <!--
-    event catalog_category_prepare_save
-    -->
-    <event name="catalog_category_prepare_save">
-        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryPrepareObserver" />
-    </event> 
-    <!--
-    event catalog_controller_category_delete
-    -->
-    <event name="catalog_controller_category_delete">
-        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryDeleteObserver" />
+        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\ProductSaveObserver"/>
     </event>
-    <!--
-    event adminhtml_catalog_product_attribute_edit_frontend_prepare_form
-    -->
+    <!-- event catalog_category_save_after -->
+    <event name="catalog_category_save_after">
+        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategorySaveObserver"/>
+    </event>
+    <!-- event catalog_category_prepare_save -->
+    <event name="catalog_category_prepare_save">
+        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryPrepareObserver"/>
+    </event>
+    <!-- event catalog_controller_category_delete -->
+    <event name="catalog_controller_category_delete">
+        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\CategoryDeleteObserver"/>
+    </event>
+    <!-- event adminhtml_catalog_product_attribute_edit_frontend_prepare_form -->
     <event name="adminhtml_catalog_product_attribute_edit_frontend_prepare_form">
-        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\AttributePrepareObserver" />
+        <observer name="faonni_smart_category" instance="Faonni\SmartCategory\Observer\AttributePrepareObserver"/>
     </event>
 </config>
