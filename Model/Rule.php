@@ -15,9 +15,6 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Model\ResourceModel\Iterator;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Serialize\Serializer\Json as Serializer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ProductFactory;
@@ -138,9 +135,6 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param ProductFactory $productFactory
      * @param Visibility $catalogProductVisibility
      * @param Iterator $resourceIterator
-     * @param ExtensionAttributesFactory|null $extensionFactory
-     * @param AttributeValueFactory|null $customAttributeFactory
-     * @param Serializer $serializer
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
@@ -156,9 +150,6 @@ class Rule extends AbstractModel implements IdentityInterface
         ProductFactory $productFactory,
         Visibility $catalogProductVisibility,
         Iterator $resourceIterator,
-        ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null,
-        Serializer $serializer = null,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
@@ -177,10 +168,7 @@ class Rule extends AbstractModel implements IdentityInterface
             $localeDate,
             $resource,
             $resourceCollection,
-            $data,
-            $extensionFactory,
-            $customAttributeFactory,
-            $serializer
+            $data
         );
     }
 
