@@ -4,21 +4,21 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php $_element = $block->getElement() ?>
-<?php $_jsObjectName = $block->getFieldSetId() != null ? $block->getFieldSetId() : $_element->getHtmlId() ?>
+<?php $element = $block->getElement() ?>
+<?php $jsObjectName = $block->getFieldSetId() != null ? $block->getFieldSetId() : $element->getHtmlId() ?>
 <div class="rule-tree">
     <fieldset
-        id="<?= $_jsObjectName ?>" <?= $_element->serialize(['class']) ?>
+        id="<?= $block->escapeHtml($jsObjectName) ?>" <?= $block->escapeHtml($element->serialize(['class'])) ?>
         class="fieldset">
-        <legend class="legend"><span><?= $_element->getLegend() ?></span></legend>
+        <legend class="legend"><span><?= $block->escapeHtml($element->getLegend()) ?></span></legend>
         <br>
-    <?php if ($_element->getComment()) : ?>
+    <?php if ($element->getComment()) : ?>
         <div class="messages">
-            <div class="message message-notice"><?= $block->escapeHtml($_element->getComment()) ?></div>
+            <div class="message message-notice"><?= $block->escapeHtml($element->getComment()) ?></div>
         </div>
     <?php endif ?>
     <div class="rule-tree-wrapper">
-        <?= $_element->getChildrenHtml() ?>
+        <?= $element->getChildrenHtml() ?>
     </div>
     </fieldset>
 </div>
@@ -28,12 +28,12 @@ require([
     "prototype"
 ], function(VarienRulesForm){
 
-window.<?= $_jsObjectName ?> = new VarienRulesForm(
-    '<?= $_jsObjectName ?>',
-    '<?= $block->getNewChildUrl() ?>'
+window.<?= $block->escapeHtml($jsObjectName) ?> = new VarienRulesForm(
+    '<?= $block->escapeHtml($jsObjectName) ?>',
+    '<?= $block->escapeHtml($block->getNewChildUrl()) ?>'
 );
-<?php if ($_element->getReadonly()) : ?>
-    <?= $_element->getHtmlId() ?>.setReadonly(true);
+<?php if ($element->getReadonly()) : ?>
+    <?= $element->getHtmlId() ?>.setReadonly(true);
 <?php endif ?>
 
 });

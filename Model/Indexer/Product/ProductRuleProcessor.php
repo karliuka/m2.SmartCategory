@@ -8,7 +8,7 @@ namespace Faonni\SmartCategory\Model\Indexer\Product;
 use Magento\Framework\Indexer\AbstractProcessor;
 
 /**
- * SmartCategory ProductRuleProcessor model
+ * Product rule processor
  */
 class ProductRuleProcessor extends AbstractProcessor
 {
@@ -17,6 +17,13 @@ class ProductRuleProcessor extends AbstractProcessor
      */
     const INDEXER_ID = 'smartcategory_product';
 
+    /**
+     * Run Row reindex
+     *
+     * @param int $id
+     * @param bool $forceReindex
+     * @return void
+     */
     public function reindexRow($id, $forceReindex = false)
     {
         if (!$forceReindex && $this->isIndexerScheduled()) {
@@ -26,6 +33,13 @@ class ProductRuleProcessor extends AbstractProcessor
         parent::reindexRow($id, $forceReindex);
     }
 
+    /**
+     * Run List reindex
+     *
+     * @param int[] $ids
+     * @param bool $forceReindex
+     * @return void
+     */
     public function reindexList($ids, $forceReindex = false)
     {
         if (!$forceReindex && $this->isIndexerScheduled()) {

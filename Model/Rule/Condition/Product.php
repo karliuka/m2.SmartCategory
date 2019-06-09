@@ -60,7 +60,7 @@ class Product extends AbstractProduct
             return false;
         }
 
-        $this->_setAttributeValue($model);
+        $this->setAttributeValue($model);
 
         $result = $this->validateAttribute($model->getData($attrCode));
         $this->_restoreOldAttrValue($model, $oldAttrValue);
@@ -91,7 +91,7 @@ class Product extends AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return $this
      */
-    protected function _setAttributeValue(AbstractModel $model)
+    protected function setAttributeValue(AbstractModel $model)
     {
         $storeId = $model->getStoreId();
         $defaultStoreId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
@@ -108,8 +108,8 @@ class Product extends AbstractProduct
 
         $value = isset($productValues[$storeId]) ? $productValues[$storeId] : $productValues[$defaultStoreId];
 
-        $value = $this->_prepareDatetimeValue($value, $model);
-        $value = $this->_prepareMultiselectValue($value, $model);
+        $value = $this->prepareDatetimeValue($value, $model);
+        $value = $this->prepareMultiselectValue($value, $model);
 
         $model->setData($this->getAttribute(), $value);
 
@@ -123,13 +123,12 @@ class Product extends AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareDatetimeValue($value, AbstractModel $model)
+    protected function prepareDatetimeValue($value, AbstractModel $model)
     {
         $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
             $value = strtotime($value);
         }
-
         return $value;
     }
 
@@ -140,13 +139,12 @@ class Product extends AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareMultiselectValue($value, AbstractModel $model)
+    protected function prepareMultiselectValue($value, AbstractModel $model)
     {
         $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getFrontendInput() == 'multiselect') {
             $value = strlen($value) ? explode(',', $value) : [];
         }
-
         return $value;
     }
 }

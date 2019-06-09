@@ -24,7 +24,7 @@ class InstallData implements InstallDataInterface
      *
      * @var \Magento\Eav\Setup\EavSetupFactory
      */
-    private $_eavSetupFactory;
+    private $eavSetupFactory;
 
     /**
      * Initialize setup
@@ -34,7 +34,7 @@ class InstallData implements InstallDataInterface
     public function __construct(
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->_eavSetupFactory = $eavSetupFactory;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
@@ -60,7 +60,7 @@ class InstallData implements InstallDataInterface
         $installer->doUpdateClassAliases();
 
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
         $eavSetup->addAttribute(
             Category::ENTITY,
             'is_smart',

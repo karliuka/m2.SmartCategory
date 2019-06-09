@@ -67,63 +67,63 @@ class Rule extends AbstractModel implements IdentityInterface
      *
      * @var array
      */
-    protected $_productIds;
+    protected $productIds;
 
     /**
      * Limitation for products collection
      *
      * @var int|array|null
      */
-    protected $_productsFilter;
+    protected $productsFilter;
 
     /**
      * Visibility filter flag
      *
      * @var bool
      */
-    protected $_visibilityFilter = true;
+    protected $visibilityFilter = true;
 
     /**
      * Iterator resource model
      *
      * @var \Magento\Framework\Model\ResourceModel\Iterator
      */
-    protected $_resourceIterator;
+    protected $resourceIterator;
 
     /**
      * Combine model factory
      *
      * @var \Faonni\SmartCategory\Model\Rule\Condition\CombineFactory
      */
-    protected $_combineFactory;
+    protected $combineFactory;
 
     /**
      * Product model factory
      *
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected $_productFactory;
+    protected $productFactory;
 
     /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
-    protected $_productCollectionFactory;
+    protected $productCollectionFactory;
 
     /**
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
-    protected $_catalogProductVisibility;
+    protected $catalogProductVisibility;
 
     /**
      * Initialize model
@@ -163,12 +163,12 @@ class Rule extends AbstractModel implements IdentityInterface
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->_productCollectionFactory = $productCollectionFactory;
-        $this->_storeManager = $storeManager;
-        $this->_combineFactory = $combineFactory;
-        $this->_productFactory = $productFactory;
-        $this->_catalogProductVisibility = $catalogProductVisibility;
-        $this->_resourceIterator = $resourceIterator;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->storeManager = $storeManager;
+        $this->combineFactory = $combineFactory;
+        $this->productFactory = $productFactory;
+        $this->catalogProductVisibility = $catalogProductVisibility;
+        $this->resourceIterator = $resourceIterator;
 
         parent::__construct(
             $context,
@@ -191,10 +191,7 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     protected function _construct()
     {
-        parent::_construct();
-
         $this->_init(RuleResource::class);
-        $this->setIdFieldName('rule_id');
     }
 
     /**
@@ -204,7 +201,7 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     public function getConditionsInstance()
     {
-        return $this->_combineFactory->create();
+        return $this->combineFactory->create();
     }
 
     /**
@@ -224,39 +221,39 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     public function getMatchingProductIds()
     {
-        if ($this->_productIds === null) {
-            $this->_productIds = [];
+        if ($this->productIds === null) {
+            $this->productIds = [];
             $this->setCollectedAttributes([]);
             /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
-            $productCollection = $this->_productCollectionFactory->create();
+            $productCollection = $this->productCollectionFactory->create();
 
             $this->_eventManager->dispatch(
                 'faonni_smartcategory_product_collection_match_before',
                 ['rule' => $this, 'collection' => $productCollection]
             );
 
-            if ($this->_productsFilter) {
-                $productCollection->addIdFilter($this->_productsFilter);
+            if ($this->productsFilter) {
+                $productCollection->addIdFilter($this->productsFilter);
             }
 
-            if ($this->_visibilityFilter) {
+            if ($this->visibilityFilter) {
                 $productCollection->addAttributeToFilter(
                     'visibility',
-                    ['in' => $this->_catalogProductVisibility->getVisibleInSiteIds()]
+                    ['in' => $this->catalogProductVisibility->getVisibleInSiteIds()]
                 );
             }
 
             $this->getConditions()->collectValidatedAttributes($productCollection);
-            $this->_resourceIterator->walk(
+            $this->resourceIterator->walk(
                 $productCollection->getSelect(),
                 [[$this, 'callbackValidateProduct']],
                 [
                     'attributes' => $this->getCollectedAttributes(),
-                    'product' => $this->_productFactory->create()
+                    'product' => $this->productFactory->create()
                 ]
             );
         }
-        return $this->_productIds;
+        return $this->productIds;
     }
 
     /**
@@ -270,14 +267,14 @@ class Rule extends AbstractModel implements IdentityInterface
         $product = clone $args['product'];
         $product->setData($args['row']);
 
-        $websites = $this->_getWebsitesMap();
+        $websites = $this->getWebsitesMap();
         $results = [];
 
         foreach ($websites as $websiteId => $defaultStoreId) {
             $product->setStoreId($defaultStoreId);
             $results[$websiteId] = $this->getConditions()->validate($product);
             if (true === $results[$websiteId]) {
-                $this->_productIds[$product->getId()] = 1;
+                $this->productIds[$product->getId()] = 1;
             }
         }
     }
@@ -287,10 +284,10 @@ class Rule extends AbstractModel implements IdentityInterface
      *
      * @return array
      */
-    protected function _getWebsitesMap()
+    protected function getWebsitesMap()
     {
         $map = [];
-        $websites = $this->_storeManager->getWebsites();
+        $websites = $this->storeManager->getWebsites();
         foreach ($websites as $website) {
             if ($website->getDefaultStore() === null) {
                 continue;
@@ -305,22 +302,20 @@ class Rule extends AbstractModel implements IdentityInterface
      *
      * @param  int|array $productIds
      * @return void
-     * @codeCoverageIgnore
      */
     public function setProductsFilter($productIds)
     {
-        $this->_productsFilter = $productIds;
+        $this->productsFilter = $productIds;
     }
 
     /**
      * Retrieve products filter
      *
      * @return array|int|null
-     * @codeCoverageIgnore
      */
     public function getProductsFilter()
     {
-        return $this->_productsFilter;
+        return $this->productsFilter;
     }
 
     /**
@@ -331,7 +326,7 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     public function setVisibilityFilter($enabled)
     {
-        $this->_visibilityFilter = $enabled;
+        $this->visibilityFilter = $enabled;
     }
 
     /**
@@ -341,7 +336,7 @@ class Rule extends AbstractModel implements IdentityInterface
      */
     public function isVisibilityFilter()
     {
-        return $this->_visibilityFilter;
+        return $this->visibilityFilter;
     }
 
     /**
@@ -417,8 +412,6 @@ class Rule extends AbstractModel implements IdentityInterface
      *
      * @param \Magento\Framework\DataObject $dataObject
      * @return bool|string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateData(DataObject $dataObject)
     {

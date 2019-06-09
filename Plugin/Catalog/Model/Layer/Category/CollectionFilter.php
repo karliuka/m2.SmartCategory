@@ -21,14 +21,14 @@ class CollectionFilter
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
-    protected $_productVisibility;
+    protected $productVisibility;
 
     /**
      * Catalog config
      *
      * @var \Magento\Catalog\Model\Config
      */
-    protected $_catalogConfig;
+    protected $catalogConfig;
 
     /**
      * Initialize plugin
@@ -40,8 +40,8 @@ class CollectionFilter
         Visibility $productVisibility,
         Config $catalogConfig
     ) {
-        $this->_productVisibility = $productVisibility;
-        $this->_catalogConfig = $catalogConfig;
+        $this->productVisibility = $productVisibility;
+        $this->catalogConfig = $catalogConfig;
     }
 
     /**
@@ -60,7 +60,7 @@ class CollectionFilter
         Category $category
     ) {
         $collection
-            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
+            ->addAttributeToSelect($this->catalogConfig->getProductAttributes())
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
@@ -68,11 +68,11 @@ class CollectionFilter
 
         if ($category->getIsSmart()) {
             $collection->setVisibility(
-                $this->_productVisibility->getVisibleInSiteIds()
+                $this->productVisibility->getVisibleInSiteIds()
             );
         } else {
             $collection->setVisibility(
-                $this->_productVisibility->getVisibleInCatalogIds()
+                $this->productVisibility->getVisibleInCatalogIds()
             );
         }
     }

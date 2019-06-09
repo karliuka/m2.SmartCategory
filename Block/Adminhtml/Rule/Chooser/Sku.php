@@ -24,14 +24,14 @@ class Sku extends AbstractGrid
      *
      * @var \Magento\Catalog\Model\Product\Type
      */
-    protected $_productType;
+    protected $productType;
 
     /**
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
-    protected $_productCollectionFactory;
+    protected $productCollectionFactory;
 
     /**
      * Product collection
@@ -45,7 +45,7 @@ class Sku extends AbstractGrid
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
-    protected $_setCollectionFactory;
+    protected $setCollectionFactory;
 
     /**
      * Intialize grid
@@ -65,9 +65,9 @@ class Sku extends AbstractGrid
         ProductType $productType,
         array $data = []
     ) {
-        $this->_productType = $productType;
-        $this->_productCollectionFactory = $productCollectionFactory;
-        $this->_setCollectionFactory = $setCollectionFactory;
+        $this->productType = $productType;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->setCollectionFactory = $setCollectionFactory;
 
         parent::__construct(
             $context,
@@ -114,7 +114,7 @@ class Sku extends AbstractGrid
     {
         // Set custom filter for in product flag
         if ($column->getId() == 'in_products') {
-            $selected = $this->_getSelectedProducts();
+            $selected = $this->getSelectedProducts();
             if (empty($selected)) {
                 $selected = '';
             }
@@ -136,7 +136,7 @@ class Sku extends AbstractGrid
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_getProductCollection()
+        $collection = $this->getProductCollection()
             ->setStoreId(0)
             ->addAttributeToSelect('name', 'type_id', 'attribute_set_id');
 
@@ -149,10 +149,10 @@ class Sku extends AbstractGrid
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    protected function _getProductCollection()
+    protected function getProductCollection()
     {
         if (!$this->productCollection) {
-            $this->productCollection = $this->_productCollectionFactory->create();
+            $this->productCollection = $this->productCollectionFactory->create();
         }
         return $this->productCollection;
     }
@@ -170,7 +170,7 @@ class Sku extends AbstractGrid
                 'header_css_class' => 'a-center',
                 'type' => 'checkbox',
                 'name' => 'in_products',
-                'values' => $this->_getSelectedProducts(),
+                'values' => $this->getSelectedProducts(),
                 'align' => 'center',
                 'index' => 'sku',
                 'use_index' => true
@@ -194,12 +194,12 @@ class Sku extends AbstractGrid
                 'width' => '60px',
                 'index' => 'type_id',
                 'type' => 'options',
-                'options' => $this->_productType->getOptionArray()
+                'options' => $this->productType->getOptionArray()
             ]
         );
 
-        $sets = $this->_setCollectionFactory->create()->setEntityTypeFilter(
-            $this->_getProductCollection()->getEntity()->getTypeId()
+        $sets = $this->setCollectionFactory->create()->setEntityTypeFilter(
+            $this->getProductCollection()->getEntity()->getTypeId()
         )->load()->toOptionHash();
 
         $this->addColumn(
@@ -252,7 +252,7 @@ class Sku extends AbstractGrid
      *
      * @return mixed
      */
-    protected function _getSelectedProducts()
+    protected function getSelectedProducts()
     {
         return $this->getRequest()->getPost('selected', []);
     }

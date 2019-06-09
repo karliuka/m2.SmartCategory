@@ -27,28 +27,28 @@ class Conditions extends Generic implements TabInterface
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry;
+    protected $coreRegistry;
 
     /**
      * Fieldset renderer
      *
      * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
      */
-    protected $_rendererFieldset;
+    protected $rendererFieldset;
 
     /**
      * Conditions
      *
      * @var \Magento\Rule\Block\Conditions
      */
-    protected $_conditions;
+    protected $conditions;
 
     /**
      * Rule factory
      *
      * @var \Faonni\SmartCategory\Model\RuleFactory
      */
-    protected $_ruleFactory;
+    protected $ruleFactory;
 
     /**
      * Intialize conditions
@@ -70,10 +70,10 @@ class Conditions extends Generic implements TabInterface
         RuleFactory $ruleFactory,
         array $data = []
     ) {
-        $this->_rendererFieldset = $rendererFieldset;
-        $this->_conditions = $conditions;
-        $this->_coreRegistry = $registry;
-        $this->_ruleFactory = $ruleFactory;
+        $this->rendererFieldset = $rendererFieldset;
+        $this->conditions = $conditions;
+        $this->coreRegistry = $registry;
+        $this->ruleFactory = $ruleFactory;
 
         parent::__construct(
             $context,
@@ -161,7 +161,7 @@ class Conditions extends Generic implements TabInterface
     protected function _prepareForm()
     {
         $category = $this->getCurrentCategory();
-        $rule = $this->_ruleFactory->create();
+        $rule = $this->ruleFactory->create();
 
         if ($category->getId()) {
             $rule = $rule->load($category->getId());
@@ -192,7 +192,7 @@ class Conditions extends Generic implements TabInterface
             ['form_namespace' => $formName]
         );
 
-        $renderer = $this->_rendererFieldset
+        $renderer = $this->rendererFieldset
             ->setTemplate('Faonni_SmartCategory::fieldset.phtml')
             ->setNewChildUrl($url)
             ->setFieldSetId($model->getConditionsFieldSetId($formName));
@@ -214,7 +214,7 @@ class Conditions extends Generic implements TabInterface
             ]
         )
         ->setRule($model)
-        ->setRenderer($this->_conditions);
+        ->setRenderer($this->conditions);
 
         $form->setValues($model->getData());
         $this->setConditionFormName(
@@ -249,6 +249,6 @@ class Conditions extends Generic implements TabInterface
      */
     public function getCurrentCategory()
     {
-        return $this->_coreRegistry->registry('current_category');
+        return $this->coreRegistry->registry('current_category');
     }
 }

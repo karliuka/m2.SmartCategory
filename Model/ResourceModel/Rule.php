@@ -23,7 +23,6 @@ class Rule extends AbstractResource
      * Initialize main table and table id field
      *
      * @return void
-     * @codeCoverageIgnore
      */
     protected function _construct()
     {
