@@ -22,7 +22,7 @@ class Combine extends RuleCombine
      *
      * @var \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory
      */
-    protected $_productFactory;
+    protected $productFactory;
 
     /**
      * Initialize combine
@@ -36,7 +36,7 @@ class Combine extends RuleCombine
         ProductFactory $conditionFactory,
         array $data = []
     ) {
-        $this->_productFactory = $conditionFactory;
+        $this->productFactory = $conditionFactory;
 
         parent::__construct(
             $context,
@@ -52,7 +52,7 @@ class Combine extends RuleCombine
      */
     public function getNewChildSelectOptions()
     {
-        $productAttributes = $this->_productFactory->create()
+        $productAttributes = $this->productFactory->create()
             ->loadAttributeOptions()
             ->getAttributeOption();
 

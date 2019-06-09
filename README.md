@@ -15,7 +15,7 @@ For example, you could create a category  includes only new products. Or you cou
 
 ## Compatibility
 
-Magento CE 2.1.x, 2.2.x
+Magento CE 2.1.x, 2.2.x, 2.3.x
 
 ## Install
 
