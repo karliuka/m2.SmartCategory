@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2017 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Model;
@@ -16,6 +15,9 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Model\ResourceModel\Iterator;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Serialize\Serializer\Json as Serializer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ProductFactory;
@@ -125,18 +127,21 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Rule constructor
 	 *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Faonni\SmartCategory\Model\Rule\Condition\CombineFactory $combineFactory
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility 
-     * @param \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param TimezoneInterface $localeDate
+     * @param CollectionFactory $productCollectionFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CombineFactory $combineFactory
+     * @param ProductFactory $productFactory
+     * @param Visibility $catalogProductVisibility 
+     * @param Iterator $resourceIterator
+     * @param ExtensionAttributesFactory|null $extensionFactory
+     * @param AttributeValueFactory|null $customAttributeFactory     
+     * @param Serializer $serializer    
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -152,6 +157,9 @@ class Rule extends AbstractModel implements IdentityInterface
         ProductFactory $productFactory,
         Visibility $catalogProductVisibility,
         Iterator $resourceIterator,
+        ExtensionAttributesFactory $extensionFactory = null,
+        AttributeValueFactory $customAttributeFactory = null,        
+        Serializer $serializer = null,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
@@ -170,7 +178,10 @@ class Rule extends AbstractModel implements IdentityInterface
             $localeDate,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $extensionFactory,
+            $customAttributeFactory,
+            $serializer            
         );
     }
 
@@ -333,23 +344,6 @@ class Rule extends AbstractModel implements IdentityInterface
     {
         return $this->_visibilityFilter;
     }    
-
-    /**
-     * Prepare data before saving
-     *
-     * @return $this
-     */
-    public function beforeSave()
-    {
-        // Serialize conditions
-        if ($this->getConditions()) {
-            $this->setConditionsSerialized(
-				serialize($this->getConditions()->asArray())
-			);
-            $this->_conditions = null;
-        }
-        return parent::beforeSave();
-    }
     
     /**
      * Initialize rule model data from array

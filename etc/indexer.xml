@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2011-2017 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 -->
@@ -11,5 +10,11 @@
     <indexer id="smartcategory_product" view_id="smartcategory_product" class="Faonni\SmartCategory\Model\Indexer\Product\ProductRuleIndexer" shared_index="smartcategory">
         <title translate="true">Smart Category Product Rule</title>
         <description translate="true">Indexed smart category product/rule association</description>
+    </indexer>
+
+    <indexer id="catalog_category_product">
+        <dependencies>
+            <indexer id="smartcategory_product"/>
+        </dependencies>
     </indexer>
 </config>

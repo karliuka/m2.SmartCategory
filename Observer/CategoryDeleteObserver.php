@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2011-2017 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\ObjectManagerInterface;
+use Faonni\SmartCategory\Model\RuleFactory;
 
 /**
  * Category delete observer
@@ -16,23 +15,23 @@ use Magento\Framework\ObjectManagerInterface;
 class CategoryDeleteObserver implements ObserverInterface
 {
     /**
-     * Object Manager instance
+     * Rule factory
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Faonni\SmartCategory\Model\RuleFactory
      */
-    protected $_objectManager;    
-    
+    protected $_ruleFactory;
+
     /**
-     * Factory constructor
+     * Intialize observer
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param RuleFactory $ruleFactory
      */
     public function __construct(
-        ObjectManagerInterface $objectManager
+        RuleFactory $ruleFactory
     ) {
-        $this->_objectManager = $objectManager;
+        $this->_ruleFactory = $ruleFactory
     }
-       	
+
     /**
      * Handler for category delete event
      *
@@ -41,14 +40,14 @@ class CategoryDeleteObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-		$category = $observer->getEvent()->getCategory();
-		/** @var \Faonni\SmartCategory\Model\Rule $rule */
-		$rule = $this->_objectManager->create('Faonni\SmartCategory\Model\Rule')
-			->load($category->getId());		
-		
-		if ($rule->getId()) {
-			$rule->delete();
-		} 		
+        $category = $observer->getEvent()->getCategory();
+        /** @var \Faonni\SmartCategory\Model\Rule $rule */
+        $rule = $this->_ruleFactory->create()
+            ->load($category->getId());
+
+        if ($rule->getId()) {
+            $rule->delete();
+        }
         return $this;
     }
 }  

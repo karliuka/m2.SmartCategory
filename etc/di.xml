@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2011-2017 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 -->
@@ -15,7 +14,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SmartCategory\Model\ResourceModel\Rule\Collection" shared="false" />
+    <type name="Faonni\SmartCategory\Model\ResourceModel\Rule\Collection" shared="false" />
     <type name="Faonni\SmartCategory\Model\Rule\Condition\Combine">
         <arguments>
             <argument name="data" xsi:type="array">

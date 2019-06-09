@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2011-2017 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
 use Magento\Rule\Model\Condition\AbstractCondition;
-use Faonni\SmartCategory\Controller\Adminhtml\Rule;
+use Faonni\SmartCategory\Controller\Adminhtml\Rule as Action;
+use Faonni\SmartCategory\Model\Rule;
 
 /**
- * SmartCategory NewConditionHtml controller
+ * NewConditionHtml controller
  */
-class NewConditionHtml extends Rule
+class NewConditionHtml extends Action
 {
     /**
      * New Condition Html
@@ -21,15 +21,16 @@ class NewConditionHtml extends Rule
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
-        $formName = $this->getRequest()->getParam('form_namespace');
-        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $request = $this->getRequest();
+        $id = $request->getParam('id');
+        $formName = $request->getParam('form_namespace');
+        $typeArr = explode('|', str_replace('-', '/', $request->getParam('type')));
         $type = $typeArr[0];
 
         $model = $this->_objectManager->create($type)
             ->setId($id)
             ->setType($type)
-            ->setRule($this->_objectManager->create('Faonni\SmartCategory\Model\Rule'))
+            ->setRule($this->_objectManager->create(Rule::class))
             ->setPrefix('conditions');
 
         if (!empty($typeArr[1])) {
@@ -37,7 +38,7 @@ class NewConditionHtml extends Rule
         }
 
         if ($model instanceof AbstractCondition) {
-            $model->setJsFormObject($this->getRequest()->getParam('form'));
+            $model->setJsFormObject($request->getParam('form'));
             $model->setFormName($formName);
             $html = $model->asHtmlRecursive();
         } else {

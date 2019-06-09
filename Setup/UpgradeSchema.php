@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2011-2017 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ * Copyright © Karliuka Vitalii(karliuka.vitalii@gmail.com)
  * See COPYING.txt for license details.
  */
 namespace Faonni\SmartCategory\Setup;
@@ -12,12 +11,12 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\DB\Ddl\Table;
 
 /**
- * Faonni_SmartCategory UpgradeSchema
+ * Upgrade schema
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
-     * Upgrades DB schema for a module Faonni_SmartCategory
+     * Upgrades DB schema
      *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -30,31 +29,31 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.3', '<')) {
             $this->removeActionColumn($setup);
         }
-        
+
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
             $this->addIsUsedForSmartRulesColumn($setup);
         }
-        
+
         $setup->endSetup();
     }
 
     /**
-     * Remove Action Column
-	 *
+     * Remove action column
+     *
      * @param SchemaSetupInterface $setup
      * @return void
      */
     private function removeActionColumn(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->dropColumn(
-			$setup->getTable('faonni_smartcategory_rule'), 
-			'actions_serialized'
-		);
+            $setup->getTable('faonni_smartcategory_rule'),
+            'actions_serialized'
+        );
     }
 
     /**
-     * add IsUsedForSmartRules Column
-	 *
+     * add IsUsedForSmartRules column
+     *
      * @param SchemaSetupInterface $setup
      * @return void
      */
@@ -62,7 +61,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $connection = $setup->getConnection();
         $connection->addColumn(
-            'catalog_eav_attribute',
+            $setup->getTable('catalog_eav_attribute'),
             'is_used_for_smart_rules',
             [
                 'type' => Table::TYPE_SMALLINT,
@@ -72,11 +71,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Is Used For Smart Category Rules',
                 'after' => 'is_used_for_price_rules'
             ]
-        );        
-		$connection->addIndex(
-			$setup->getTable('catalog_eav_attribute'),
-			$setup->getIdxName('catalog_eav_attribute', ['is_used_for_smart_rules']),
-			['is_used_for_smart_rules']
-		);         		
-    }    
+        );
+        $connection->addIndex(
+            $setup->getTable('catalog_eav_attribute'),
+            $setup->getIdxName('catalog_eav_attribute', ['is_used_for_smart_rules']),
+            ['is_used_for_smart_rules']
+        );
+    } 
 }
