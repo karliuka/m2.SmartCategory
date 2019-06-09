@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product;
 use Faonni\SmartCategory\Model\Indexer\AbstractIndexer;
 
 /**
- * SmartCategory ProductRuleIndexer model
+ * Product rule indexer
  */
 class ProductRuleIndexer extends AbstractIndexer
 {
@@ -21,7 +21,7 @@ class ProductRuleIndexer extends AbstractIndexer
      */
     protected function doExecuteList($ids)
     {
-        $this->_indexBuilder->reindexByIds(array_unique($ids));
+        $this->indexBuilder->reindexByIds(array_unique($ids));
         $this->getCacheContext()->registerEntities(Product::CACHE_TAG, $ids);
     }
 
@@ -34,6 +34,6 @@ class ProductRuleIndexer extends AbstractIndexer
      */
     protected function doExecuteRow($id)
     {
-        $this->_indexBuilder->reindexById($id);
+        $this->indexBuilder->reindexById($id);
     }
 }

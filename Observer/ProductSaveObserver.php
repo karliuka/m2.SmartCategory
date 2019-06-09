@@ -19,7 +19,7 @@ class ProductSaveObserver implements ObserverInterface
      *
      * @var ProductRuleProcessor
      */
-    protected $_productRuleProcessor;
+    protected $productRuleProcessor;
 
     /**
      * Intialize observer
@@ -29,7 +29,7 @@ class ProductSaveObserver implements ObserverInterface
     public function __construct(
         ProductRuleProcessor $productRuleProcessor
     ) {
-        $this->_productRuleProcessor = $productRuleProcessor;
+        $this->productRuleProcessor = $productRuleProcessor;
     }
 
     /**
@@ -42,7 +42,7 @@ class ProductSaveObserver implements ObserverInterface
     {
         $product = $observer->getEvent()->getProduct();
         if (!$product->getIsMassupdate()) {
-            $this->_productRuleProcessor->reindexRow($product->getId());
+            $this->productRuleProcessor->reindexRow($product->getId());
         }
         return $this;
     }

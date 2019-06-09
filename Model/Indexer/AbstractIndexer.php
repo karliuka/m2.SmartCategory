@@ -18,42 +18,50 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 
 /**
- * SmartCategory AbstractIndexer model
+ * Abstract indexer
  */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**
+     * Index builder
+     *
      * @var IndexBuilder
      */
-    protected $_indexBuilder;
+    protected $indexBuilder;
 
     /**
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager;
+    protected $eventManager;
 
     /**
+     * Cache manager
+     *
      * @var \Magento\Framework\App\CacheInterface
      */
-    private $_cacheManager;
+    protected $cacheManager;
 
     /**
+     * Cache context
+     *
      * @var \Magento\Framework\Indexer\CacheContext
      */
-    protected $_cacheContext;
+    protected $cacheContext;
 
     /**
+     * Initialize indexer
+     *
      * @param IndexBuilder $indexBuilder
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         IndexBuilder $indexBuilder,
         ManagerInterface $eventManager
     ) {
-        $this->_indexBuilder = $indexBuilder;
-        $this->_eventManager = $eventManager;
+        $this->indexBuilder = $indexBuilder;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -74,14 +82,14 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     public function executeFull()
     {
-        $this->_indexBuilder->reindexFull();
-        $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
+        $this->indexBuilder->reindexFull();
+        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         //TODO: remove after fix fpc. MAGETWO-50668
         $this->getCacheManager()->clean($this->getIdentities());
     }
 
     /**
-     * Get affected cache tags
+     * Retrieve affected cache tags
      *
      * @return array
      * @codeCoverageIgnore
@@ -113,7 +121,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     }
 
     /**
-     * Execute partial indexation by ID list. Template method
+     * Execute partial indexation by ID list
      *
      * @param int[] $ids
      * @return void
@@ -138,7 +146,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     }
 
     /**
-     * Execute partial indexation by ID. Template method
+     * Execute partial indexation by ID
      *
      * @param int $id
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -147,32 +155,33 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     abstract protected function doExecuteRow($id);
 
     /**
-     * @return \Magento\Framework\App\CacheInterface|mixed
+     * Retrieve cache manager
      *
+     * @return \Magento\Framework\App\CacheInterface|mixed
      * @deprecated
      */
     private function getCacheManager()
     {
-        if ($this->_cacheManager === null) {
-            $this->_cacheManager = ObjectManager::getInstance()->get(
+        if ($this->cacheManager === null) {
+            $this->cacheManager = ObjectManager::getInstance()->get(
                 CacheInterface::class
             );
         }
-        return $this->_cacheManager;
+        return $this->cacheManager;
     }
 
     /**
-     * Get cache context
+     * Retrieve cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
      * @deprecated
      */
     protected function getCacheContext()
     {
-        if (!($this->_cacheContext instanceof CacheContext)) {
+        if (!($this->cacheContext instanceof CacheContext)) {
             return ObjectManager::getInstance()->get(CacheContext::class);
         } else {
-            return $this->_cacheContext;
+            return $this->cacheContext;
         }
     }
 }

@@ -20,7 +20,7 @@ class AttributePrepareObserver implements ObserverInterface
      *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
-    protected $_yesNo;
+    protected $yesNo;
 
     /**
      * Initialize Observer
@@ -30,7 +30,7 @@ class AttributePrepareObserver implements ObserverInterface
     public function __construct(
         Yesno $yesNo
     ) {
-        $this->_yesNo = $yesNo;
+        $this->yesNo = $yesNo;
     }
 
     /**
@@ -42,7 +42,7 @@ class AttributePrepareObserver implements ObserverInterface
     public function execute(Observer $observer)
     {
         $form = $observer->getEvent()->getForm();
-        $yesnoSource = $this->_yesNo->toOptionArray();
+        $yesnoSource = $this->yesNo->toOptionArray();
         $fieldset = $form->getElement('front_fieldset');
 
         if ($fieldset) {

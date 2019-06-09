@@ -22,7 +22,6 @@ class Chooser extends Action
     public function execute()
     {
         $request = $this->getRequest();
-
         switch ($request->getParam('attribute')) {
             case 'sku':
                 $block = $this->_view->getLayout()->createBlock(
@@ -52,7 +51,6 @@ class Chooser extends Action
                     $ids
                 );
                 break;
-
             default:
                 $block = false;
                 break;
