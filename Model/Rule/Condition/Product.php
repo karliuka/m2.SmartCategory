@@ -20,11 +20,50 @@ use Magento\Store\Model\Store;
 class Product extends AbstractProduct
 {
     /**
+     * @var \Magento\Framework\Model\ResourceModel\IteratorFactory
+     */
+    protected $iteratorFactory;
+    
+    /**
      * Attribute data key that indicates whether it should be used for rules
      *
      * @var string
      */
     protected $_isUsedForRuleProperty = 'is_used_for_smart_rules';
+
+    /**
+     * Product constructor.
+     *
+     * @param \Magento\Rule\Model\Condition\Context $context
+     * @param \Magento\Backend\Helper\Data $backendData
+     * @param \Magento\Eav\Model\Config $config
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\Model\ResourceModel\IteratorFactory $iteratorFactory
+     * @param array $data
+     * @param ProductCategoryList|null $categoryList
+     */
+    public function __construct(
+        \Magento\Rule\Model\Condition\Context $context,
+        \Magento\Backend\Helper\Data $backendData,
+        \Magento\Eav\Model\Config $config,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\Model\ResourceModel\IteratorFactory $iteratorFactory,
+        array $data = [],
+        ProductCategoryList $categoryList = null
+    ) {
+        parent::__construct($context, $backendData, $config, $productFactory, $productRepository, $productResource,
+            $attrSetCollection, $localeFormat, $data, $categoryList);
+
+        $this->iteratorFactory = $iteratorFactory;
+    }
 
     /**
      * Retrieve value element chooser URL
@@ -156,5 +195,49 @@ class Product extends AbstractProduct
             $value = strlen($value) ? explode(',', $value) : [];
         }
         return $value;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
+     *
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function collectValidatedAttributes($productCollection)
+    {
+        $attribute = $this->getAttribute();
+        if ('category_ids' != $attribute) {
+            $productCollection->addAttributeToSelect($attribute, 'left');
+            if ($this->getAttributeObject()->isScopeGlobal()) {
+                $attributes = $this->getRule()->getCollectedAttributes();
+                $attributes[$attribute] = true;
+                $this->getRule()->setCollectedAttributes($attributes);
+            } else {
+                $select = clone $productCollection->getSelect();
+                $attributeModel = $productCollection->getEntity()->getAttribute($attribute);
+
+                $fieldMainTable = $productCollection->getConnection()->getAutoIncrementField($productCollection->getMainTable());
+                $fieldJoinTable = $attributeModel->getEntity()->getLinkField();
+                $select->reset()
+                       ->from(
+                           ['cpe' => $productCollection->getMainTable()],
+                           ['entity_id']
+                       )->join(
+                        ['cpa' => $attributeModel->getBackend()->getTable()],
+                        'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
+                        ['store_id', 'value']
+                    )->where('attribute_id = ?', (int)$attributeModel->getId());
+
+                $iterator = $this->iteratorFactory->create();
+                $res = [];
+                $iterator->walk((string)$select, [function(array $data) {
+                    $row = $data['row'];
+                    $res[$row['entity_id']][$row['store_id']] = $row['value'];
+                }], [], $productCollection->getConnection());
+                $this->_entityAttributeValues= $res;
+            }
+        }
+
+        return $this;
     }
 }
