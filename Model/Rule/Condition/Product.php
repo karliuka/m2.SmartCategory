@@ -8,6 +8,7 @@ namespace Faonni\SmartCategory\Model\Rule\Condition;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ProductCategoryList;
 
 /**
  * Product condition
@@ -23,7 +24,7 @@ class Product extends AbstractProduct
      * @var \Magento\Framework\Model\ResourceModel\IteratorFactory
      */
     protected $iteratorFactory;
-    
+
     /**
      * Attribute data key that indicates whether it should be used for rules
      *
