@@ -7,6 +7,7 @@ namespace Faonni\SmartCategory\Model\Rule\Condition;
 
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Model\ProductCategoryList;
 
 /**
  * SmartCategory Rule Product model
