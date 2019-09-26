@@ -24,7 +24,7 @@ class ProductSaveObserver implements ObserverInterface
     /**
      * Intialize observer
      *
-     * @param ProductRuleProcessor $objectManager
+     * @param ProductRuleProcessor $productRuleProcessor
      */
     public function __construct(
         ProductRuleProcessor $productRuleProcessor
@@ -44,6 +44,5 @@ class ProductSaveObserver implements ObserverInterface
         if (!$product->getIsMassupdate()) {
             $this->productRuleProcessor->reindexRow($product->getId());
         }
-        return $this;
     }
 }

@@ -5,15 +5,15 @@
  */
 namespace Faonni\SmartCategory\Block\Adminhtml\Catalog\Edit\Tab;
 
-use Magento\Backend\Block\Widget\Form;
-use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
 use Magento\Rule\Block\Conditions as RuleConditions;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Faonni\SmartCategory\Model\RuleFactory;
 use Faonni\SmartCategory\Model\Rule;
 
@@ -25,28 +25,28 @@ class Conditions extends Generic implements TabInterface
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
      * Fieldset renderer
      *
-     * @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
+     * @var Fieldset
      */
     protected $rendererFieldset;
 
     /**
      * Conditions
      *
-     * @var \Magento\Rule\Block\Conditions
+     * @var RuleConditions
      */
     protected $conditions;
 
     /**
      * Rule factory
      *
-     * @var \Faonni\SmartCategory\Model\RuleFactory
+     * @var RuleFactory
      */
     protected $ruleFactory;
 
@@ -86,7 +86,7 @@ class Conditions extends Generic implements TabInterface
     /**
      * Prepare content for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return string
      */
     public function getTabLabel()
     {
@@ -96,7 +96,7 @@ class Conditions extends Generic implements TabInterface
     /**
      * Prepare title for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return string
      */
     public function getTabTitle()
     {
@@ -130,7 +130,7 @@ class Conditions extends Generic implements TabInterface
      */
     public function getTabClass()
     {
-        return null;
+        return '';
     }
 
     /**
@@ -140,7 +140,7 @@ class Conditions extends Generic implements TabInterface
      */
     public function getTabUrl()
     {
-        return null;
+        return '';
     }
 
     /**
@@ -166,7 +166,7 @@ class Conditions extends Generic implements TabInterface
         if ($category->getId()) {
             $rule = $rule->load($category->getId());
         }
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->addTabToForm($rule);
         $this->setForm($form);
 
@@ -179,11 +179,11 @@ class Conditions extends Generic implements TabInterface
      * @param Rule $model
      * @param string $fieldsetId
      * @param string $formName
-     * @return \Magento\Framework\Data\Form
+     * @return Form
      */
     protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset', $formName = 'category_form')
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 

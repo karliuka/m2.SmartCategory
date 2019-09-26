@@ -11,6 +11,11 @@ use Magento\Rule\Model\Condition\Context;
 
 /**
  * SmartCategory Rule News model
+ *
+ * @method Sale setType($type)
+ * @method Sale setValue($value)
+ * @method Sale setValueOption($option)
+ * @method Sale setOperatorOption($option)
  */
 class News extends AbstractCondition
 {
@@ -53,7 +58,7 @@ class News extends AbstractCondition
     /**
      * Prepare value select options
      *
-     * @return \Faonni\SmartCategory\Model\Rule\Condition\Product\News
+     * @return $this
      */
     public function loadValueOptions()
     {
@@ -64,7 +69,7 @@ class News extends AbstractCondition
     /**
      * Prepare operator select options
      *
-     * @return \Faonni\SmartCategory\Model\Rule\Condition\Product\News
+     * @return $this
      */
     public function loadOperatorOptions()
     {

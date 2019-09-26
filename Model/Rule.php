@@ -5,7 +5,6 @@
  */
 namespace Faonni\SmartCategory\Model;
 
-use Magento\Rule\Model\AbstractModel;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\Context;
@@ -15,15 +14,22 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Model\ResourceModel\Iterator;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Rule\Model\AbstractModel;
+use Magento\Rule\Model\Action\CollectionFactory as ActionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Faonni\SmartCategory\Model\Rule\Condition\CombineFactory;
 use Faonni\SmartCategory\Model\ResourceModel\Rule as RuleResource;
 
 /**
  * Rule model
+ *
+ * @method Rule setCategory($category)
+ * @method getCategory()
+ * @method Rule setCollectedAttributes($attributes)
+ * @method getCollectedAttributes()
  */
 class Rule extends AbstractModel implements IdentityInterface
 {
@@ -81,44 +87,51 @@ class Rule extends AbstractModel implements IdentityInterface
     protected $visibilityFilter = true;
 
     /**
-     * Iterator resource model
+     * Iterator resource
      *
-     * @var \Magento\Framework\Model\ResourceModel\Iterator
+     * @var Iterator
      */
     protected $resourceIterator;
 
     /**
-     * Combine model factory
+     * Combine factory
      *
-     * @var \Faonni\SmartCategory\Model\Rule\Condition\CombineFactory
+     * @var CombineFactory
      */
     protected $combineFactory;
 
     /**
+     * Action factory
+     *
+     * @var ActionFactory
+     */
+    protected $actionFactory;
+
+    /**
      * Product model factory
      *
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     protected $productCollectionFactory;
 
     /**
      * Catalog product visibility
      *
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var Visibility
      */
     protected $catalogProductVisibility;
 
@@ -132,6 +145,7 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param CollectionFactory $productCollectionFactory
      * @param StoreManagerInterface $storeManager
      * @param CombineFactory $combineFactory
+     * @param ActionFactory $actionFactory
      * @param ProductFactory $productFactory
      * @param Visibility $catalogProductVisibility
      * @param Iterator $resourceIterator
@@ -147,6 +161,7 @@ class Rule extends AbstractModel implements IdentityInterface
         CollectionFactory $productCollectionFactory,
         StoreManagerInterface $storeManager,
         CombineFactory $combineFactory,
+        ActionFactory $actionFactory,
         ProductFactory $productFactory,
         Visibility $catalogProductVisibility,
         Iterator $resourceIterator,
@@ -157,6 +172,7 @@ class Rule extends AbstractModel implements IdentityInterface
         $this->productCollectionFactory = $productCollectionFactory;
         $this->storeManager = $storeManager;
         $this->combineFactory = $combineFactory;
+        $this->actionFactory = $actionFactory;
         $this->productFactory = $productFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
         $this->resourceIterator = $resourceIterator;
@@ -195,11 +211,11 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Retrieve rule actions instance
      *
-     * @return null
+     * @return \Magento\Rule\Model\Action\Collection
      */
     public function getActionsInstance()
     {
-        return null;
+        return $this->actionFactory->create();
     }
 
     /**
@@ -212,7 +228,7 @@ class Rule extends AbstractModel implements IdentityInterface
         if ($this->productIds === null) {
             $this->productIds = [];
             $this->setCollectedAttributes([]);
-            /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
             $productCollection = $this->productCollectionFactory->create();
 
             $this->_eventManager->dispatch(
@@ -385,20 +401,9 @@ class Rule extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * Reset rule actions
-     *
-     * @param null|\Magento\Rule\Model\Action\Collection $actions
-     * @return $this
-     */
-    protected function _resetActions($actions = null)
-    {
-        return $this;
-    }
-
-    /**
      * Validate rule data
      *
-     * @param \Magento\Framework\DataObject $dataObject
+     * @param DataObject $dataObject
      * @return bool|string
      */
     public function validateData(DataObject $dataObject)

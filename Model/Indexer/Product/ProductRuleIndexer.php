@@ -5,6 +5,7 @@
  */
 namespace Faonni\SmartCategory\Model\Indexer\Product;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product;
 use Faonni\SmartCategory\Model\Indexer\AbstractIndexer;
 
@@ -29,7 +30,7 @@ class ProductRuleIndexer extends AbstractIndexer
      * Execute partial indexation by ID
      *
      * @param int $id
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     protected function doExecuteRow($id)

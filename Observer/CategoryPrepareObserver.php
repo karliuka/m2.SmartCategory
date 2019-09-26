@@ -18,7 +18,7 @@ class CategoryPrepareObserver implements ObserverInterface
     /**
      * Rule factory
      *
-     * @var \Faonni\SmartCategory\Model\RuleFactory
+     * @var RuleFactory
      */
     protected $ruleFactory;
 

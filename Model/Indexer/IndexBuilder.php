@@ -5,14 +5,14 @@
  */
 namespace Faonni\SmartCategory\Model\Indexer;
 
-use Psr\Log\LoggerInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
-use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
+use Magento\Framework\DataObject;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
+use Psr\Log\LoggerInterface;
 use Faonni\SmartCategory\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Faonni\SmartCategory\Model\Rule;
 
@@ -24,28 +24,28 @@ class IndexBuilder
     /**
      * Resource connection
      *
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $resource;
 
     /**
      * Rule collection factory
      *
-     * @var \Faonni\SmartCategory\Model\ResourceModel\Rule\CollectionFactory
+     * @var RuleCollectionFactory
      */
     protected $ruleCollectionFactory;
 
     /**
      * Logger interface
      *
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
      * Product factory
      *
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
@@ -66,7 +66,7 @@ class IndexBuilder
     /**
      * Indexer registry
      *
-     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @var IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -110,7 +110,7 @@ class IndexBuilder
      * Reindex by ids
      *
      * @param array $ids
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      * @api
      */
@@ -145,7 +145,7 @@ class IndexBuilder
     /**
      * Reindex product categories by productId
      *
-     * @param array $productId
+     * @param int $productId
      * @return void
      */
     protected function productCategoryReindexRow($productId)
@@ -157,7 +157,7 @@ class IndexBuilder
     /**
      * Reindex category products by productId
      *
-     * @param array $categoryId
+     * @param int $categoryId
      * @return void
      */
     protected function categoryProductReindexRow($categoryId)
@@ -169,7 +169,7 @@ class IndexBuilder
     /**
      * Full reindex
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      * @api
      */
@@ -238,7 +238,7 @@ class IndexBuilder
      * Apply rule
      *
      * @param Rule $rule
-     * @param ProductInterface $product
+     * @param DataObject $product
      * @return $this
      */
     protected function applyRule(Rule $rule, $product)
@@ -270,8 +270,8 @@ class IndexBuilder
     /**
      * Check posted product
      *
-     * @param integer $categoryId
-     * @param integer $productId
+     * @param string $categoryId
+     * @param string $productId
      * @return bool
      */
     protected function checkPostedProduct($categoryId, $productId)
@@ -288,7 +288,7 @@ class IndexBuilder
     /**
      * Retrieve posted products
      *
-     * @param integer $categoryId
+     * @param string $categoryId
      * @return array
      */
     protected function getPostedProductData($categoryId)
@@ -339,7 +339,7 @@ class IndexBuilder
      * Retrieve product
      *
      * @param int $productId
-     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @return DataObject
      */
     protected function getProduct($productId)
     {
