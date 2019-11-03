@@ -9,7 +9,6 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\IteratorFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Backend\Helper\Data as BackendHelper;
@@ -55,7 +54,6 @@ class Product extends AbstractProduct
      * @param FormatInterface $localeFormat
      * @param IteratorFactory $iteratorFactory
      * @param array $data
-     * @param ProductCategoryList|null $categoryList
      */
     public function __construct(
         Context $context,
@@ -67,8 +65,7 @@ class Product extends AbstractProduct
         SetCollection $attrSetCollection,
         FormatInterface $localeFormat,
         IteratorFactory $iteratorFactory,
-        array $data = [],
-        ProductCategoryList $categoryList = null
+        array $data = []
     ) {
         $this->iteratorFactory = $iteratorFactory;
 
@@ -81,8 +78,7 @@ class Product extends AbstractProduct
             $productResource,
             $attrSetCollection,
             $localeFormat,
-            $data,
-            $categoryList
+            $data
         );
     }
 
