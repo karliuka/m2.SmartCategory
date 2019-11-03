@@ -74,4 +74,3 @@ class UpgradeData implements UpgradeDataInterface
         );
     }
 }
- 
