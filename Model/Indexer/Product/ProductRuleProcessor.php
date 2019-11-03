@@ -13,7 +13,7 @@ use Magento\Framework\Indexer\AbstractProcessor;
 class ProductRuleProcessor extends AbstractProcessor
 {
     /**
-     * Indexer id
+     * Indexer code
      */
     const INDEXER_ID = 'smartcategory_product';
 

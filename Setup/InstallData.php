@@ -22,9 +22,9 @@ class InstallData implements InstallDataInterface
     /**
      * EAV setup factory
      *
-     * @var \Magento\Eav\Setup\EavSetupFactory
+     * @var EavSetupFactory
      */
-    private $eavSetupFactory;
+    protected $eavSetupFactory;
 
     /**
      * Initialize setup
@@ -40,7 +40,7 @@ class InstallData implements InstallDataInterface
     /**
      * Installs DB data
      *
-     * @param SchemaSetupInterface $setup
+     * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
      */

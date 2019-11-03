@@ -59,7 +59,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function convertSerializedDataToJson($setup)
+    protected function convertSerializedDataToJson($setup)
     {
         $this->aggregatedFieldConverter->convert(
             [
@@ -74,3 +74,4 @@ class UpgradeData implements UpgradeDataInterface
         );
     }
 }
+ 

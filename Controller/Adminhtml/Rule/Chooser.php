@@ -5,6 +5,7 @@
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
+use Magento\Framework\App\ResponseInterface;
 use Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree;
 use Faonni\SmartCategory\Controller\Adminhtml\Rule as Action;
 use Faonni\SmartCategory\Block\Adminhtml\Rule\Chooser\Sku;
@@ -17,7 +18,7 @@ class Chooser extends Action
     /**
      * Prepare block for chooser
      *
-     * @return void
+     * @return ResponseInterface
      */
     public function execute()
     {

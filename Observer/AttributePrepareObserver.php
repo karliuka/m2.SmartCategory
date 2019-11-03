@@ -18,7 +18,7 @@ class AttributePrepareObserver implements ObserverInterface
     /**
      * Source Yesno
      *
-     * @var \Magento\Config\Model\Config\Source\Yesno
+     * @var Yesno
      */
     protected $yesNo;
 

@@ -19,14 +19,14 @@ class CollectionFilter
     /**
      * Catalog product visibility
      *
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var Visibility
      */
     protected $productVisibility;
 
     /**
      * Catalog config
      *
-     * @var \Magento\Catalog\Model\Config
+     * @var Config
      */
     protected $catalogConfig;
 
@@ -48,7 +48,7 @@ class CollectionFilter
      * Filter product collection
      *
      * @param LayerCollectionFilter $collectionFilter
-     * @param callable proceed
+     * @param callable $proceed
      * @param Collection $collection
      * @param Category $category
      * @return void

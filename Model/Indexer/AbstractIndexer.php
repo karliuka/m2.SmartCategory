@@ -30,9 +30,9 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     protected $indexBuilder;
 
     /**
-     * Application Event Dispatcher
+     * Application event dispatcher
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
@@ -84,7 +84,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         $this->indexBuilder->reindexFull();
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
-        //TODO: remove after fix fpc. MAGETWO-50668
+
         $this->getCacheManager()->clean($this->getIdentities());
     }
 
@@ -107,7 +107,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute partial indexation by ID list
      *
      * @param int[] $ids
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     public function executeList(array $ids)
@@ -132,7 +132,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute partial indexation by ID
      *
      * @param int $id
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     public function executeRow($id)
@@ -149,7 +149,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute partial indexation by ID
      *
      * @param int $id
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     abstract protected function doExecuteRow($id);
@@ -160,7 +160,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @return \Magento\Framework\App\CacheInterface|mixed
      * @deprecated
      */
-    private function getCacheManager()
+    protected function getCacheManager()
     {
         if ($this->cacheManager === null) {
             $this->cacheManager = ObjectManager::getInstance()->get(

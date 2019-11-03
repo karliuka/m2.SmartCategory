@@ -17,7 +17,7 @@ class CategoryDeleteObserver implements ObserverInterface
     /**
      * Rule factory
      *
-     * @var \Faonni\SmartCategory\Model\RuleFactory
+     * @var RuleFactory
      */
     protected $ruleFactory;
 
@@ -48,6 +48,5 @@ class CategoryDeleteObserver implements ObserverInterface
         if ($rule->getId()) {
             $rule->delete();
         }
-        return $this;
     }
 }
