@@ -5,11 +5,16 @@
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition;
 
-use Magento\Rule\Model\Condition\Product\AbstractProduct;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Rule\Model\Condition\Product\AbstractProduct;
+use Magento\Store\Model\Store;
 
 /**
  * SmartCategory Rule Product model
+ *
+ * @method getAttribute()
+ * @method getJsFormObject()
+ * @method getAttributeOption()
  */
 class Product extends AbstractProduct
 {
@@ -45,7 +50,7 @@ class Product extends AbstractProduct
     /**
      * Validate product attribute value for condition
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
+     * @param \Magento\Catalog\Model\Product|AbstractModel $model
      * @return bool
      */
     public function validate(AbstractModel $model)
@@ -71,7 +76,7 @@ class Product extends AbstractProduct
     /**
      * Restore old attribute value
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @param mixed $oldAttrValue
      * @return void
      */
@@ -88,13 +93,13 @@ class Product extends AbstractProduct
     /**
      * Set attribute value
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
+     * @param \Magento\Catalog\Model\Product|AbstractModel $model
      * @return $this
      */
     protected function setAttributeValue(AbstractModel $model)
     {
         $storeId = $model->getStoreId();
-        $defaultStoreId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        $defaultStoreId = Store::DEFAULT_STORE_ID;
 
         if (!isset($this->_entityAttributeValues[$model->getId()])) {
             return $this;
@@ -120,12 +125,14 @@ class Product extends AbstractProduct
      * Prepare datetime attribute value
      *
      * @param mixed $value
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
+     * @param \Magento\Catalog\Model\Product|AbstractModel $model
      * @return mixed
      */
     protected function prepareDatetimeValue($value, AbstractModel $model)
     {
-        $attribute = $model->getResource()->getAttribute($this->getAttribute());
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
+        $resource = $model->getResource();
+        $attribute = $resource->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
             $value = strtotime($value);
         }
@@ -136,12 +143,14 @@ class Product extends AbstractProduct
      * Prepare multiselect attribute value
      *
      * @param mixed $value
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
+     * @param \Magento\Catalog\Model\Product|AbstractModel $model
      * @return mixed
      */
     protected function prepareMultiselectValue($value, AbstractModel $model)
     {
-        $attribute = $model->getResource()->getAttribute($this->getAttribute());
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
+        $resource = $model->getResource();
+        $attribute = $resource->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getFrontendInput() == 'multiselect') {
             $value = strlen($value) ? explode(',', $value) : [];
         }

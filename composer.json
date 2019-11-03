@@ -22,7 +22,7 @@
     },
     "autoload": {
         "files": [
-            "registration.php" 
+            "registration.php"
         ],
         "psr-4": {
             "Faonni\\SmartCategory\\": ""

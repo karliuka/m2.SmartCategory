@@ -5,6 +5,7 @@
  */
 namespace Faonni\SmartCategory\Controller\Adminhtml\Rule;
 
+use Magento\Framework\App\ResponseInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Faonni\SmartCategory\Controller\Adminhtml\Rule as Action;
 use Faonni\SmartCategory\Model\Rule;
@@ -17,7 +18,7 @@ class NewConditionHtml extends Action
     /**
      * New condition html
      *
-     * @return void
+     * @return ResponseInterface
      */
     public function execute()
     {

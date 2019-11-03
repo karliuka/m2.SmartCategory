@@ -19,9 +19,9 @@ class Uninstall implements UninstallInterface
     /**
      * EAV setup factory
      *
-     * @var \Magento\Eav\Setup\EavSetupFactory
+     * @var EavSetupFactory
      */
-    private $eavSetupFactory;
+    protected $eavSetupFactory;
 
     /**
      * Initialize setup
@@ -58,7 +58,7 @@ class Uninstall implements UninstallInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function removeTables(SchemaSetupInterface $setup)
+    protected function removeTables(SchemaSetupInterface $setup)
     {
         $tableName = 'faonni_smartcategory_rule';
         if ($setup->tableExists($tableName)) {
@@ -72,7 +72,7 @@ class Uninstall implements UninstallInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function removeColumns(SchemaSetupInterface $setup)
+    protected function removeColumns(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->dropColumn(
             $setup->getTable('catalog_eav_attribute'),
@@ -85,7 +85,7 @@ class Uninstall implements UninstallInterface
      *
      * @return void
      */
-    private function removeAttributes()
+    protected function removeAttributes()
     {
         $attributes = ['is_smart'];
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */

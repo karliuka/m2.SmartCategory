@@ -43,7 +43,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function removeActionColumn(SchemaSetupInterface $setup)
+    protected function removeActionColumn(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->dropColumn(
             $setup->getTable('faonni_smartcategory_rule'),
@@ -57,7 +57,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function addIsUsedForSmartRulesColumn(SchemaSetupInterface $setup)
+    protected function addIsUsedForSmartRulesColumn(SchemaSetupInterface $setup)
     {
         $connection = $setup->getConnection();
         $connection->addColumn(

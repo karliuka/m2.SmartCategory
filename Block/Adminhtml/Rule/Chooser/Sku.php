@@ -16,20 +16,31 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as Se
 
 /**
  * Sku grid
+ *
+ * @method Sku setId($id)
+ * @method getId()
+ * @method Sku setCheckboxCheckCallback($callback)
+ * @method getCheckboxCheckCallback()
+ * @method Sku setRowInitCallback($callback)
+ * @method getRowInitCallback()
+ * @method Sku setUseAjax($flag)
+ * @method getUseAjax()
+ * @method Sku setJsFormObject($object)
+ * @method getJsFormObject()
  */
 class Sku extends AbstractGrid
 {
     /**
      * Product type
      *
-     * @var \Magento\Catalog\Model\Product\Type
+     * @var ProductType
      */
     protected $productType;
 
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var ProductCollectionFactory
      */
     protected $productCollectionFactory;
 
@@ -43,7 +54,7 @@ class Sku extends AbstractGrid
     /**
      * Attribute set collection factory
      *
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
+     * @var SetCollectionFactory
      */
     protected $setCollectionFactory;
 
@@ -151,7 +162,7 @@ class Sku extends AbstractGrid
      */
     protected function getProductCollection()
     {
-        if (!$this->productCollection) {
+        if (null === $this->productCollection) {
             $this->productCollection = $this->productCollectionFactory->create();
         }
         return $this->productCollection;

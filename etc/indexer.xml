@@ -11,9 +11,4 @@
         <title translate="true">Smart Category Product Rule</title>
         <description translate="true">Indexed smart category product/rule association</description>
     </indexer>
-    <indexer id="catalog_category_product">
-        <dependencies>
-            <indexer id="smartcategory_product"/>
-        </dependencies>
-    </indexer>
 </config>

@@ -14,13 +14,15 @@ use Faonni\SmartCategory\Model\Rule\Condition\Product;
 
 /**
  * Combine model
+ *
+ * @method Sale setType($type)
  */
 class Combine extends RuleCombine
 {
     /**
      * Product model factory
      *
-     * @var \Faonni\SmartCategory\Model\Rule\Condition\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
