@@ -25,6 +25,11 @@ use Magento\Store\Model\StoreManagerInterface;
 class Sale extends AbstractCondition
 {
     /**
+     * @var array
+     */
+    private static array $priceRulesData = [];
+
+    /**
      * Defines which operators will be available for this condition
      *
      * @var string
