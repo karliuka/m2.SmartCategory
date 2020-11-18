@@ -5,9 +5,14 @@
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition\Product;
 
+use Magento\CatalogRule\Model\ResourceModel\Rule;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Context;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * SmartCategory Rule Sale model
@@ -29,20 +34,24 @@ class Sale extends AbstractCondition
     /**
      * Initialize Condition Model
      *
+     * @param Rule $ruleResourceFactory
+     * @param Session $customerSession
+     * @param StoreManagerInterface $storeManager
      * @param Context $context
      * @param array $data
      */
     public function __construct(
+        Rule $ruleResourceFactory,
+        Session $customerSession,
+        StoreManagerInterface $storeManager,
         Context $context,
         array $data = []
     ) {
-        parent::__construct(
-            $context,
-            $data
-        );
+        $this->ruleResourceFactory = $ruleResourceFactory;
+        $this->customerSession = $customerSession;
+        $this->storeManager = $storeManager;
 
-        $this->setType(self::class);
-        $this->setValue(0);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -87,10 +96,46 @@ class Sale extends AbstractCondition
      */
     public function asHtml()
     {
-        return $this->getTypeElementHtml() . __(
-            'Product %1 a Special Price',
-            $this->getOperatorElementHtml()
-        ) . $this->getRemoveLinkHtml();
+        return $this->getTypeElementHtml() .
+            __('Product %1 a Discount', $this->getOperatorElementHtml()) .
+            $this->getRemoveLinkHtml();
+    }
+
+    /**
+     * Check Product for valid promo rule.
+     *
+     * @param $product
+     * @return bool
+     */
+    public function checkCatalogPriceRules($product): bool
+    {
+        $storeId = $product->getStoreId();
+        try {
+            $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+        } catch (NoSuchEntityException $e) {
+            $websiteId = 1;
+        }
+
+        if ($product->hasCustomerGroupId()) {
+            $customerGroupId = $product->getCustomerGroupId();
+        } else {
+            try {
+                $customerGroupId = $this->customerSession->getCustomerGroupId();
+            } catch (NoSuchEntityException | LocalizedException $e) {
+                $customerGroupId = 0;
+            }
+        }
+
+        $productId = $product->getId();
+        $dateTs = $this->_localeDate->scopeTimeStamp($storeId);
+        $cacheKey = date('Y-m-d', $dateTs) . "|{$websiteId}|{$customerGroupId}|{$productId}";
+
+        if (!\array_key_exists($cacheKey, self::$priceRulesData)) {
+            $rules = $this->ruleResourceFactory->getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId);
+            self::$priceRulesData[$cacheKey] = count($rules) > 0;
+        }
+
+        return self::$priceRulesData[$cacheKey] ?? false;
     }
 
     /**
@@ -101,6 +146,10 @@ class Sale extends AbstractCondition
      */
     public function validate(AbstractModel $model)
     {
+        if ($this->checkCatalogPriceRules($model)) {
+            return true;
+        }
+
         $specialPrice = $model->getSpecialPrice();
         $isDateInterval = $this->_localeDate->isScopeDateInInterval(
             $model->getStore(),
