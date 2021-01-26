@@ -15,7 +15,7 @@ For example, you could create a category  includes only new products. Or you cou
 
 ## Compatibility
 
-Magento CE 2.1.x, 2.2.x, 2.3.x
+Magento CE 2.1.x, 2.2.x, 2.3.x, 2.4.x
 
 ## Install
 
@@ -30,13 +30,30 @@ The corresponding version of the Smart Category Kit will be installed automatica
 
 2. Enter following commands to install module:
 
+     For Magento CE 2.1.x
+
     ```bash
-    composer require faonni/module-smart-category-kit
+    composer require faonni/module-smart-category-kit:2.1.*
     ```
-   Wait while dependencies are updated.
-   
+     For Magento CE 2.2.x
+
+    ```bash
+    composer require faonni/module-smart-category-kit:2.2.*
+    ```
+     For Magento CE 2.3.x
+
+    ```bash
+    composer require faonni/module-smart-category-kit:2.3.*
+    ```
+     For Magento CE 2.4.x
+
+    ```bash
+    composer require faonni/module-smart-category-kit:2.4.*
+    ```
+   Choose one based on your Magento version and wait while dependencies are updated.
+
 #### Manual Installation
-   
+
 1. Create a folder {Magento root}/app/code/Faonni/SmartCategory
 
 2. Download the corresponding [latest version](https://github.com/karliuka/m2.SmartCategory/releases)
@@ -52,9 +69,9 @@ The corresponding version of the Smart Category Kit will be installed automatica
 2. Enter following commands:
 
     ```bash
-	php bin/magento setup:upgrade
-	php bin/magento setup:di:compile
-	php bin/magento setup:static-content:deploy  (optional)
+    php bin/magento setup:upgrade
+    php bin/magento setup:di:compile
+    php bin/magento setup:static-content:deploy  (optional)
     ```
 ## Configuration
 In the Magento Admin Panel go to *Stores > Product Attributes*.
@@ -75,7 +92,7 @@ This works only with modules defined as Composer packages.
     ```bash
     php bin/magento module:uninstall -r Faonni_SmartCategoryKit Faonni_SmartCategoryConfigurable Faonni_SmartCategory
     ```
-    
+
 #### Remove Smart Category Kit
     
 1. Go to Magento2 root folder
@@ -93,6 +110,7 @@ This works only with modules defined as Composer packages.
 2. Enter following commands:
 
     ```bash
-	php bin/magento setup:upgrade
-	php bin/magento setup:di:compile
-	php bin/magento setup:static-content:deploy  (optional)
+    php bin/magento setup:upgrade
+    php bin/magento setup:di:compile
+    php bin/magento setup:static-content:deploy  (optional)
+    ```
