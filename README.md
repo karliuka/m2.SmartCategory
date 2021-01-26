@@ -31,9 +31,11 @@ The corresponding version of the Smart Category Kit will be installed automatica
 2. Enter following commands to install module:
 
     ```bash
-    composer require faonni/module-smart-category-kit
+    composer require faonni/module-smart-category-kit 2.3.*
+    composer require faonni/module-smart-category-kit 2.2.*
+    composer require faonni/module-smart-category-kit 2.1.*
     ```
-   Wait while dependencies are updated.
+   Choose one based on your Magento version and wait while dependencies are updated.
    
 #### Manual Installation
    
