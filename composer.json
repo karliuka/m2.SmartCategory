@@ -3,10 +3,12 @@
     "description": "SmartCategory module is a base of Smart Categories functionality.",
     "type": "magento2-module",
     "version": "2.4.0",
-    "authors": [{
-        "name": "Karliuka Vitalii",
-        "email": "karliuka.vitalii@gmail.com"
-    }],
+    "authors": [
+        {
+            "name": "Karliuka Vitalii",
+            "email": "karliuka.vitalii@gmail.com"
+        }
+    ],
     "license": [
         "OSL-3.0"
     ],
