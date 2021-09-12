@@ -10,7 +10,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Category save observer
+ * Category save
  */
 class CategorySaveObserver implements ObserverInterface
 {
@@ -22,18 +22,17 @@ class CategorySaveObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $category = $observer->getEvent()->getCategory();
+        $category = $observer->getEvent()->getData('category');
         if ($category->getIsSmart()) {
             if ($category->getSmartRuleError()) {
                 throw new LocalizedException(
                     $category->getSmartRuleError()
                 );
-            } else {
-                $rule = $category->getSmartRule();
-                if ($rule) {
-                    $rule->setId($category->getId());
-                    $rule->save();
-                }
+            }
+            $rule = $category->getSmartRule();
+            if ($rule) {
+                $rule->setId($category->getId());
+                $rule->save();
             }
         }
     }

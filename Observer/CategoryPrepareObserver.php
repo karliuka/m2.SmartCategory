@@ -11,7 +11,7 @@ use Magento\Framework\DataObject;
 use Faonni\SmartCategory\Model\RuleFactory;
 
 /**
- * Category prepare observer
+ * Category prepare
  */
 class CategoryPrepareObserver implements ObserverInterface
 {
@@ -41,8 +41,8 @@ class CategoryPrepareObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $request = $observer->getEvent()->getRequest();
-        $category = $observer->getEvent()->getCategory();
+        $request = $observer->getEvent()->getData('request');
+        $category = $observer->getEvent()->getData('category');
         $data = $request->getPostValue();
 
         $rule = $this->ruleFactory->create();
@@ -51,13 +51,14 @@ class CategoryPrepareObserver implements ObserverInterface
         }
 
         if ($data && $category->getIsSmart()) {
-            if (isset($data['rule'])) {
-                $data['conditions'] = $data['rule']['conditions'];
-                unset($data['rule']);
-            } else {
+            if (!isset($data['rule'])) {
                 // closed tab
                 return;
             }
+
+            $data['conditions'] = $data['rule']['conditions'];
+            unset($data['rule']);
+
             $validateResult = $rule->validateData(new DataObject($data));
             if ($validateResult !== true) {
                 $category->setSmartRuleError($validateResult);
@@ -74,8 +75,8 @@ class CategoryPrepareObserver implements ObserverInterface
 
             $category->setPostedProducts($postedProducts);
             $category->setSmartRule($rule);
-        } else {
-            $rule->delete();
+            return;
         }
+        $rule->delete();
     }
 }

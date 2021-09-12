@@ -10,7 +10,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Faonni\SmartCategory\Model\Indexer\Product\ProductRuleProcessor;
 
 /**
- * Product save observer
+ * Product save
  */
 class ProductSaveObserver implements ObserverInterface
 {
@@ -40,7 +40,7 @@ class ProductSaveObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $product = $observer->getEvent()->getProduct();
+        $product = $observer->getEvent()->getData('product');
         if (!$product->getIsMassupdate()) {
             $this->productRuleProcessor->reindexRow($product->getId());
         }

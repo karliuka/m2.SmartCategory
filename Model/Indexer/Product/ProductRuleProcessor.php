@@ -8,7 +8,7 @@ namespace Faonni\SmartCategory\Model\Indexer\Product;
 use Magento\Framework\Indexer\AbstractProcessor;
 
 /**
- * Product rule processor
+ * Indexer processor
  */
 class ProductRuleProcessor extends AbstractProcessor
 {
