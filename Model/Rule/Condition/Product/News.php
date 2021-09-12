@@ -30,7 +30,7 @@ class News extends AbstractCondition
      * Initialize Condition Model
      *
      * @param Context $context
-     * @param array $data
+     * @param mixed[] $data
      */
     public function __construct(
         Context $context,

@@ -31,7 +31,7 @@ class Combine extends RuleCombine
      *
      * @param Context $context
      * @param ProductFactory $conditionFactory
-     * @param array $data
+     * @param mixed[] $data
      */
     public function __construct(
         Context $context,
@@ -50,7 +50,7 @@ class Combine extends RuleCombine
     /**
      * Get inherited conditions selectors
      *
-     * @return array
+     * @return mixed[]
      */
     public function getNewChildSelectOptions()
     {
