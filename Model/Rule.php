@@ -47,7 +47,7 @@ class Rule extends AbstractModel implements IdentityInterface
      * Model cache tag for clear cache in after save and after delete
      * When you use true - all cache will be clean
      *
-     * @var string|array|bool
+     * @var string|mixed[]|bool
      */
     protected $_cacheTag = self::CACHE_TAG;
 
@@ -68,14 +68,14 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Store matched product Ids
      *
-     * @var array
+     * @var mixed[]
      */
     protected $productIds;
 
     /**
      * Limitation for products collection
      *
-     * @var int|array|null
+     * @var int|int[]|null
      */
     protected $productsFilter;
 
@@ -151,7 +151,7 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param Iterator $resourceIterator
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param mixed[] $data
      */
     public function __construct(
         Context $context,
@@ -221,7 +221,7 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Retrieve array of product ids which are matched by rule
      *
-     * @return array
+     * @return mixed[]
      */
     public function getMatchingProductIds()
     {
@@ -263,7 +263,7 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Callback function for product matching
      *
-     * @param array $args
+     * @param mixed[] $args
      * @return void
      */
     public function callbackValidateProduct($args)
@@ -286,7 +286,7 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Prepare website map
      *
-     * @return array
+     * @return mixed[]
      */
     protected function getWebsitesMap()
     {
@@ -304,7 +304,7 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Filtering products that must be checked for matching with rule
      *
-     * @param  int|array $productIds
+     * @param  int|int[] $productIds
      * @return void
      */
     public function setProductsFilter($productIds)
@@ -315,7 +315,7 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Retrieve products filter
      *
-     * @return array|int|null
+     * @return int|int[]|null
      */
     public function getProductsFilter()
     {
@@ -346,7 +346,7 @@ class Rule extends AbstractModel implements IdentityInterface
     /**
      * Initialize rule model data from array
      *
-     * @param array $data
+     * @param mixed[] $data
      * @return $this
      */
     public function loadPost(array $data)

@@ -33,17 +33,16 @@ class Chooser extends Action
                 break;
             case 'category_ids':
                 $ids = $request->getParam('selected', []);
-                if (is_array($ids)) {
-                    foreach ($ids as $key => &$id) {
-                        $id = (int)$id;
-                        if ($id <= 0) {
-                            unset($ids[$key]);
-                        }
+                $ids = is_array($ids) ? $ids : [];
+
+                foreach ($ids as $key => &$id) {
+                    $id = (int)$id;
+                    if ($id <= 0) {
+                        unset($ids[$key]);
                     }
-                    $ids = array_unique($ids);
-                } else {
-                    $ids = [];
                 }
+
+                $ids = array_unique($ids);
                 $block = $this->_view->getLayout()->createBlock(
                     Tree::class,
                     'smartcategory_chooser_category_ids',
@@ -56,9 +55,6 @@ class Chooser extends Action
                 $block = false;
                 break;
         }
-
-        if ($block) {
-            $this->getResponse()->setBody($block->toHtml());
-        }
+        return $this->getResponse()->setBody($block ? $block->toHtml() : '');
     }
 }

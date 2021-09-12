@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 use Faonni\SmartCategory\Model\Indexer\AbstractIndexer;
 
 /**
- * Product rule indexer
+ * Product indexer
  */
 class ProductRuleIndexer extends AbstractIndexer
 {
