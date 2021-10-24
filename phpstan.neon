@@ -38,3 +38,6 @@ parameters:
         - '#no value type specified in iterable type Magento\\Framework\\Data\\Collection\\AbstractDb.#'
         - '#no value type specified in iterable type Faonni\\SmartCategory\\Model\\ResourceModel\\Rule\\Collection.#'
         - '#no value type specified in iterable type Magento\\Eav\\Model\\ResourceModel\\Entity\\Attribute\\Set\\Collection.#'
+        - '#Cannot call method getBackend\(\) on Magento\\Eav\\Model\\Entity\\Attribute\\AbstractAttribute.#'
+        - '#Cannot call method getEntity\(\) on Magento\\Eav\\Model\\Entity\\Attribute\\AbstractAttribute.#'
+        - '#Cannot call method getId\(\) on Magento\\Eav\\Model\\Entity\\Attribute\\AbstractAttribute.#'

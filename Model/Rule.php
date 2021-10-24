@@ -30,6 +30,7 @@ use Faonni\SmartCategory\Model\ResourceModel\Rule as RuleResource;
  * @method getCategory()
  * @method Rule setCollectedAttributes($attributes)
  * @method getCollectedAttributes()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rule extends AbstractModel implements IdentityInterface
 {
@@ -152,6 +153,7 @@ class Rule extends AbstractModel implements IdentityInterface
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param mixed[] $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,

@@ -19,6 +19,8 @@ use Zend_Db_Expr;
 
 /**
  * Rule index builder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexBuilder
 {

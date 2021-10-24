@@ -6,8 +6,17 @@
 namespace Faonni\SmartCategory\Model\Rule\Condition;
 
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\IteratorFactory;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Backend\Helper\Data as Helper;
+use Magento\Rule\Model\Condition\Context;
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttrSetCollection;
+use Magento\Eav\Model\Config;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ProductCategoryList;
 
 /**
@@ -17,11 +26,12 @@ use Magento\Catalog\Model\ProductCategoryList;
  * @method getJsFormObject()
  * @method getAttributeOption()
  * @method getRule()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends AbstractProduct
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\IteratorFactory
+     * @var IteratorFactory
      */
     protected $iteratorFactory;
 
@@ -33,37 +43,48 @@ class Product extends AbstractProduct
     protected $_isUsedForRuleProperty = 'is_used_for_smart_rules';
 
     /**
-     * Product constructor.
+     * Initialize condition
      *
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
-     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Framework\Model\ResourceModel\IteratorFactory $iteratorFactory
-     * @param array $data
+     * @param Context $context
+     * @param Helper $backendData
+     * @param Config $config
+     * @param ProductFactory $productFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param ProductResource $productResource
+     * @param AttrSetCollection $attrSetCollection
+     * @param FormatInterface $localeFormat
+     * @param IteratorFactory $iteratorFactory
+     * @param mixed[] $data
      * @param ProductCategoryList|null $categoryList
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Eav\Model\Config $config,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
-        \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Framework\Model\ResourceModel\IteratorFactory $iteratorFactory,
+        Context $context,
+        Helper $backendData,
+        Config $config,
+        ProductFactory $productFactory,
+        ProductRepositoryInterface $productRepository,
+        ProductResource $productResource,
+        AttrSetCollection $attrSetCollection,
+        FormatInterface $localeFormat,
+        IteratorFactory $iteratorFactory,
         array $data = [],
         ProductCategoryList $categoryList = null
     ) {
-        parent::__construct($context, $backendData, $config, $productFactory, $productRepository, $productResource,
-            $attrSetCollection, $localeFormat, $data, $categoryList);
-
         $this->iteratorFactory = $iteratorFactory;
+
+        parent::__construct(
+            $context,
+            $backendData,
+            $config,
+            $productFactory,
+            $productRepository,
+            $productResource,
+            $attrSetCollection,
+            $localeFormat,
+            $data,
+            $categoryList
+        );
     }
 
     /**
@@ -146,14 +167,12 @@ class Product extends AbstractProduct
             return $this;
         }
 
-        $productValues  = $this->_entityAttributeValues[$model->getId()];
-
+        $productValues = $this->_entityAttributeValues[$model->getId()];
         if (!isset($productValues[$storeId]) && !isset($productValues[$defaultStoreId])) {
             return $this;
         }
 
-        $value = isset($productValues[$storeId]) ? $productValues[$storeId] : $productValues[$defaultStoreId];
-
+        $value = $productValues[$storeId] ?? $productValues[$defaultStoreId];
         $value = $this->prepareDatetimeValue($value, $model);
         $value = $this->prepareMultiselectValue($value, $model);
 
@@ -203,6 +222,7 @@ class Product extends AbstractProduct
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function collectValidatedAttributes($productCollection)
     {
@@ -224,18 +244,18 @@ class Product extends AbstractProduct
                            ['cpe' => $productCollection->getMainTable()],
                            ['entity_id']
                        )->join(
-                        ['cpa' => $attributeModel->getBackend()->getTable()],
-                        'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
-                        ['store_id', 'value']
-                    )->where('attribute_id = ?', (int)$attributeModel->getId());
+                           ['cpa' => $attributeModel->getBackend()->getTable()],
+                           'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
+                           ['store_id', 'value']
+                       )->where('attribute_id = ?', (int)$attributeModel->getId());
 
                 $iterator = $this->iteratorFactory->create();
                 $res = [];
-                $iterator->walk((string)$select, [function(array $data) {
+                $iterator->walk((string)$select, [function (array $data) {
                     $row = $data['row'];
                     $res[$row['entity_id']][$row['store_id']] = $row['value'];
                 }], [], $productCollection->getConnection());
-                $this->_entityAttributeValues= $res;
+                $this->_entityAttributeValues = $res;
             }
         }
 
