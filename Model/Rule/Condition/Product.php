@@ -6,8 +6,18 @@
 namespace Faonni\SmartCategory\Model\Rule\Condition;
 
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\IteratorFactory;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Backend\Helper\Data as Helper;
+use Magento\Rule\Model\Condition\Context;
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttrSetCollection;
+use Magento\Eav\Model\Config;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Model\ProductCategoryList;
 
 /**
  * Product condition
@@ -16,15 +26,66 @@ use Magento\Store\Model\Store;
  * @method getJsFormObject()
  * @method getAttributeOption()
  * @method getRule()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends AbstractProduct
 {
+    /**
+     * @var IteratorFactory
+     */
+    protected $iteratorFactory;
+
     /**
      * Attribute data key that indicates whether it should be used for rules
      *
      * @var string
      */
     protected $_isUsedForRuleProperty = 'is_used_for_smart_rules';
+
+    /**
+     * Initialize condition
+     *
+     * @param Context $context
+     * @param Helper $backendData
+     * @param Config $config
+     * @param ProductFactory $productFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param ProductResource $productResource
+     * @param AttrSetCollection $attrSetCollection
+     * @param FormatInterface $localeFormat
+     * @param IteratorFactory $iteratorFactory
+     * @param mixed[] $data
+     * @param ProductCategoryList|null $categoryList
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        Context $context,
+        Helper $backendData,
+        Config $config,
+        ProductFactory $productFactory,
+        ProductRepositoryInterface $productRepository,
+        ProductResource $productResource,
+        AttrSetCollection $attrSetCollection,
+        FormatInterface $localeFormat,
+        IteratorFactory $iteratorFactory,
+        array $data = [],
+        ProductCategoryList $categoryList = null
+    ) {
+        $this->iteratorFactory = $iteratorFactory;
+
+        parent::__construct(
+            $context,
+            $backendData,
+            $config,
+            $productFactory,
+            $productRepository,
+            $productResource,
+            $attrSetCollection,
+            $localeFormat,
+            $data,
+            $categoryList
+        );
+    }
 
     /**
      * Retrieve value element chooser URL
@@ -106,14 +167,12 @@ class Product extends AbstractProduct
             return $this;
         }
 
-        $productValues  = $this->_entityAttributeValues[$model->getId()];
-
+        $productValues = $this->_entityAttributeValues[$model->getId()];
         if (!isset($productValues[$storeId]) && !isset($productValues[$defaultStoreId])) {
             return $this;
         }
 
-        $value = isset($productValues[$storeId]) ? $productValues[$storeId] : $productValues[$defaultStoreId];
-
+        $value = $productValues[$storeId] ?? $productValues[$defaultStoreId];
         $value = $this->prepareDatetimeValue($value, $model);
         $value = $this->prepareMultiselectValue($value, $model);
 
@@ -156,5 +215,50 @@ class Product extends AbstractProduct
             $value = strlen($value) ? explode(',', $value) : [];
         }
         return $value;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
+     *
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     */
+    public function collectValidatedAttributes($productCollection)
+    {
+        $attribute = $this->getAttribute();
+        if ('category_ids' != $attribute) {
+            $productCollection->addAttributeToSelect($attribute, 'left');
+            if ($this->getAttributeObject()->isScopeGlobal()) {
+                $attributes = $this->getRule()->getCollectedAttributes();
+                $attributes[$attribute] = true;
+                $this->getRule()->setCollectedAttributes($attributes);
+            } else {
+                $select = clone $productCollection->getSelect();
+                $attributeModel = $productCollection->getEntity()->getAttribute($attribute);
+
+                $fieldMainTable = $productCollection->getConnection()->getAutoIncrementField($productCollection->getMainTable());
+                $fieldJoinTable = $attributeModel->getEntity()->getLinkField();
+                $select->reset()
+                       ->from(
+                           ['cpe' => $productCollection->getMainTable()],
+                           ['entity_id']
+                       )->join(
+                           ['cpa' => $attributeModel->getBackend()->getTable()],
+                           'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
+                           ['store_id', 'value']
+                       )->where('attribute_id = ?', (int)$attributeModel->getId());
+
+                $iterator = $this->iteratorFactory->create();
+                $res = [];
+                $iterator->walk((string)$select, [function (array $data) {
+                    $row = $data['row'];
+                    $res[$row['entity_id']][$row['store_id']] = $row['value'];
+                }], [], $productCollection->getConnection());
+                $this->_entityAttributeValues = $res;
+            }
+        }
+
+        return $this;
     }
 }
