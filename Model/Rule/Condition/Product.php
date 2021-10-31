@@ -5,19 +5,19 @@
  */
 namespace Faonni\SmartCategory\Model\Rule\Condition;
 
-use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\IteratorFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductCategoryList;
-use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Backend\Helper\Data as BackendHelper;
-use Magento\Eav\Model\Config;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as SetCollection;
-use Magento\Rule\Model\Condition\Product\AbstractProduct;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Backend\Helper\Data as Helper;
 use Magento\Rule\Model\Condition\Context;
+use Magento\Rule\Model\Condition\Product\AbstractProduct;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttrSetCollection;
+use Magento\Eav\Model\Config;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Model\ProductCategoryList;
 
 /**
  * Product condition
@@ -25,12 +25,12 @@ use Magento\Store\Model\Store;
  * @method getAttribute()
  * @method getJsFormObject()
  * @method getAttributeOption()
+ * @method getRule()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends AbstractProduct
 {
     /**
-     * Iterator factory
-     *
      * @var IteratorFactory
      */
     protected $iteratorFactory;
@@ -46,25 +46,26 @@ class Product extends AbstractProduct
      * Initialize condition
      *
      * @param Context $context
-     * @param BackendHelper $backendData
+     * @param Helper $backendData
      * @param Config $config
      * @param ProductFactory $productFactory
      * @param ProductRepositoryInterface $productRepository
      * @param ProductResource $productResource
-     * @param SetCollection $attrSetCollection
+     * @param AttrSetCollection $attrSetCollection
      * @param FormatInterface $localeFormat
      * @param IteratorFactory $iteratorFactory
-     * @param array $data
+     * @param mixed[] $data
      * @param ProductCategoryList|null $categoryList
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
-        BackendHelper $backendData,
+        Helper $backendData,
         Config $config,
         ProductFactory $productFactory,
         ProductRepositoryInterface $productRepository,
         ProductResource $productResource,
-        SetCollection $attrSetCollection,
+        AttrSetCollection $attrSetCollection,
         FormatInterface $localeFormat,
         IteratorFactory $iteratorFactory,
         array $data = [],
@@ -146,9 +147,9 @@ class Product extends AbstractProduct
         $attrCode = $this->getAttribute();
         if ($oldAttrValue === null) {
             $model->unsetData($attrCode);
-        } else {
-            $model->setData($attrCode, $oldAttrValue);
+            return;
         }
+        $model->setData($attrCode, $oldAttrValue);
     }
 
     /**
@@ -166,14 +167,12 @@ class Product extends AbstractProduct
             return $this;
         }
 
-        $productValues  = $this->_entityAttributeValues[$model->getId()];
-
+        $productValues = $this->_entityAttributeValues[$model->getId()];
         if (!isset($productValues[$storeId]) && !isset($productValues[$defaultStoreId])) {
             return $this;
         }
 
-        $value = isset($productValues[$storeId]) ? $productValues[$storeId] : $productValues[$defaultStoreId];
-
+        $value = $productValues[$storeId] ?? $productValues[$defaultStoreId];
         $value = $this->prepareDatetimeValue($value, $model);
         $value = $this->prepareMultiselectValue($value, $model);
 
@@ -219,12 +218,11 @@ class Product extends AbstractProduct
     }
 
     /**
-     * Collect validated attributes
-     *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function collectValidatedAttributes($productCollection)
     {
@@ -239,21 +237,17 @@ class Product extends AbstractProduct
                 $select = clone $productCollection->getSelect();
                 $attributeModel = $productCollection->getEntity()->getAttribute($attribute);
 
-                $fieldMainTable = $productCollection->getConnection()->getAutoIncrementField(
-                    $productCollection->getMainTable()
-                );
-
+                $fieldMainTable = $productCollection->getConnection()->getAutoIncrementField($productCollection->getMainTable());
                 $fieldJoinTable = $attributeModel->getEntity()->getLinkField();
                 $select->reset()
-                    ->from(
-                        ['cpe' => $productCollection->getMainTable()],
-                        ['entity_id']
-                    )
-                    ->join(
-                        ['cpa' => $attributeModel->getBackend()->getTable()],
-                        'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
-                        ['store_id', 'value']
-                    )->where('attribute_id = ?', (int)$attributeModel->getId());
+                       ->from(
+                           ['cpe' => $productCollection->getMainTable()],
+                           ['entity_id']
+                       )->join(
+                           ['cpa' => $attributeModel->getBackend()->getTable()],
+                           'cpe.' . $fieldMainTable . ' = cpa.' . $fieldJoinTable,
+                           ['store_id', 'value']
+                       )->where('attribute_id = ?', (int)$attributeModel->getId());
 
                 $iterator = $this->iteratorFactory->create();
                 $res = [];

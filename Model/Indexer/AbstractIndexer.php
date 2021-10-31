@@ -91,7 +91,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * Retrieve affected cache tags
      *
-     * @return array
+     * @return string[]
      * @codeCoverageIgnore
      */
     public function getIdentities()
@@ -180,8 +180,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         if (!($this->cacheContext instanceof CacheContext)) {
             return ObjectManager::getInstance()->get(CacheContext::class);
-        } else {
-            return $this->cacheContext;
         }
+        return $this->cacheContext;
     }
 }

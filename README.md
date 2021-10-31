@@ -1,7 +1,7 @@
 # Magento2 Smart Category
 
 [![Total Downloads](https://poser.pugx.org/faonni/module-smart-category/downloads)](https://packagist.org/packages/faonni/module-smart-category)
-[![Latest Stable Version](https://poser.pugx.org/faonni/module-smart-category/v/stable)](https://packagist.org/packages/faonni/module-smart-category)	
+[![Latest Stable Version](https://poser.pugx.org/faonni/module-smart-category/v/stable)](https://packagist.org/packages/faonni/module-smart-category)
 
 Extension Smart Category rules dynamically change the product selection according to a set of conditions (Similar Smart Playlists on iTunes).
 
@@ -94,7 +94,7 @@ This works only with modules defined as Composer packages.
     ```
 
 #### Remove Smart Category Kit
-    
+
 1. Go to Magento2 root folder
 
 2. Enter following commands to remove:

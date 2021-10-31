@@ -15,9 +15,12 @@ use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
 use Psr\Log\LoggerInterface;
 use Faonni\SmartCategory\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Faonni\SmartCategory\Model\Rule;
+use Zend_Db_Expr;
 
 /**
- * Index builder
+ * Rule index builder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexBuilder
 {
@@ -52,7 +55,7 @@ class IndexBuilder
     /**
      * Loaded products
      *
-     * @var array
+     * @var mixed[]
      */
     protected $loadedProducts;
 
@@ -109,7 +112,7 @@ class IndexBuilder
     /**
      * Reindex by ids
      *
-     * @param array $ids
+     * @param int[] $ids
      * @throws LocalizedException
      * @return void
      * @api
@@ -129,7 +132,7 @@ class IndexBuilder
     /**
      * Reindex by ids
      *
-     * @param array $ids
+     * @param int[] $ids
      * @return void
      */
     protected function doReindexByIds($ids)
@@ -200,7 +203,7 @@ class IndexBuilder
      * Clean by product ids
      *
      * @param integer $categoryId
-     * @param array $productIds
+     * @param mixed[] $productIds
      * @return void
      */
     protected function cleanByIds($categoryId, $productIds)
@@ -215,7 +218,7 @@ class IndexBuilder
      * Insert products
      *
      * @param integer $categoryId
-     * @param array $productIds
+     * @param mixed[] $productIds
      * @return void
      */
     protected function insertMultiple($categoryId, $productIds)
@@ -278,7 +281,7 @@ class IndexBuilder
     {
         $select = $this->connection
             ->select()
-            ->from($this->getTable('catalog_category_product'), [new \Zend_Db_Expr('COUNT(*)')])
+            ->from($this->getTable('catalog_category_product'), [new Zend_Db_Expr('COUNT(*)')])
             ->where('category_id = ?', $categoryId)
             ->where('product_id = ?', $productId);
 
@@ -289,7 +292,7 @@ class IndexBuilder
      * Retrieve posted products
      *
      * @param string $categoryId
-     * @return array
+     * @return mixed[]
      */
     protected function getPostedProductData($categoryId)
     {

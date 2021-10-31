@@ -12,7 +12,7 @@ use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Catalog\Model\Category;
 
 /**
- * Uninstall
+ * Uninstall schema
  */
 class Uninstall implements UninstallInterface
 {
@@ -88,7 +88,6 @@ class Uninstall implements UninstallInterface
     protected function removeAttributes()
     {
         $attributes = ['is_smart'];
-        /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create();
         foreach ($attributes as $attribute) {
             $eavSetup->removeAttribute(Category::ENTITY, $attribute);

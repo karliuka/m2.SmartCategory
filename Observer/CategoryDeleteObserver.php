@@ -10,7 +10,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Faonni\SmartCategory\Model\RuleFactory;
 
 /**
- * Category delete observer
+ * Category delete
  */
 class CategoryDeleteObserver implements ObserverInterface
 {
@@ -40,7 +40,7 @@ class CategoryDeleteObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $category = $observer->getEvent()->getCategory();
+        $category = $observer->getEvent()->getData('category');
         /** @var \Faonni\SmartCategory\Model\Rule $rule */
         $rule = $this->ruleFactory->create()
             ->load($category->getId());

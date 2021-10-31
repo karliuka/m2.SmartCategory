@@ -1,0 +1,19 @@
+{
+    "catalog_eav_attribute": {
+        "column": {
+            "is_used_for_smart_rules": true
+        },
+        "index": {
+            "CATALOG_EAV_ATTRIBUTE_IS_USED_FOR_SMART_RULES": true
+        }
+    },
+    "faonni_smartcategory_rule": {
+        "column": {
+            "rule_id": true,
+            "conditions_serialized": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
