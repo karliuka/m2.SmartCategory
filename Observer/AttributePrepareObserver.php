@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Config\Model\Config\Source\Yesno;
 
 /**
- * Attribute prepare observer
+ * Attribute prepare
  */
 class AttributePrepareObserver implements ObserverInterface
 {
@@ -41,7 +41,7 @@ class AttributePrepareObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $form = $observer->getEvent()->getForm();
+        $form = $observer->getEvent()->getData('form');
         $yesnoSource = $this->yesNo->toOptionArray();
         $fieldset = $form->getElement('front_fieldset');
 

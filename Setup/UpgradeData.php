@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
- * Upgrade data
+ * Upgrade data schema
  */
 class UpgradeData implements UpgradeDataInterface
 {

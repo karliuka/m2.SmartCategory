@@ -2,17 +2,24 @@
     "name": "faonni/module-smart-category",
     "description": "SmartCategory module is a base of Smart Categories functionality.",
     "type": "magento2-module",
-    "version": "2.3.1",
-    "authors": [{
-        "name": "Karliuka Vitalii",
-        "email": "karliuka.vitalii@gmail.com"
-    }],
+    "version": "2.4.2",
+    "authors": [
+        {
+            "name": "Karliuka Vitalii",
+            "email": "karliuka.vitalii@gmail.com"
+        }
+    ],
     "license": [
         "OSL-3.0"
     ],
     "require": {
-        "magento/module-catalog": "103.0.*",
-        "magento/module-rule": "100.3.*"
+        "magento/module-backend": "102.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-config": "101.2.*",
+        "magento/module-eav": "102.1.*",
+        "magento/module-rule": "100.4.*",
+        "magento/module-store": "101.1.*",
+        "magento/module-ui": "101.2.*"
     },
     "conflict": {
         "magento/magento2-ee-base": "*"

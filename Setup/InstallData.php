@@ -15,7 +15,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Catalog\Model\Category;
 
 /**
- * Install data
+ * Install data schema
  */
 class InstallData implements InstallDataInterface
 {

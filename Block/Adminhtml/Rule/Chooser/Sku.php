@@ -66,7 +66,7 @@ class Sku extends AbstractGrid
      * @param SetCollectionFactory $setCollectionFactory
      * @param ProductCollectionFactory $productCollectionFactory
      * @param ProductType $productType
-     * @param array $data
+     * @param mixed[] $data
      */
     public function __construct(
         Context $context,
@@ -96,12 +96,12 @@ class Sku extends AbstractGrid
     {
         parent::_construct();
 
+        $id = 'skuChooserGrid_' . $this->getId();
         if ($this->getRequest()->getParam('current_grid_id')) {
-            $this->setId($this->getRequest()->getParam('current_grid_id'));
-        } else {
-            $this->setId('skuChooserGrid_' . $this->getId());
+            $id = $this->getRequest()->getParam('current_grid_id');
         }
 
+        $this->setId($id);
         $form = $this->getJsFormObject();
 
         $this->setRowClickCallback("{$form}.chooserGridRowClick.bind({$form})");
@@ -129,15 +129,17 @@ class Sku extends AbstractGrid
             if (empty($selected)) {
                 $selected = '';
             }
-            if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('sku', ['in' => $selected]);
-            } else {
-                $this->getCollection()->addFieldToFilter('sku', ['nin' => $selected]);
+
+            if (false !== $column->getFilter()) {
+                $value = $column->getFilter()->getData('value')
+                    ? ['in' => $selected]
+                    : ['nin' => $selected];
+
+                $this->getCollection()->addFieldToFilter('sku', $value);
             }
-        } else {
-            parent::_addColumnFilterToCollection($column);
+            return $this;
         }
-        return $this;
+        return parent::_addColumnFilterToCollection($column);
     }
 
     /**
@@ -149,9 +151,10 @@ class Sku extends AbstractGrid
     {
         $collection = $this->getProductCollection()
             ->setStoreId(0)
-            ->addAttributeToSelect('name', 'type_id', 'attribute_set_id');
+            ->addAttributeToSelect(['name', 'type_id', 'attribute_set_id']);
 
         $this->setCollection($collection);
+
         return parent::_prepareCollection();
     }
 
