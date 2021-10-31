@@ -21,9 +21,11 @@ use Magento\Store\Model\Store;
 /**
  * Product condition
  *
+ * @method getRule()
  * @method getAttribute()
  * @method getJsFormObject()
  * @method getAttributeOption()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends AbstractProduct
 {
@@ -53,7 +55,8 @@ class Product extends AbstractProduct
      * @param SetCollection $attrSetCollection
      * @param FormatInterface $localeFormat
      * @param IteratorFactory $iteratorFactory
-     * @param array $data
+     * @param mixed[] $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -142,9 +145,9 @@ class Product extends AbstractProduct
         $attrCode = $this->getAttribute();
         if ($oldAttrValue === null) {
             $model->unsetData($attrCode);
-        } else {
-            $model->setData($attrCode, $oldAttrValue);
+            return;
         }
+        $model->setData($attrCode, $oldAttrValue);
     }
 
     /**
@@ -221,6 +224,7 @@ class Product extends AbstractProduct
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function collectValidatedAttributes($productCollection)
     {

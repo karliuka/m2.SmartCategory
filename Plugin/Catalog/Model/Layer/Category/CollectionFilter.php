@@ -66,14 +66,10 @@ class CollectionFilter
             ->addTaxPercents()
             ->addUrlRewrite($category->getId());
 
-        if ($category->getIsSmart()) {
-            $collection->setVisibility(
-                $this->productVisibility->getVisibleInSiteIds()
-            );
-        } else {
-            $collection->setVisibility(
-                $this->productVisibility->getVisibleInCatalogIds()
-            );
-        }
+        $visibility = $category->getIsSmart()
+            ? $this->productVisibility->getVisibleInSiteIds()
+            : $this->productVisibility->getVisibleInCatalogIds();
+
+        $collection->setVisibility($visibility);
     }
 }

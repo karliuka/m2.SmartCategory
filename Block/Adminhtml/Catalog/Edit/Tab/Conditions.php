@@ -59,7 +59,7 @@ class Conditions extends Generic implements TabInterface
      * @param RuleConditions $conditions
      * @param Fieldset $rendererFieldset
      * @param RuleFactory $ruleFactory
-     * @param array $data
+     * @param mixed[] $data
      */
     public function __construct(
         Context $context,
@@ -233,7 +233,7 @@ class Conditions extends Generic implements TabInterface
      */
     protected function setConditionFormName(AbstractCondition $conditions, $formName)
     {
-        $conditions->setFormName($formName);
+        $conditions->setData('form_name', $formName);
         $conditions->setJsFormObject($formName);
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
